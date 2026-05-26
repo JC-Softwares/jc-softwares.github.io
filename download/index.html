@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Downloads e Ativação | JC-Softwares</title>
+    <title>JC-Softwares | Soluções Inteligentes de Gestão</title>
     <style>
         :root {
             --bg-principal: #0d0f14;
@@ -31,6 +31,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo h1 {
@@ -40,19 +43,31 @@
             letter-spacing: 0.5px;
         }
 
-        .logo h1 span { color: var(--azul-jc); }
+        .logo h1 span {
+            color: var(--azul-jc);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
 
         .nav-links a {
             color: var(--texto-claro);
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--azul-jc);
         }
 
         /* HERO COM DEGRADÊ */
         .hero-section {
             background: linear-gradient(to bottom, rgba(65, 105, 225, 0.25) 0%, var(--bg-principal) 100%);
-            padding: 80px 20px 40px 20px;
+            padding: 100px 20px 70px 20px;
             text-align: center;
         }
 
@@ -62,176 +77,241 @@
         }
 
         .hero-section h2 {
-            margin: 0 0 15px 0;
-            font-size: 2.4rem;
+            margin: 0 0 20px 0;
+            font-size: 2.6rem;
             font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #ffffff;
         }
 
-        .hero-section h2 span { color: var(--azul-jc); }
+        .hero-section h2 span {
+            color: var(--azul-jc);
+            text-shadow: 0 0 20px rgba(65, 105, 225, 0.4);
+        }
 
         .hero-section p {
             color: #b4bcda;
-            font-size: 1.1rem;
-            margin: 0;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin: 0 auto 35px auto; /* Margem inferior para afastar o botão */
         }
 
-        /* CONTEÚDO PRINCIPAL */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px 20px 80px 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-        }
-
-        .painel {
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            border-radius: 12px;
-            padding: 35px;
-        }
-
-        .painel h3 {
-            margin: 0 0 20px 0;
-            font-size: 1.5rem;
-            color: #ffffff;
-            border-bottom: 1px solid var(--borda-sutil);
-            padding-bottom: 10px;
-        }
-
-        /* BOTÃO DE DOWNLOAD RESTRITO */
-        .btn-download {
+        /* BOTÃO DE DOWNLOAD ANIMADO */
+        .btn-hero-download {
             background-color: var(--azul-jc);
             color: #ffffff;
             text-decoration: none;
-            display: block;
-            text-align: center;
-            padding: 15px;
-            font-size: 1.1rem;
+            display: inline-block;
+            padding: 14px 35px;
+            font-size: 1.05rem;
             font-weight: 700;
-            border-radius: 8px;
-            margin: 30px 0 15px 0;
-            transition: background-color 0.2s, transform 0.1s;
+            border-radius: 30px; /* Cantos arredondados estilo mobile */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            transition: all 0.3s ease;
+            animation: pulsarGlow 2s infinite ease-in-out; /* Animação constante de pulso */
         }
 
-        .btn-download:hover {
+        /* Efeito ao passar o mouse */
+        .btn-hero-download:hover {
+            transform: translateY(-3px); /* Sobe de leve */
             background-color: #3158cd;
-            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(65, 105, 225, 0.6); /* Brilho intensifica */
         }
 
-        .aviso-seguranca {
-            background-color: rgba(65, 105, 225, 0.05);
-            border: 1px solid rgba(65, 105, 225, 0.15);
-            border-radius: 6px;
-            padding: 15px;
-            font-size: 0.9rem;
-            color: var(--texto-mutado);
-            line-height: 1.5;
+        /* Efeito ao clicar */
+        .btn-hero-download:active {
+            transform: translateY(-1px);
         }
 
-        /* LISTA DE PASSOS (HARDWARE ID) */
-        .passos {
-            margin: 0;
-            padding: 0;
-            list-style: none;
+        /* Regra da animação de pulso */
+        @keyframes pulsarGlow {
+            0% {
+                box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(65, 105, 225, 0.6); /* Expande o brilho */
+            }
+            100% {
+                box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            }
         }
 
-        .passos li {
-            margin-bottom: 20px;
-            position: relative;
-            padding-left: 35px;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--texto-mutado);
+        /* SEÇÃO DE PRODUTOS / SISTEMAS */
+        .produtos-section {
+            padding: 40px 20px 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .passos li strong {
+        .secao-titulo {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .secao-titulo h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
             color: #ffffff;
         }
 
-        .passos li::before {
-            content: attr(data-passo);
-            position: absolute;
-            left: 0;
-            top: 2px;
-            background-color: rgba(65, 105, 225, 0.15);
-            color: var(--azul-jc);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            font-size: 0.8rem;
-            font-weight: 700;
+        .grid-produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
         }
 
-        /* FOOTER */
+        .card-produto {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 12px;
+            padding: 30px;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-produto:hover {
+            transform: translateY(-4px);
+            border-color: var(--azul-jc);
+            box-shadow: 0 8px 24px rgba(65, 105, 225, 0.15);
+        }
+
+        .card-produto h4 {
+            margin: 0 0 15px 0;
+            font-size: 1.25rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-produto p {
+            color: var(--texto-mutado);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+            flex: 1;
+        }
+
+        .recursos-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background-color: rgba(65, 105, 225, 0.1);
+            color: #7393ff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(65, 105, 225, 0.2);
+        }
+
+        /* FOOTER EXTRA ESCURO */
         footer {
             background-color: #050608;
             border-top: 1px solid var(--borda-sutil);
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
             font-size: 0.85rem;
             color: var(--texto-mutado);
+        }
+
+        footer p { 
+            margin: 6px 0; 
+        }
+        
+        .footer-brand {
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px !important;
         }
     </style>
 </head>
 <body>
 
+    <!-- BARRA DE NAVEGAÇÃO -->
     <div class="navbar">
         <div class="logo">
             <h1>JC-<span>Softwares</span></h1>
         </div>
         <div class="nav-links">
-            <a href="https://jc-softwares.github.io/">← Voltar para Home</a>
+            <a href="#solucoes">Nossas Soluções</a>
+            <a href="https://www.jcsoftware.com.br/JCSoftwares_Config/" target="_blank">Painel de Diagnóstico</a>
         </div>
     </div>
 
+    <!-- HERO COM O SEU DEGRADÊ E BOTÃO ANIMADO -->
     <div class="hero-section">
         <div class="hero-content">
-            <h2>Instalação & <span>Ativação</span></h2>
-            <p>Baixe a versão mais recente do sistema e valide sua licença de uso local.</p>
+            <h2>Sistemas de Gestão <span>Premium</span></h2>
+            <p>Desenvolvimento focado em estabilidade offline, alta velocidade de resposta e automação comercial sob medida para o varejo moderno.</p>
+            
+            <!-- NOVO BOTÃO ANIMADO APONTANDO PARA A PASTA /DOWNLOAD -->
+            <a href="./download/" class="btn-hero-download">🚀 Baixar Versão de Avaliação</a>
         </div>
     </div>
 
-    <div class="container">
-        
-        <!-- COLUNA 1: DOWNLOAD -->
-        <div class="painel">
-            <h3>1. Baixar o Instalador</h3>
-            <p>Clique no botão abaixo para descarregar o pacote de instalação do sistema de varejo pré-configurado.</p>
+    <!-- SEÇÃO DE PRODUTOS -->
+    <div class="produtos-section" id="solucoes">
+        <div class="secao-titulo">
+            <h3>Soluções Disponíveis</h3>
+        </div>
+
+        <div class="grid-produtos">
             
-            <!-- COLOQUE O LINK DO SEU EXECUTÁVEL EXATAMENTE NO HREF ABAIXO -->
-            <a href="COLOQUE_O_LINK_DO_SEU_ARQUIVO_AQUI" class="btn-download">💾 Baixar Sistema v1.0</a>
-            
-            <div class="aviso-seguranca">
-                <strong>🔒 Segurança do Banco de Dados:</strong><br>
-                Este sistema opera de forma autônoma offline. Seu banco de dados local está camuflado e protegido contra acessos não autorizados de curiosos.
+            <!-- CARD 1 -->
+            <div class="card-produto">
+                <div>
+                    <h4>🛍️ Frente de Caixa Smart</h4>
+                    <p>Interface escura inspirada em aplicativos mobile com foco em usabilidade. Fluidez completa no cadastro de usuários e operação de vendas diárias.</p>
+                    <div class="recursos-tags">
+                        <span class="tag">Interface Dark</span>
+                        <span class="tag">Faturamento Ágil</span>
+                        <span class="tag">Controle de Níveis</span>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- COLUNA 2: ATIVAÇÃO -->
-        <div class="painel">
-            <h3>2. Ativação por Hardware ID</h3>
-            <p>Para sua proteção, o software é vinculado diretamente à máquina do cliente. Siga os passos abaixo:</p>
-            
-            <ul class="passos">
-                <li data-passo="1"><strong>Inicie o executável:</strong> Instale o sistema e abra a tela de login inicial.</li>
-                <li data-passo="2"><strong>Copie o ID da Máquina:</strong> Localize o código gerado automaticamente (Hardware ID) exibido na janela.</li>
-                <li data-passo="3"><strong>Envie para o suporte:</strong> Encaminhe esse código para gerar sua chave exclusiva de validação.</li>
-                <li data-passo="4"><strong>Acesse o sistema:</strong> Cole a licença gerada no campo indicado para liberar o primeiro login.</li>
-            </ul>
-        </div>
+            <!-- CARD 2 -->
+            <div class="card-produto">
+                <div>
+                    <h4>📦 Retaguarda & Estoque</h4>
+                    <p>Módulo de administração pesada estruturado sobre banco de dados protegido contra manipulação direta de usuários leigos.</p>
+                    <div class="recursos-tags">
+                        <span class="tag">Banco .DAT Oculto</span>
+                        <span class="tag">Filtros de Busca</span>
+                        <span class="tag">Sincronia Rápida</span>
+                    </div>
+                </div>
+            </div>
 
+            <!-- CARD 3 -->
+            <div class="card-produto">
+                <div>
+                    <h4>🖨️ Módulo de Impressão Direta</h4>
+                    <p>Drivers dedicados para alternar a saída do documento de forma silenciosa entre relatórios em folha A4 e cupons térmicos rápidos de 80mm.</p>
+                    <div class="recursos-tags">
+                        <span class="tag">Sem Telas de Diálogo</span>
+                        <span class="tag">Cupom Fiscal 80mm</span>
+                        <span class="tag">Suporte Folha A4</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
+    <!-- RODAPÉ -->
     <footer>
-        <p>&copy; 2026 JC-Softwares. Licenciamento protegido via Hardware ID Validation.</p>
+        <p class="footer-brand">JC-SOFTWARES</p>
+        <p>Sistemas de Gestão Homologados e Protegidos por Hardware ID Validation.</p>
+        <p>&copy; 2026 JC-Softwares. Todos os direitos reservados.</p>
     </footer>
 
 </body>
