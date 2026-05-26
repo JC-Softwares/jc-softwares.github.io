@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloads e Ativação | JC-Softwares</title>
+    <style>
+        :root {
+            --bg-principal: #0d0f14;
+            --bg-card: #161920;
+            --azul-jc: #4169E1;
+            --texto-claro: #f0f2f5;
+            --texto-mutado: #a0a8b5;
+            --borda-sutil: #232833;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-claro);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* NAVBAR PRINCIPAL */
+        .navbar {
+            background-color: #06070a;
+            border-bottom: 2px solid var(--azul-jc);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo h1 span { color: var(--azul-jc); }
+
+        .nav-links a {
+            color: var(--texto-claro);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* HERO COM DEGRADÊ */
+        .hero-section {
+            background: linear-gradient(to bottom, rgba(65, 105, 225, 0.25) 0%, var(--bg-principal) 100%);
+            padding: 80px 20px 40px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-section h2 {
+            margin: 0 0 15px 0;
+            font-size: 2.4rem;
+            font-weight: 700;
+        }
+
+        .hero-section h2 span { color: var(--azul-jc); }
+
+        .hero-section p {
+            color: #b4bcda;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 20px 80px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+        }
+
+        .painel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 12px;
+            padding: 35px;
+        }
+
+        .painel h3 {
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            color: #ffffff;
+            border-bottom: 1px solid var(--borda-sutil);
+            padding-bottom: 10px;
+        }
+
+        /* BOTÃO DE DOWNLOAD RESTRITO */
+        .btn-download {
+            background-color: var(--azul-jc);
+            color: #ffffff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            margin: 30px 0 15px 0;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-download:hover {
+            background-color: #3158cd;
+            transform: translateY(-2px);
+        }
+
+        .aviso-seguranca {
+            background-color: rgba(65, 105, 225, 0.05);
+            border: 1px solid rgba(65, 105, 225, 0.15);
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: var(--texto-mutado);
+            line-height: 1.5;
+        }
+
+        /* LISTA DE PASSOS (HARDWARE ID) */
+        .passos {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .passos li {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 35px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--texto-mutado);
+        }
+
+        .passos li strong {
+            color: #ffffff;
+        }
+
+        .passos li::before {
+            content: attr(data-passo);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            background-color: rgba(65, 105, 225, 0.15);
+            color: var(--azul-jc);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #050608;
+            border-top: 1px solid var(--borda-sutil);
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--texto-mutado);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+            <h1>JC-<span>Softwares</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="https://jc-softwares.github.io/">← Voltar para Home</a>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h2>Instalação & <span>Ativação</span></h2>
+            <p>Baixe a versão mais recente do sistema e valide sua licença de uso local.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- COLUNA 1: DOWNLOAD -->
+        <div class="painel">
+            <h3>1. Baixar o Instalador</h3>
+            <p>Clique no botão abaixo para descarregar o pacote de instalação do sistema de varejo pré-configurado.</p>
+            
+            <!-- COLOQUE O LINK DO SEU EXECUTÁVEL EXATAMENTE NO HREF ABAIXO -->
+            <a href="COLOQUE_O_LINK_DO_SEU_ARQUIVO_AQUI" class="btn-download">💾 Baixar Sistema v1.0</a>
+            
+            <div class="aviso-seguranca">
+                <strong>🔒 Segurança do Banco de Dados:</strong><br>
+                Este sistema opera de forma autônoma offline. Seu banco de dados local está camuflado e protegido contra acessos não autorizados de curiosos.
+            </div>
+        </div>
+
+        <!-- COLUNA 2: ATIVAÇÃO -->
+        <div class="painel">
+            <h3>2. Ativação por Hardware ID</h3>
+            <p>Para sua proteção, o software é vinculado diretamente à máquina do cliente. Siga os passos abaixo:</p>
+            
+            <ul class="passos">
+                <li data-passo="1"><strong>Inicie o executável:</strong> Instale o sistema e abra a tela de login inicial.</li>
+                <li data-passo="2"><strong>Copie o ID da Máquina:</strong> Localize o código gerado automaticamente (Hardware ID) exibido na janela.</li>
+                <li data-passo="3"><strong>Envie para o suporte:</strong> Encaminhe esse código para gerar sua chave exclusiva de validação.</li>
+                <li data-passo="4"><strong>Acesse o sistema:</strong> Cole a licença gerada no campo indicado para liberar o primeiro login.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 JC-Softwares. Licenciamento protegido via Hardware ID Validation.</p>
+    </footer>
+
+</body>
+</html>
