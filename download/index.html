@@ -77,7 +77,7 @@
 
         /* CONTEÚDO PRINCIPAL */
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px 20px 80px 20px;
             display: grid;
@@ -94,6 +94,9 @@
             border: 1px solid var(--borda-sutil);
             border-radius: 12px;
             padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .painel h3 {
@@ -104,7 +107,7 @@
             padding-bottom: 10px;
         }
 
-        /* BOTÃO DE DOWNLOAD RESTRITO */
+        /* BOTÃO DE DOWNLOAD */
         .btn-download {
             background-color: var(--azul-jc);
             color: #ffffff;
@@ -115,7 +118,7 @@
             font-size: 1.1rem;
             font-weight: 700;
             border-radius: 8px;
-            margin: 30px 0 15px 0;
+            margin: 20px 0;
             transition: background-color 0.2s, transform 0.1s;
         }
 
@@ -134,7 +137,7 @@
             line-height: 1.5;
         }
 
-        /* LISTA DE PASSOS (HARDWARE ID) */
+        /* LISTA DE PASSOS (AGORA AUTOMÁTICOS) */
         .passos {
             margin: 0;
             padding: 0;
@@ -142,7 +145,7 @@
         }
 
         .passos li {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             position: relative;
             padding-left: 35px;
             font-size: 0.95rem;
@@ -155,7 +158,7 @@
         }
 
         .passos li::before {
-            content: attr(data-passo);
+            content: "✓";
             position: absolute;
             left: 0;
             top: 2px;
@@ -195,7 +198,7 @@
     <div class="hero-section">
         <div class="hero-content">
             <h2>Instalação & <span>Ativação</span></h2>
-            <p>Baixe a versão mais recente do sistema e valide sua licença de uso local.</p>
+            <p>Baixe a versão de avaliação e comece a usar imediatamente sem configurações manuais.</p>
         </div>
     </div>
 
@@ -203,35 +206,38 @@
         
         <!-- COLUNA 1: DOWNLOAD -->
         <div class="painel">
-            <h3>1. Baixar o Instalador</h3>
-            <p>Clique no botão abaixo para descarregar o pacote de instalação do sistema de varejo pré-configurado.</p>
-            
-            <!-- COLOQUE O LINK DO SEU EXECUTÁVEL EXATAMENTE NO HREF ABAIXO -->
-            <a href="COLOQUE_O_LINK_DO_SEU_ARQUIVO_AQUI" class="btn-download">💾 Baixar Sistema v1.0</a>
+            <div>
+                <h3>1. Obter o Instalador</h3>
+                <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
+                
+                <!-- COLOQUE SEU LINK DO EXECUTÁVEL AQUI -->
+                <a href="COLOQUE_O_LINK_DO_SEU_ARQUIVO_AQUI" class="btn-download">💾 Baixar Instalador v1.0</a>
+            </div>
             
             <div class="aviso-seguranca">
-                <strong>🔒 Segurança do Banco de Dados:</strong><br>
-                Este sistema opera de forma autônoma offline. Seu banco de dados local está camuflado e protegido contra acessos não autorizados de curiosos.
+                <strong>🔒 Banco de Dados Isolado:</strong><br>
+                O sistema utiliza armazenamento local seguro protegido (.dat) garantindo total imunidade contra quedas de internet e curiosos.
             </div>
         </div>
 
-        <!-- COLUNA 2: ATIVAÇÃO -->
+        <!-- COLUNA 2: ATIVAÇÃO AUTOMÁTICA -->
         <div class="painel">
-            <h3>2. Ativação por Hardware ID</h3>
-            <p>Para sua proteção, o software é vinculado diretamente à máquina do cliente. Siga os passos abaixo:</p>
-            
-            <ul class="passos">
-                <li data-passo="1"><strong>Inicie o executável:</strong> Instale o sistema e abra a tela de login inicial.</li>
-                <li data-passo="2"><strong>Copie o ID da Máquina:</strong> Localize o código gerado automaticamente (Hardware ID) exibido na janela.</li>
-                <li data-passo="3"><strong>Envie para o suporte:</strong> Encaminhe esse código para gerar sua chave exclusiva de validação.</li>
-                <li data-passo="4"><strong>Acesse o sistema:</strong> Cole a licença gerada no campo indicado para liberar o primeiro login.</li>
-            </ul>
+            <div>
+                <h3>2. Tecnologia Multi-Key</h3>
+                <p>Nossa arquitetura foi projetada para poupar o seu tempo. Veja como funciona a validação:</p>
+                
+                <ul class="passos">
+                    <li><strong>Reconhecimento de Hardware:</strong> No primeiro login, o sistema identifica de forma nativa e segura os componentes da sua máquina.</li>
+                    <li><strong>Sincronização Invisível:</strong> Os dados de licença são validados automaticamente com o nosso servidor, dispensando qualquer digitação de chaves longas.</li>
+                    <li><strong>Pronto para o Varejo:</strong> O ambiente é liberado instantaneamente com todas as ferramentas de impressão e caixa ativas.</li>
+                </ul>
+            </div>
         </div>
 
     </div>
 
     <footer>
-        <p>&copy; 2026 JC-Softwares. Licenciamento protegido via Hardware ID Validation.</p>
+        <p>&copy; 2026 JC-Softwares. Licenciamento automatizado via Hardware ID Validation.</p>
     </footer>
 
 </body>
