@@ -9,10 +9,9 @@
             --bg-principal: #12151c;
             --bg-card: #1e222b;
             --azul-jc: #4169E1;
-            --azul-grad-1: #1e3c72;
-            --azul-grad-2: #2a5298;
             --texto-claro: #f0f2f5;
             --texto-mutado: #a0a8b5;
+            --borda-sutil: #2f3640;
         }
 
         body {
@@ -27,7 +26,7 @@
         /* NAVBAR PRINCIPAL */
         .navbar {
             background-color: rgba(30, 34, 43, 0.95);
-            border-bottom: 1px solid #2f3640;
+            border-bottom: 1px solid var(--borda-sutil);
             padding: 20px 50px;
             display: flex;
             justify-content: space-between;
@@ -40,7 +39,7 @@
 
         .logo h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
@@ -66,56 +65,37 @@
             color: var(--azul-jc);
         }
 
-        /* HERO BANNER (DESTAQUE CENTRAL) */
+        /* HERO CLEAN (SEM A FAIXA AZUL) */
         .hero-section {
-            background: linear-gradient(135deg, var(--azul-grad-1), var(--azul-grad-2));
-            padding: 90px 20px;
+            background-color: var(--bg-principal);
+            padding: 80px 20px 40px 20px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 4px solid var(--azul-jc);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .hero-section h2 {
             margin: 0 0 20px 0;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .hero-section h2 span {
+            color: var(--azul-jc);
         }
 
         .hero-section p {
-            color: #cbd5e1;
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 35px auto;
+            color: var(--texto-mutado);
+            font-size: 1.1rem;
             line-height: 1.6;
-        }
-
-        .btn-cta {
-            background-color: var(--texto-claro);
-            color: var(--azul-grad-1);
-            border: none;
-            padding: 15px 40px;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 30px; /* Estilo arredondado moderno */
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            background-color: #ffffff;
+            margin: 0 auto;
         }
 
         /* SEÇÃO DE PRODUTOS / SISTEMAS */
         .produtos-section {
-            padding: 80px 20px;
+            padding: 40px 20px 80px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -127,23 +107,8 @@
 
         .secao-titulo h3 {
             margin: 0 0 10px 0;
-            font-size: 2rem;
-            position: relative;
-        }
-
-        .secao-titulo h3::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background-color: var(--azul-jc);
-            margin: 10px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        .secao-titulo p {
-            color: var(--texto-mutado);
-            margin: 0;
+            font-size: 1.8rem;
+            color: #ffffff;
         }
 
         .grid-produtos {
@@ -154,23 +119,24 @@
 
         .card-produto {
             background-color: var(--bg-card);
-            border: 1px solid #2f3640;
-            border-radius: 16px; /* Cantos arredondados estilo celular */
+            border: 1px solid var(--borda-sutil);
+            border-radius: 12px; /* Cantos arredondados estilo interface moderna */
             padding: 30px;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
         .card-produto:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             border-color: var(--azul-jc);
+            box-shadow: 0 8px 24px rgba(65, 105, 225, 0.1);
         }
 
         .card-produto h4 {
             margin: 0 0 15px 0;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -181,7 +147,7 @@
             color: var(--texto-mutado);
             font-size: 0.95rem;
             line-height: 1.6;
-            margin: 0 0 20px 0;
+            margin: 0 0 25px 0;
             flex: 1;
         }
 
@@ -189,40 +155,43 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 20px;
         }
 
         .tag {
-            background-color: #161920;
+            background-color: rgba(65, 105, 225, 0.08);
             color: var(--azul-jc);
             font-size: 0.75rem;
             font-weight: 600;
-            padding: 5px 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(65, 105, 225, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px; /* Tags arredondadas estilo mobile */
+            border: 1px solid rgba(65, 105, 225, 0.15);
         }
 
         /* FOOTER EXTRA ESCURO */
         footer {
-            background-color: #0d0f14;
-            border-top: 1px solid #161920;
+            background-color: #0b0d11;
+            border-top: 1px solid var(--borda-sutil);
             padding: 40px 20px;
             text-align: center;
             font-size: 0.85rem;
             color: var(--texto-mutado);
         }
 
-        footer p { margin: 5px 0; }
+        footer p { 
+            margin: 6px 0; 
+        }
         
         .footer-brand {
-            font-weight: bold;
+            font-weight: 700;
             color: #ffffff;
-            margin-bottom: 15px !important;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px !important;
         }
     </style>
 </head>
 <body>
 
+    <!-- BARRA DE NAVEGAÇÃO -->
     <div class="navbar">
         <div class="logo">
             <h1>JC-<span>Softwares</span></h1>
@@ -233,52 +202,55 @@
         </div>
     </div>
 
+    <!-- CABEÇALHO INTEGRADO (SEM FAIXA AZUL) -->
     <div class="hero-section">
-        <h2>Automação Comercial de Alta Performance</h2>
-        <p>Desenvolvemos ecossistemas robustos de vendas e gestão de estoque sob medida para o varejo moderno. Agilidade instantânea do caixa à emissão fiscal.</p>
-        <a href="#solucoes" class="btn-cta">Conhecer Nossos Sistemas</a>
+        <h2>Sistemas de Gestão <span>Premium</span></h2>
+        <p>Desenvolvimento focado em estabilidade offline, alta velocidade de resposta e automação comercial sob medida para o varejo.</p>
     </div>
 
+    <!-- SEÇÃO DE PRODUTOS -->
     <div class="produtos-section" id="solucoes">
         <div class="secao-titulo">
-            <h3>Nossas Soluções Desktop & Web</h3>
-            <p>Sistemas projetados para rodar de forma leve, segura e offline com sincronia inteligente</p>
+            <h3>Soluções Disponíveis</h3>
         </div>
 
         <div class="grid-produtos">
             
+            <!-- CARD 1: SISTEMA DE VAREJO -->
             <div class="card-produto">
                 <div>
-                    <h4>🛍️ Sistema de Vendas Smart</h4>
-                    <p>Interface ultra moderna inspirada em usabilidade mobile com botões de cantos arredondados. Ideal para frentes de caixa que não podem parar.</p>
+                    <h4>🛍️ Frente de Caixa Smart</h4>
+                    <p>Interface escura inspirada em aplicativos mobile com foco em usabilidade. Fluidez completa no cadastro de usuários e operação de vendas diárias.</p>
                     <div class="recursos-tags">
-                        <span class="tag">Interface Dark Moderna</span>
-                        <span class="tag">Faturamento Rápido</span>
-                        <span class="tag">Cadastro de Usuários</span>
+                        <span class="tag">Interface Dark</span>
+                        <span class="tag">Faturamento Ágil</span>
+                        <span class="tag">Controle de Níveis</span>
                     </div>
                 </div>
             </div>
 
+            <!-- CARD 2: GESTÃO DE ESTOQUE -->
             <div class="card-produto">
                 <div>
-                    <h4>📦 Controle de Estoque & Fluxo</h4>
-                    <p>Módulo inteligente com suporte nativo a rotinas automatizadas de relatórios pesados e gerenciamento completo de produtos em banco de dados seguro.</p>
+                    <h4>📦 Retaguarda & Estoque</h4>
+                    <p>Módulo de administração pesada estruturado sobre banco de dados protegido contra manipulação direta de usuários leigos.</p>
                     <div class="recursos-tags">
-                        <span class="tag">Banco .DAT Protegido</span>
-                        <span class="tag">Filtros Avançados</span>
-                        <span class="tag">Relatórios Otimizados</span>
+                        <span class="tag">Banco .DAT Oculto</span>
+                        <span class="tag">Filtros de Busca</span>
+                        <span class="tag">Sincronia Rápida</span>
                     </div>
                 </div>
             </div>
 
+            <!-- CARD 3: IMPRESSÃO DIRETA -->
             <div class="card-produto">
                 <div>
                     <h4>🖨️ Módulo de Impressão Direta</h4>
-                    <p>Comunicação direta com o hardware local para alternar dinamicamente entre layouts em folha A4 completa ou cupons térmicos fiscais de 80mm sem caixas de diálogo.</p>
+                    <p>Drivers dedicados para alternar a saída do documento de forma silenciosa entre relatórios em folha A4 e cupons térmicos rápidos de 80mm.</p>
                     <div class="recursos-tags">
-                        <span class="tag">Impressão Silenciosa</span>
-                        <span class="tag">Layout Cupom 80mm</span>
-                        <span class="tag">Layout Relatório A4</span>
+                        <span class="tag">Sem Telas de Diálogo</span>
+                        <span class="tag">Cupom Fiscal 80mm</span>
+                        <span class="tag">Suporte Folha A4</span>
                     </div>
                 </div>
             </div>
@@ -286,6 +258,7 @@
         </div>
     </div>
 
+    <!-- RODAPÉ INSTITUCIONAL -->
     <footer>
         <p class="footer-brand">JC-SOFTWARES</p>
         <p>Sistemas de Gestão Homologados e Protegidos por Hardware ID Validation.</p>
