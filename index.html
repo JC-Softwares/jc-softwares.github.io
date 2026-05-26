@@ -6,7 +6,7 @@
     <title>JC-Softwares | Soluções Inteligentes de Gestão</title>
     <style>
         :root {
-            --bg-principal: #0d0f14; /* Preto mais profundo para casar com o degradê */
+            --bg-principal: #0d0f14;
             --bg-card: #161920;
             --azul-jc: #4169E1;
             --texto-claro: #f0f2f5;
@@ -21,12 +21,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
-        /* NAVBAR PRINCIPAL (BANNER PRETO NO TOPO) */
+        /* NAVBAR PRINCIPAL */
         .navbar {
-            background-color: #06070a; /* Preto absoluto */
-            border-bottom: 2px solid var(--azul-jc); /* Linha azul destacando a divisão */
+            background-color: #06070a;
+            border-bottom: 2px solid var(--azul-jc);
             padding: 20px 50px;
             display: flex;
             justify-content: space-between;
@@ -49,7 +50,7 @@
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 25px;
         }
 
         .nav-links a {
@@ -64,11 +65,10 @@
             color: var(--azul-jc);
         }
 
-        /* HERO COM DEGRADÊ DO AZUL PARA O PRETO */
+        /* HERO COM DEGRADÊ */
         .hero-section {
-            /* Começa no azul royal e vai sumindo no preto principal para baixo */
             background: linear-gradient(to bottom, rgba(65, 105, 225, 0.25) 0%, var(--bg-principal) 100%);
-            padding: 100px 20px 60px 20px;
+            padding: 110px 20px 80px 20px;
             text-align: center;
         }
 
@@ -79,7 +79,7 @@
 
         .hero-section h2 {
             margin: 0 0 20px 0;
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #ffffff;
@@ -87,19 +87,73 @@
 
         .hero-section h2 span {
             color: var(--azul-jc);
-            text-shadow: 0 0 20px rgba(65, 105, 225, 0.4); /* Leve brilho neon */
+            text-shadow: 0 0 20px rgba(65, 105, 225, 0.4);
         }
 
         .hero-section p {
-            color: #b4bcda; /* Tom levemente azulado/acinzentado */
+            color: #b4bcda;
             font-size: 1.15rem;
             line-height: 1.6;
-            margin: 0 auto;
+            margin: 0 auto 40px auto;
+        }
+
+        /* GRUPO DE BOTÕES DO HERO */
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* BOTÃO PRINCIPAL ANIMADO (DOWNLOAD) */
+        .btn-principal {
+            background-color: var(--azul-jc);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 35px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            transition: all 0.3s ease;
+            animation: pulsarGlow 2s infinite ease-in-out;
+        }
+
+        .btn-principal:hover {
+            transform: translateY(-3px);
+            background-color: #3158cd;
+            box-shadow: 0 8px 25px rgba(65, 105, 225, 0.6);
+        }
+
+        /* BOTÃO SECUNDÁRIO (PLANOS) */
+        .btn-secundario {
+            background-color: transparent;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 35px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 30px;
+            border: 2px solid var(--borda-sutil);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secundario:hover {
+            border-color: var(--azul-jc);
+            background-color: rgba(65, 105, 225, 0.05);
+            transform: translateY(-3px);
+        }
+
+        @keyframes pulsarGlow {
+            0% { box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3); }
+            50% { box-shadow: 0 4px 25px rgba(65, 105, 225, 0.6); }
+            100% { box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3); }
         }
 
         /* SEÇÃO DE PRODUTOS / SISTEMAS */
         .produtos-section {
-            padding: 40px 20px 80px 20px;
+            padding: 40px 20px 60px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -111,7 +165,7 @@
 
         .secao-titulo h3 {
             margin: 0 0 10px 0;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #ffffff;
         }
 
@@ -119,6 +173,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
+            margin-bottom: 50px;
         }
 
         .card-produto {
@@ -126,7 +181,7 @@
             border: 1px solid var(--borda-sutil);
             border-radius: 12px;
             padding: 30px;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, border-color 0.2s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -135,7 +190,6 @@
         .card-produto:hover {
             transform: translateY(-4px);
             border-color: var(--azul-jc);
-            box-shadow: 0 8px 24px rgba(65, 105, 225, 0.15);
         }
 
         .card-produto h4 {
@@ -171,19 +225,122 @@
             border: 1px solid rgba(65, 105, 225, 0.2);
         }
 
+        /* SEÇÃO DE PLANOS / PREÇOS */
+        .planos-section {
+            padding: 60px 20px 80px 20px;
+            background-color: #06070a;
+            border-top: 1px solid var(--borda-sutil);
+        }
+
+        .container-planos {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .card-plano {
+            background-color: var(--bg-principal);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .card-plano.destaque {
+            border-color: var(--azul-jc);
+            position: relative;
+        }
+
+        .badge-destaque {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--azul-jc);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 15px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .card-plano h4 { margin: 0 0 10px 0; font-size: 1.5rem; }
+        .preco { font-size: 2rem; font-weight: 700; color: #ffffff; margin-bottom: 25px; }
+        .preco span { font-size: 1rem; color: var(--texto-mutado); }
+
+        .recursos-plano {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 35px 0;
+            text-align: left;
+        }
+
+        .recursos-plano li {
+            margin-bottom: 12px;
+            color: var(--texto-mutado);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recursos-plano li::before {
+            content: "✓";
+            color: var(--azul-jc);
+            font-weight: bold;
+        }
+
+        .btn-plano {
+            display: block;
+            background-color: var(--bg-card);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            border: 1px solid var(--borda-sutil);
+            transition: all 0.2s;
+        }
+
+        .card-plano.destaque .btn-plano {
+            background-color: var(--azul-jc);
+            border-color: var(--azul-jc);
+        }
+
+        .btn-plano:hover {
+            transform: translateY(-2px);
+            border-color: var(--azul-jc);
+        }
+
         /* FOOTER EXTRA ESCURO */
         footer {
-            background-color: #050608;
+            background-color: #020304;
             border-top: 1px solid var(--borda-sutil);
-            padding: 40px 20px;
+            padding: 50px 20px 30px 20px;
             text-align: center;
             font-size: 0.85rem;
             color: var(--texto-mutado);
         }
 
-        footer p { 
-            margin: 6px 0; 
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            text-align: left;
         }
+
+        .footer-col h5 { color: #ffffff; margin: 0 0 15px 0; font-size: 1rem; }
+        .footer-col ul { list-style: none; padding: 0; margin: 0; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--texto-mutado); text-decoration: none; }
+        .footer-col ul li a:hover { color: var(--azul-jc); }
         
         .footer-brand {
             font-weight: 700;
@@ -195,34 +352,41 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGAÇÃO (BANNER PRETO) -->
+    <!-- BARRA DE NAVEGAÇÃO -->
     <div class="navbar">
         <div class="logo">
             <h1>JC-<span>Softwares</span></h1>
         </div>
         <div class="nav-links">
-            <a href="#solucoes">Nossas Soluções</a>
-            <a href="https://www.jcsoftware.com.br/JCSoftwares_Config/" target="_blank">Painel de Diagnóstico</a>
+            <a href="#solucoes">Soluções</a>
+            <a href="#planos">Planos</a>
+            <a href="./download/">Downloads</a>
+            <a href="./suporte/">Suporte</a>
+            <a href="https://www.jcsoftware.com.br/JCSoftwares_Config/" target="_blank">Diagnóstico</a>
+            <a href="./contato/">Contato</a>
         </div>
     </div>
 
-    <!-- HERO COM O SEU DEGRADÊ PERSONALIZADO -->
+    <!-- HERO PRINCIPAL -->
     <div class="hero-section">
         <div class="hero-content">
             <h2>Sistemas de Gestão <span>Premium</span></h2>
             <p>Desenvolvimento focado em estabilidade offline, alta velocidade de resposta e automação comercial sob medida para o varejo moderno.</p>
+            
+            <div class="hero-buttons">
+                <a href="./download/" class="btn-principal">🚀 Instalar Versão de Avaliação</a>
+                <a href="#planos" class="btn-secundario">💳 Conhecer Planos</a>
+            </div>
         </div>
     </div>
 
     <!-- SEÇÃO DE PRODUTOS -->
     <div class="produtos-section" id="solucoes">
         <div class="secao-titulo">
-            <h3>Soluções Disponíveis</h3>
+            <h3>Nossas Soluções</h3>
         </div>
 
         <div class="grid-produtos">
-            
-            <!-- CARD 1 -->
             <div class="card-produto">
                 <div>
                     <h4>🛍️ Frente de Caixa Smart</h4>
@@ -230,12 +394,10 @@
                     <div class="recursos-tags">
                         <span class="tag">Interface Dark</span>
                         <span class="tag">Faturamento Ágil</span>
-                        <span class="tag">Controle de Níveis</span>
                     </div>
                 </div>
             </div>
 
-            <!-- CARD 2 -->
             <div class="card-produto">
                 <div>
                     <h4>📦 Retaguarda & Estoque</h4>
@@ -243,31 +405,82 @@
                     <div class="recursos-tags">
                         <span class="tag">Banco .DAT Oculto</span>
                         <span class="tag">Filtros de Busca</span>
-                        <span class="tag">Sincronia Rápida</span>
                     </div>
                 </div>
             </div>
 
-            <!-- CARD 3 -->
             <div class="card-produto">
                 <div>
                     <h4>🖨️ Módulo de Impressão Direta</h4>
                     <p>Drivers dedicados para alternar a saída do documento de forma silenciosa entre relatórios em folha A4 e cupons térmicos rápidos de 80mm.</p>
                     <div class="recursos-tags">
-                        <span class="tag">Sem Telas de Diálogo</span>
-                        <span class="tag">Cupom Fiscal 80mm</span>
-                        <span class="tag">Suporte Folha A4</span>
+                        <span class="tag">Sem Diálogos</span>
+                        <span class="tag">Cupom 80mm / A4</span>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <!-- RODAPÉ -->
+    <!-- SEÇÃO DE PLANOS -->
+    <div class="planos-section" id="planos">
+        <div class="secao-titulo">
+            <h3>Licenciamento Simples e Transparente</h3>
+        </div>
+
+        <div class="container-planos">
+            <div class="card-plano">
+                <h4>Licença Comercial</h4>
+                <div class="preco">R$ 59<span> /mês</span></div>
+                <ul class="recursos-plano">
+                    <li>1 Máquina Ativada</li>
+                    <li>Banco de Dados Local (.DAT)</li>
+                    <li>Impressão Direta (80mm e A4)</li>
+                    <li>Suporte via Painel Web</li>
+                </ul>
+                <a href="./contato/" class="btn-plano">Contratar Plano</a>
+            </div>
+
+            <div class="card-plano destaque">
+                <div class="badge-destaque">Mais Vendido</div>
+                <h4>Especial Varejo</h4>
+                <div class="preco">R$ 89<span> /mês</span></div>
+                <ul class="recursos-plano">
+                    <li>Até 3 Máquinas Ativadas</li>
+                    <li>Hardware ID Multi-Key</li>
+                    <li>Atualizações Automáticas</li>
+                    <li>Suporte Prioritário</li>
+                </ul>
+                <a href="./contato/" class="btn-plano">Contratar Plano</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ COMPLETO -->
     <footer>
-        <p class="footer-brand">JC-SOFTWARES</p>
-        <p>Sistemas de Gestão Homologados e Protegidos por Hardware ID Validation.</p>
+        <div class="footer-container">
+            <div class="footer-col">
+                <p class="footer-brand">JC-SOFTWARES</p>
+                <p style="max-width: 250px; font-size: 0.8rem;">Sistemas homologados e protegidos por criptografia de Hardware ID local.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Navegação</h5>
+                <ul>
+                    <li><a href="#solucoes">Soluções</a></li>
+                    <li><a href="#planos">Planos e Preços</a></li>
+                    <li><a href="./download/">Área de Download</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Ajuda e Suporte</h5>
+                <ul>
+                    <li><a href="./suporte/">Central de Ajuda</a></li>
+                    <li><a href="https://www.jcsoftware.com.br/JCSoftwares_Config/" target="_blank">Painel de Diagnóstico</a></li>
+                    <li><a href="./contato/">Falar com Suporte</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border: 0; border-top: 1px solid var(--borda-sutil); margin-bottom: 20px;">
         <p>&copy; 2026 JC-Softwares. Todos os direitos reservados.</p>
     </footer>
 
