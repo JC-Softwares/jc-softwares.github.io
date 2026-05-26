@@ -6,12 +6,12 @@
     <title>JC-Softwares | Soluções Inteligentes de Gestão</title>
     <style>
         :root {
-            --bg-principal: #12151c;
-            --bg-card: #1e222b;
+            --bg-principal: #0d0f14; /* Preto mais profundo para casar com o degradê */
+            --bg-card: #161920;
             --azul-jc: #4169E1;
             --texto-claro: #f0f2f5;
             --texto-mutado: #a0a8b5;
-            --borda-sutil: #2f3640;
+            --borda-sutil: #232833;
         }
 
         body {
@@ -23,10 +23,10 @@
             box-sizing: border-box;
         }
 
-        /* NAVBAR PRINCIPAL */
+        /* NAVBAR PRINCIPAL (BANNER PRETO NO TOPO) */
         .navbar {
-            background-color: rgba(30, 34, 43, 0.95);
-            border-bottom: 1px solid var(--borda-sutil);
+            background-color: #06070a; /* Preto absoluto */
+            border-bottom: 2px solid var(--azul-jc); /* Linha azul destacando a divisão */
             padding: 20px 50px;
             display: flex;
             justify-content: space-between;
@@ -34,7 +34,6 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .logo h1 {
@@ -65,18 +64,22 @@
             color: var(--azul-jc);
         }
 
-        /* HERO CLEAN (SEM A FAIXA AZUL) */
+        /* HERO COM DEGRADÊ DO AZUL PARA O PRETO */
         .hero-section {
-            background-color: var(--bg-principal);
-            padding: 80px 20px 40px 20px;
+            /* Começa no azul royal e vai sumindo no preto principal para baixo */
+            background: linear-gradient(to bottom, rgba(65, 105, 225, 0.25) 0%, var(--bg-principal) 100%);
+            padding: 100px 20px 60px 20px;
             text-align: center;
+        }
+
+        .hero-content {
             max-width: 800px;
             margin: 0 auto;
         }
 
         .hero-section h2 {
             margin: 0 0 20px 0;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #ffffff;
@@ -84,11 +87,12 @@
 
         .hero-section h2 span {
             color: var(--azul-jc);
+            text-shadow: 0 0 20px rgba(65, 105, 225, 0.4); /* Leve brilho neon */
         }
 
         .hero-section p {
-            color: var(--texto-mutado);
-            font-size: 1.1rem;
+            color: #b4bcda; /* Tom levemente azulado/acinzentado */
+            font-size: 1.15rem;
             line-height: 1.6;
             margin: 0 auto;
         }
@@ -120,7 +124,7 @@
         .card-produto {
             background-color: var(--bg-card);
             border: 1px solid var(--borda-sutil);
-            border-radius: 12px; /* Cantos arredondados estilo interface moderna */
+            border-radius: 12px;
             padding: 30px;
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
             display: flex;
@@ -131,7 +135,7 @@
         .card-produto:hover {
             transform: translateY(-4px);
             border-color: var(--azul-jc);
-            box-shadow: 0 8px 24px rgba(65, 105, 225, 0.1);
+            box-shadow: 0 8px 24px rgba(65, 105, 225, 0.15);
         }
 
         .card-produto h4 {
@@ -158,18 +162,18 @@
         }
 
         .tag {
-            background-color: rgba(65, 105, 225, 0.08);
-            color: var(--azul-jc);
+            background-color: rgba(65, 105, 225, 0.1);
+            color: #7393ff;
             font-size: 0.75rem;
             font-weight: 600;
             padding: 5px 12px;
-            border-radius: 20px; /* Tags arredondadas estilo mobile */
-            border: 1px solid rgba(65, 105, 225, 0.15);
+            border-radius: 20px;
+            border: 1px solid rgba(65, 105, 225, 0.2);
         }
 
         /* FOOTER EXTRA ESCURO */
         footer {
-            background-color: #0b0d11;
+            background-color: #050608;
             border-top: 1px solid var(--borda-sutil);
             padding: 40px 20px;
             text-align: center;
@@ -191,7 +195,7 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGAÇÃO -->
+    <!-- BARRA DE NAVEGAÇÃO (BANNER PRETO) -->
     <div class="navbar">
         <div class="logo">
             <h1>JC-<span>Softwares</span></h1>
@@ -202,10 +206,12 @@
         </div>
     </div>
 
-    <!-- CABEÇALHO INTEGRADO (SEM FAIXA AZUL) -->
+    <!-- HERO COM O SEU DEGRADÊ PERSONALIZADO -->
     <div class="hero-section">
-        <h2>Sistemas de Gestão <span>Premium</span></h2>
-        <p>Desenvolvimento focado em estabilidade offline, alta velocidade de resposta e automação comercial sob medida para o varejo.</p>
+        <div class="hero-content">
+            <h2>Sistemas de Gestão <span>Premium</span></h2>
+            <p>Desenvolvimento focado em estabilidade offline, alta velocidade de resposta e automação comercial sob medida para o varejo moderno.</p>
+        </div>
     </div>
 
     <!-- SEÇÃO DE PRODUTOS -->
@@ -216,7 +222,7 @@
 
         <div class="grid-produtos">
             
-            <!-- CARD 1: SISTEMA DE VAREJO -->
+            <!-- CARD 1 -->
             <div class="card-produto">
                 <div>
                     <h4>🛍️ Frente de Caixa Smart</h4>
@@ -229,7 +235,7 @@
                 </div>
             </div>
 
-            <!-- CARD 2: GESTÃO DE ESTOQUE -->
+            <!-- CARD 2 -->
             <div class="card-produto">
                 <div>
                     <h4>📦 Retaguarda & Estoque</h4>
@@ -242,7 +248,7 @@
                 </div>
             </div>
 
-            <!-- CARD 3: IMPRESSÃO DIRETA -->
+            <!-- CARD 3 -->
             <div class="card-produto">
                 <div>
                     <h4>🖨️ Módulo de Impressão Direta</h4>
@@ -258,7 +264,7 @@
         </div>
     </div>
 
-    <!-- RODAPÉ INSTITUCIONAL -->
+    <!-- RODAPÉ -->
     <footer>
         <p class="footer-brand">JC-SOFTWARES</p>
         <p>Sistemas de Gestão Homologados e Protegidos por Hardware ID Validation.</p>
