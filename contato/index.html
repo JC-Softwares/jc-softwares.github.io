@@ -14,6 +14,7 @@
             --texto-mutado: #a0a8b5;
             --borda-sutil: #232833;
             --verde-sucesso: #2ed573;
+            --vermelho-erro: #ff4757;
         }
 
         body {
@@ -155,17 +156,26 @@
             transform: scale(0.99);
         }
 
-        /* ALERTA DE SUCESSO INVISÍVEL COORDENADO */
-        .msg-sucesso {
+        /* ALERTA DE STATUS COORDENADO */
+        .msg-status {
             display: none;
-            background-color: rgba(46, 213, 115, 0.1);
-            border: 1px solid var(--verde-sucesso);
-            color: var(--verde-sucesso);
             padding: 15px;
             border-radius: 8px;
             font-size: 0.95rem;
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .msg-status.sucesso {
+            background-color: rgba(46, 213, 115, 0.1);
+            border: 1px solid var(--verde-sucesso);
+            color: var(--verde-sucesso);
+        }
+
+        .msg-status.erro {
+            background-color: rgba(255, 71, 87, 0.1);
+            border: 1px solid var(--vermelho-erro);
+            color: var(--vermelho-erro);
         }
 
         /* COLUNA INFORMAÇÕES LATERAIS */
@@ -252,49 +262,52 @@
     <div class="contato-grid">
         
         <div class="card-formulario">
-    <div id="feedback-box" class="msg-status"></div>
+            <div id="feedback-box" class="msg-status"></div>
 
-    <form id="form-contato" onsubmit="enviarViaFetch(event)">
-        
-        <input type="hidden" name="access_key" value="3b5d1e1f-7e55-473e-9c6c-a1397ad4d708">
-        
-        <input type="hidden" name="subject" value="Nova Lead Comercial - JC-Softwares">
-        <input type="hidden" name="from_name" value="Portal JC-Softwares">
+            <form id="form-contato" onsubmit="enviarViaFetch(event)">
+                
+                <!-- IMPORTANTE: Insira sua Access Key real obtida no painel do Web3Forms abaixo -->
+                <input type="hidden" name="access_key" value="3b5d1e1f-7e55-473e-9c6c-a1397ad4d708">
+                
+                <!-- Configurações de Cabeçalho personalizadas -->
+                <input type="hidden" name="subject" value="Nova Lead Comercial - JC-Softwares">
+                <input type="hidden" name="from_name" value="Portal JC-Softwares">
 
-        <div class="grupo-campo">
-            <label for="txt-assunto">Qual o seu objetivo principal?</label>
-            <select id="txt-assunto" name="Objetivo_Cliente" required>
-                <option value="" disabled selected hidden>Selecione um departamento...</option>
-                <option value="Licença Comercial">Quero Adquirir uma Licença Comercial</option>
-                <option value="Plano Multi-Terminal">Migração para Plano Multi-Terminal</option>
-                <option value="Parceria">Propostas de Parceria ou Integração</option>
-                <option value="Outros">Outras Demandas Administrativas</option>
-            </select>
+                <!-- Nomes parametrizados com [] para facilitar a raspagem de dados via VBA -->
+                <div class="grupo-campo">
+                    <label for="txt-assunto">Qual o seu objetivo principal?</label>
+                    <select id="txt-assunto" name="[Objetivo]" required>
+                        <option value="" disabled selected hidden>Selecione um departamento...</option>
+                        <option value="Licença Comercial">Quero Adquirir uma Licença Comercial</option>
+                        <option value="Plano Multi-Terminal">Migração para Plano Multi-Terminal</option>
+                        <option value="Parceria">Propostas de Parceria ou Integração</option>
+                        <option value="Outros">Outras Demandas Administrativas</option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="txt-nome">Nome do Responsável / Empresa</label>
+                    <input type="text" id="txt-nome" name="[Nome]" placeholder="Ex: Júlio / JC Soft" required />
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="txt-email">E-mail Corporativo</label>
+                    <input type="email" id="txt-email" name="[Email]" placeholder="nome@suaempresa.com" required />
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="txt-whats">WhatsApp Comercial</label>
+                    <input type="tel" id="txt-whats" name="[WhatsApp]" placeholder="(00) 00000-0000" oninput="aplicarMascaraFone(this)" maxlength="15" required />
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="txt-obs">Notas Adicionais (Opcional)</label>
+                    <textarea id="txt-obs" name="[Notas]" placeholder="Detalhes específicos da sua operação de varejo..."></textarea>
+                </div>
+
+                <button type="submit" id="btn-submit-form" class="btn-enviar">Encaminhar Solicitação</button>
+            </form>
         </div>
-
-        <div class="grupo-campo">
-            <label for="txt-nome">Nome do Responsável / Empresa</label>
-            <input type="text" id="txt-nome" name="Nome" placeholder="Ex: Júlio / JC Soft" required />
-        </div>
-
-        <div class="grupo-campo">
-            <label for="txt-email">E-mail Corporativo</label>
-            <input type="email" id="txt-email" name="Email" placeholder="nome@suaempresa.com" required />
-        </div>
-
-        <div class="grupo-campo">
-            <label for="txt-whats">WhatsApp Comercial</label>
-            <input type="tel" id="txt-whats" name="WhatsApp" placeholder="(00) 00000-0000" oninput="aplicarMascaraFone(this)" maxlength="15" required />
-        </div>
-
-        <div class="grupo-campo">
-            <label for="txt-obs">Notas Adicionais (Opcional)</label>
-            <textarea id="txt-obs" name="Observações" placeholder="Detalhes específicos da sua operação de varejo..."></textarea>
-        </div>
-
-        <button type="submit" id="btn-submit-form" class="btn-enviar">Encaminhar Solicitação</button>
-    </form>
-</div>
 
         <!-- COLUNA INFORMAÇÕES LATERAIS -->
         <div class="info-lateral">
@@ -305,7 +318,7 @@
 
             <div class="card-info" style="border-left-color: var(--verde-sucesso)">
                 <h4>Atendimento Direto</h4>
-                <p>E-mail: contato@jcsoftwares.com.br<br>Respostas comerciais em até 2 horas úteis.</p>
+                <p>E-mail: contato@jcsoftware.com.br<br>Respostas comerciais em até 2 hours úteis.</p>
             </div>
 
             <div class="card-info">
@@ -322,9 +335,8 @@
         <p>&copy; 2026 JC-Softwares. Comunicação Segura via Protocolo de Entrada.</p>
     </footer>
 
-    <!-- LOGICAS DE MÁSCARA E SIMULAÇÃO DE ENVIO -->
+    <!-- LOGICAS DE MÁSCARA E ENVIO ASSÍNCRONO -->
     <script>
-    // Função para aplicar a máscara visual de telefone celular brasileiro
     function aplicarMascaraFone(input) {
         let valor = input.value.replace(/\D/g, "");
         if (valor.length > 11) valor = valor.slice(0, 11);
@@ -340,28 +352,22 @@
         }
     }
 
-    // Função assíncrona que realiza o envio real via FETCH API
     async function enviarViaFetch(event) {
-        event.preventDefault(); // Impede o recarregamento padrão da página do formulário
+        event.preventDefault(); 
 
         const form = document.getElementById('form-contato');
         const btnSubmit = document.getElementById('btn-submit-form');
         const feedbackBox = document.getElementById('feedback-box');
 
-        // 1. Feedback Visual de Carregamento (UX Profissional)
         btnSubmit.disabled = true;
         btnSubmit.innerText = "Processando envio técnico...";
         feedbackBox.style.display = "none";
 
-        // 2. Captura automática de todos os inputs do formulário
         const formData = new FormData(form);
-        
-        // Converte o FormData para um objeto JSON que a API espera receber
         const objetoJson = Object.fromEntries(formData);
         const jsonBody = JSON.stringify(objetoJson);
 
         try {
-            // 3. Disparo da requisição HTTP POST em segundo plano
             const resposta = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: {
@@ -373,24 +379,21 @@
 
             const resultado = await resposta.json();
 
-            // 4. Verificação do status de sucesso retornado pelo servidor
             if (resultado.success) {
                 feedbackBox.className = "msg-status sucesso";
                 feedbackBox.innerText = "✓ Solicitação registrada! Entraremos em contato via WhatsApp nas próximas horas.";
                 feedbackBox.style.display = "block";
-                form.reset(); // Limpa os campos após o envio bem-sucedido
+                form.reset(); 
             } else {
-                throw new Error("Erro reportado pelo servidor de e-mail.");
+                throw new Error("Erro reportado pelo servidor.");
             }
 
         } catch (erro) {
-            // 5. Tratamento de exceções (Ex: falta de internet do cliente)
             feedbackBox.className = "msg-status erro";
             feedbackBox.innerText = "✕ Não foi possível processar o envio automático. Envie diretamente para contato@jcsoftwares.com.br";
             feedbackBox.style.display = "block";
             
         } finally {
-            // 6. Restaura o estado original do botão e centraliza a tela no feedback
             btnSubmit.disabled = false;
             btnSubmit.innerText = "Encaminhar Solicitação";
             window.scrollTo({ top: 150, behavior: 'smooth' });
