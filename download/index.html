@@ -415,47 +415,54 @@
         }
 
         /* ENVIO ASSÍNCRONO PARADO NA API - REMOVE PROPAGANDAS */
-        async function enviarListaDesejos(event) {
-            event.preventDefault(); 
+        /* ENVIO ASSÍNCRONO CORRIGIDO - FORÇA TEXTO PURO NO EMAIL */
+async function enviarListaDesejos(event) {
+    event.preventDefault(); 
 
-            const form = document.getElementById('form-lista-desejos');
-            const btnSubmit = document.getElementById('btn-submit-modal');
+    const form = document.getElementById('form-lista-desejos');
+    const btnSubmit = document.getElementById('btn-submit-modal');
 
-            // Sinalização visual profissional durante a requisição
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Processando registro técnico...";
+    // Sinalização visual profissional durante a requisição
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = "Processando registro técnico...";
 
-            const formData = new FormData(form);
-            const objetoJson = Object.fromEntries(formData);
-            const jsonBody = JSON.stringify(objetoJson);
+    // CAPTURA CONSTRUIDA MANUALMENTE PARA GARANTIR JSON PURO
+    const dados = {
+        Nome: document.getElementById('nomeInteressado').value,
+        Email: document.getElementById('emailInteressado').value,
+        _subject: "Novo interessado na Lista de Desejos! 🚀" // Assunto dentro do JSON
+    };
 
-            try {
-                // Rota /ajax/ desativa a injeção de templates HTML e propagandas do FormSubmit
-                const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: jsonBody
-                });
+    try {
+        // Envio direto para a API de AJAX deles
+        const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(dados) // Transforma em string JSON legítima
+        });
 
-                if (resposta.ok) {
-                    alert("✓ Sucesso! Seu e-mail foi registrado na nossa lista de exclusividade.");
-                    form.reset(); 
-                    fecharModal();
-                } else {
-                    throw new Error("Erro de resposta do servidor.");
-                }
+        const resultado = await resposta.json();
 
-            } catch (erro) {
-                alert("✕ Não foi possível processar o envio automático. Entre em contato direto com o suporte.");
-            } finally {
-                // Devolve o estado inicial ao botão
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "✨ Entrar para Lista de Espera";
-            }
+        // Se o FormSubmit aceitar o JSON, ele retorna success: "true"
+        if (resultado.success === "true" || resposta.ok) {
+            alert("✓ Sucesso! Seu e-mail foi registrado na nossa lista de exclusividade.");
+            form.reset(); 
+            fecharModal();
+        } else {
+            throw new Error("Erro de resposta do servidor.");
         }
+
+    } catch (erro) {
+        alert("✕ Não foi possível processar o envio automático. Entre em contato direto com o suporte.");
+    } finally {
+        // Devolve o estado inicial ao botão
+        btnSubmit.disabled = false;
+        btnSubmit.innerText = "✨ Entrar para Lista de Espera";
+    }
+}
     </script>
 
 </body>
