@@ -435,9 +435,9 @@
                 })
                 .then(texto => {
                     // Limpa espaços em branco e quebras de linha indesejadas
-                    const statusLimpo = texto.trim().toUpperCase();
+                    const StatusSistema = texto.trim().toUpperCase();
 
-                    if (statusLimpo.includes("INDISPONÍVEL") || statusLimpo.includes("INDISPONIVEL")) {
+                    if (StatusSistema.includes("INDISPONÍVEL") || statusLimpo.includes("INDISPONIVEL")) {
                         botaoFormulario.innerHTML = "Entrar para Lista de Espera";
                     } else {
                         botaoFormulario.innerHTML = "✨ Baixar Agora Comercial";
