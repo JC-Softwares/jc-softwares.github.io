@@ -9,10 +9,12 @@
             --bg-principal: #0d0f14;
             --bg-card: #161920;
             --azul-jc: #4169E1;
+            --azul-hover: #3558c8;
             --texto-claro: #f0f2f5;
             --texto-mutado: #a0a8b5;
             --borda-sutil: #232833;
-            --verde-sucesso: #2e7d32;
+            --verde-sucesso: #2ed573;
+            --vermelho-erro: #ff4757;
         }
 
         body {
@@ -41,9 +43,7 @@
             letter-spacing: 0.5px;
         }
 
-        .logo h1 span {
-            color: var(--azul-jc);
-        }
+        .logo h1 span { color: var(--azul-jc); }
 
         .nav-links a {
             color: var(--texto-claro);
@@ -70,9 +70,7 @@
             font-weight: 700;
         }
 
-        .hero-section h2 span {
-            color: var(--azul-jc);
-        }
+        .hero-section h2 span { color: var(--azul-jc); }
 
         .hero-section p {
             color: #b4bcda;
@@ -91,9 +89,7 @@
         }
 
         @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+            .container { grid-template-columns: 1fr; }
         }
 
         .painel {
@@ -114,7 +110,7 @@
             padding-bottom: 10px;
         }
 
-        /* BOTÃO DE DOWNLOAD (GATILHO DO MODAL) */
+        /* BOTÃO DE DOWNLOAD */
         .btn-download {
             background-color: var(--azul-jc);
             color: #ffffff;
@@ -134,7 +130,7 @@
         }
 
         .btn-download:hover {
-            background-color: #3158cd;
+            background-color: var(--azul-hover);
             transform: translateY(-2px);
         }
 
@@ -148,7 +144,7 @@
             line-height: 1.5;
         }
 
-        /* LISTA DE PASSOS NATIVOS */
+        /* LISTA DE PASSOS */
         .passos {
             margin: 0;
             padding: 0;
@@ -164,9 +160,7 @@
             color: var(--texto-mutado);
         }
 
-        .passos li strong {
-            color: #ffffff;
-        }
+        .passos li strong { color: #ffffff; }
 
         .passos li::before {
             content: "✓";
@@ -184,7 +178,7 @@
             font-weight: 700;
         }
 
-        /* --- ESTILIZAÇÃO DO MODAL --- */
+        /* --- ESTILIZAÇÃO DOS MODAIS --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -237,15 +231,15 @@
             transition: color 0.2s;
         }
 
-        .btn-fechar-modal:hover {
-            color: #ffffff;
-        }
+        .btn-fechar-modal:hover { color: #ffffff; }
 
         .modal-card h4 {
             margin: 0 0 10px 0;
             font-size: 1.6rem;
             color: #ffffff;
         }
+
+        .modal-card h4 span { color: var(--azul-jc); }
 
         .modal-card p {
             color: var(--texto-mutado);
@@ -254,40 +248,42 @@
             margin: 0 0 25px 0;
         }
 
-        /* FORMULÁRIO INTERNO DO MODAL */
-        .grupo-campo {
+        /* FORMULÁRIO DO MODAL */
+        .modal-form .grupo-campo {
             margin-bottom: 20px;
-            text-align: left;
         }
 
-        .grupo-campo label {
+        .modal-form label {
             display: block;
             font-size: 0.85rem;
             color: var(--texto-mutado);
             margin-bottom: 8px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .grupo-campo input {
+        .modal-form input[type="email"], .modal-form input[type="text"] {
             width: 100%;
             padding: 14px;
-            background-color: #0d0f14;
+            background-color: #06070a;
             border: 1px solid var(--borda-sutil);
             border-radius: 8px;
             color: #ffffff;
             font-family: inherit;
             font-size: 0.95rem;
             box-sizing: border-box;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .grupo-campo input:focus {
+        .modal-form input:focus {
             border-color: var(--azul-jc);
+            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15);
             outline: none;
         }
 
         .btn-enviar-pedido {
-            background-color: var(--verde-sucesso);
+            background-color: var(--azul-jc);
             color: #ffffff;
             border: none;
             width: 100%;
@@ -296,12 +292,27 @@
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
             font-family: inherit;
         }
 
-        .btn-enviar-pedido:hover {
-            background-color: #1b5e20;
+        .btn-enviar-pedido:hover { background-color: var(--azul-hover); }
+        .btn-enviar-pedido:active { transform: scale(0.99); }
+
+        /* ALERTAS DE RESPOSTA COORDENADOS */
+        .msg-status {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .msg-status.erro {
+            background-color: rgba(255, 71, 87, 0.1);
+            border: 1px solid var(--vermelho-erro);
+            color: var(--vermelho-erro);
         }
 
         /* FOOTER */
@@ -334,15 +345,13 @@
     </div>
 
     <div class="container">
-
         <div class="painel">
             <div>
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
-
-                <button onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
+                <button type="button" onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
             </div>
-
+            
             <div class="aviso-seguranca">
                 <strong>🔒 Banco de Dados Isolado:</strong><br>
                 O sistema utiliza armazenamento local seguro protegido (.dat) garantindo total imunidade contra quedas de internet e curiosos.
@@ -353,7 +362,7 @@
             <div>
                 <h3>2. Tecnologia Multi-Key</h3>
                 <p>Nossa arquitetura foi projetada para poupar o seu tempo. Veja como funciona a validação:</p>
-
+                
                 <ul class="passos">
                     <li><strong>Reconhecimento de Hardware:</strong> No primeiro login, o sistema identifica de forma nativa e segura os componentes da sua máquina.</li>
                     <li><strong>Sincronização Invisível:</strong> Os dados de licença são validados automaticamente com o nosso servidor, dispensando qualquer digitação de chaves longas.</li>
@@ -361,35 +370,54 @@
                 </ul>
             </div>
         </div>
-
     </div>
 
-    <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event)">
+    <!-- MODAL 1: FORMULÁRIO DE CADASTRO -->
+    <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event, 'modalDesejos')">
         <div class="modal-card">
-            <button class="btn-fechar-modal" onclick="fecharModal()">&times;</button>
-
+            <button type="button" class="btn-fechar-modal" onclick="fecharModal('modalDesejos')">&times;</button>
+            
             <h4>Quase pronto! 🚀</h4>
             <p>
-                Tanto o nosso site quanto o sistema estão recebendo os <strong>ajustes finais de otimização</strong>. Entre para a nossa lista de exclusividade inserindo seu e-mail abaixo. Assim que liberarmos o instalador, você receberá o link direto no seu e-mail junto com uma condição especial de lançamento!
+                Tanto o nosso site quanto o ecossistema estão recebendo os <strong>ajustes finais de otimização</strong>. Cadastre-se na nossa lista de interesse. Assim que o instalador for homologado, você receberá o link direto com exclusividade!
             </p>
 
-            <form id="form-lista-desejos" onsubmit="enviarListaDesejos(event)" class="modal-form">
+            <div id="feedback-box" class="msg-status erro"></div>
 
-                <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
-                <input type="hidden" name="_captcha" value="false"> 
+            <form id="form-lista-desejos" onsubmit="enviarListaDesejos(event)">
+                <input type="hidden" name="_subject" value="Novo Lead - Lista de Espera do Sistema">
+                <input type="hidden" name="_captcha" value="false">
 
                 <div class="grupo-campo">
-                    <label for="nomeInteressado">Seu Nome:</label>
-                    <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
+                    <label for="txt-nome">Seu Nome / Empresa</label>
+                    <input type="text" id="txt-nome" name="[Nome]" placeholder="Ex: Seu nome ou Empresa" required>
                 </div>
 
                 <div class="grupo-campo">
-                    <label for="emailInteressado">Seu Melhor E-mail:</label>
-                    <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
+                    <label for="txt-email">E-mail para Notificação</label>
+                    <input type="email" id="txt-email" name="email" placeholder="nome@exemplo.com" required>
                 </div>
 
                 <button type="submit" id="btn-submit-modal" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CONFIRMAÇÃO E AGRADECIMENTO (VISUAL PREMIUM DO NAVEGADOR) -->
+    <div class="modal-overlay" id="modalSucesso" onclick="fecharModalPeloFundo(event, 'modalSucesso')">
+        <div class="modal-card" style="text-align: center;">
+            <button type="button" class="btn-fechar-modal" onclick="fecharModal('modalSucesso')">&times;</button>
+            
+            <div style="font-size: 3.5rem; margin-bottom: 15px;">✅</div>
+            <h4>Inscrição Confirmada!</h4>
+            <p style="color: var(--texto-claro); font-weight: 600; margin-bottom: 15px;">
+                Muito obrigado pelo interesse em nosso sistema!
+            </p>
+            <p>
+                Identificamos o seu registro com sucesso. Em breve, você receberá um <strong>e-mail personalizado de confirmação</strong> diretamente na sua fila de espera com as instruções de liberação da versão v1.0.
+            </p>
+            
+            <button type="button" onclick="fecharModal('modalSucesso')" class="btn-enviar-pedido" style="margin-top: 10px;">Entendido</button>
         </div>
     </div>
 
@@ -398,71 +426,70 @@
     </footer>
 
     <script>
-        const modal = document.getElementById('modalDesejos');
-
+        // Gerenciamento dinâmico dos Modais
         function abrirModal() {
-            modal.classList.add('ativo');
+            document.getElementById('modalDesejos').classList.add('ativo');
         }
 
-        function fecharModal() {
-            modal.classList.remove('ativo');
-        }
-
-        function fecharModalPeloFundo(event) {
-            if (event.target === modal) {
-                fecharModal();
+        function fecharModal(idModal) {
+            document.getElementById(idModal).classList.remove('ativo');
+            if(idModal === 'modalDesejos') {
+                document.getElementById('feedback-box').style.display = "none";
             }
         }
 
-        /* ENVIO ASSÍNCRONO PARADO NA API - REMOVE PROPAGANDAS */
-        /* ENVIO ASSÍNCRONO CORRIGIDO - FORÇA TEXTO PURO NO EMAIL */
-async function enviarListaDesejos(event) {
-    event.preventDefault(); 
-
-    const form = document.getElementById('form-lista-desejos');
-    const btnSubmit = document.getElementById('btn-submit-modal');
-
-    // Sinalização visual profissional durante a requisição
-    btnSubmit.disabled = true;
-    btnSubmit.innerText = "Processando registro técnico...";
-
-    // CAPTURA CONSTRUIDA MANUALMENTE PARA GARANTIR JSON PURO
-    const dados = {
-        Nome: document.getElementById('nomeInteressado').value,
-        Email: document.getElementById('emailInteressado').value,
-        _subject: "Novo interessado na Lista de Desejos! 🚀" // Assunto dentro do JSON
-    };
-
-    try {
-        // Envio direto para a API de AJAX deles
-        const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(dados) // Transforma em string JSON legítima
-        });
-
-        const resultado = await resposta.json();
-
-        // Se o FormSubmit aceitar o JSON, ele retorna success: "true"
-        if (resultado.success === "true" || resposta.ok) {
-            alert("✓ Sucesso! Seu e-mail foi registrado na nossa lista de exclusividade.");
-            form.reset(); 
-            fecharModal();
-        } else {
-            throw new Error("Erro de resposta do servidor.");
+        function fecharModalPeloFundo(event, idModal) {
+            if (event.target === document.getElementById(idModal)) {
+                fecharModal(idModal);
+            }
         }
 
-    } catch (erro) {
-        alert("✕ Não foi possível processar o envio automático. Entre em contato direto com o suporte.");
-    } finally {
-        // Devolve o estado inicial ao botão
-        btnSubmit.disabled = false;
-        btnSubmit.innerText = "✨ Entrar para Lista de Espera";
-    }
-}
+        /* ENVIO ASSÍNCRONO ATIVO - ATIVA MODAL INTERNO DE AGRADECIMENTO */
+        async function enviarListaDesejos(event) {
+            event.preventDefault(); 
+
+            const form = document.getElementById('form-lista-desejos');
+            const btnSubmit = document.getElementById('btn-submit-modal');
+            const feedbackBox = document.getElementById('feedback-box');
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Processando registro técnico...";
+            feedbackBox.style.display = "none";
+
+            const formData = new FormData(form);
+            const objetoJson = Object.fromEntries(formData);
+            const jsonBody = JSON.stringify(objetoJson);
+
+            try {
+                // IMPORTANTE: Altere abaixo pelo seu e-mail comercial para receber a notificação de Lead
+                const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: jsonBody
+                });
+
+                if (resposta.ok) {
+                    form.reset(); 
+                    fecharModal('modalDesejos'); // Fecha o formulário
+                    
+                    // Abre o modal customizado de agradecimento na tela
+                    document.getElementById('modalSucesso').classList.add('ativo');
+                } else {
+                    throw new Error("Erro reportado pelo servidor.");
+                }
+
+            } catch (erro) {
+                feedbackBox.className = "msg-status erro";
+                feedbackBox.innerText = "✕ Erro no processamento. Envie seu e-mail direto para o nosso contato.";
+                feedbackBox.style.display = "block";
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "✨ Entrar para Lista de Espera";
+            }
+        }
     </script>
 
 </body>
