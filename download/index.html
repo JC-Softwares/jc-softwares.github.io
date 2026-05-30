@@ -248,9 +248,11 @@
             margin: 0 0 25px 0;
         }
 
-        /* FORMULÁRIO DO MODAL */
+        /* FORMULÁRIO DO MODAL AJUSTADO */
         .modal-form .grupo-campo {
-            margin-bottom: 20px;
+            margin-bottom: 22px; /* Garante um distanciamento uniforme entre os blocos */
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .modal-form label {
@@ -272,8 +274,9 @@
             color: #ffffff;
             font-family: inherit;
             font-size: 0.95rem;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Impede o input de quebrar para fora da borda do modal */
             transition: border-color 0.2s, box-shadow 0.2s;
+            display: block;
         }
 
         .modal-form input:focus {
@@ -294,6 +297,9 @@
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
             font-family: inherit;
+            margin-top: 15px; /* Espaçamento adicional para separar bem das caixas de input acima */
+            display: block;
+            box-sizing: border-box;
         }
 
         .btn-enviar-pedido:hover { background-color: var(--azul-hover); }
@@ -383,7 +389,7 @@
 
             <div id="feedback-box" class="msg-status erro"></div>
 
-            <form id="form-lista-desejos" onsubmit="enviarListaDesejos(event)">
+            <form id="form-lista-desejos" class="modal-form" onsubmit="enviarListaDesejos(event)">
                 <input type="hidden" name="_subject" value="Novo Lead - Lista de Espera do Sistema">
                 <input type="hidden" name="_captcha" value="false">
 
@@ -424,43 +430,35 @@
     </footer>
 
     <script>
-        // URL Raw do GitHub para processar o conteúdo bruto via código
         const URL_CONFIG_GITHUB = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
-        
-        // Variável global para reter dinamicamente a URL de download capturada
         let linkDownloadAtualizado = "";
 
         async function verificarStatusSistema() {
             const botaoDownload = document.querySelector('.btn-download');
             
             try {
-                // 1. Consulta o arquivo remotos de configurações
                 const resposta = await fetch(URL_CONFIG_GITHUB);
                 if (!resposta.ok) throw new Error("Erro na comunicação com o servidor Git.");
                 
                 const textoBruto = await resposta.text();
-                
                 let statusSistema = "";
                 
-                // 2. Fragmenta o texto bruto linha por linha procurando os parâmetros
                 const linhas = textoBruto.split('\n');
                 linhas.forEach(linha => {
                     if (linha.includes("StatusSistema:")) {
-                        statusSistema = linha.replace("StatusSistema:", "").trim();
+                        statusSistema = line = linha.replace("StatusSistema:", "").trim();
                     }
                     if (linha.includes("ArquivoAtualizado:")) {
                         linkDownloadAtualizado = linha.replace("ArquivoAtualizado:", "").trim();
                     }
                 });
 
-                // 3. Aplica a inteligência de negócios ao botão
                 if (statusSistema === "DISPONÍVEL" && linkDownloadAtualizado !== "") {
                     botaoDownload.innerText = "💾 Baixar Instalador v1.0";
                     botaoDownload.onclick = function() {
                         window.location.href = linkDownloadAtualizado;
                     };
                 } else {
-                    // Caso esteja INDISPONÍVEL, assume a ação de abrir o modal de interesse
                     botaoDownload.innerText = "💾 Entrar na Lista de Espera";
                     botaoDownload.onclick = function() {
                         abrirModal();
@@ -469,7 +467,6 @@
 
             } catch (erro) {
                 console.error("Falha na varredura remota. Modo de contingência ativo:", erro);
-                // Fallback de segurança: Se falhar a conexão ou arquivo sumir, o botão mantém-se seguro abrindo o formulário
                 botaoDownload.innerText = "💾 Entrar na Lista de Espera";
                 botaoDownload.onclick = function() {
                     abrirModal();
@@ -477,10 +474,8 @@
             }
         }
 
-        // Executa a checagem dinâmica assim que o DOM estiver carregado
         window.onload = verificarStatusSistema;
 
-        // Gerenciamento dos Modais
         function abrirModal() {
             document.getElementById('modalDesejos').classList.add('ativo');
         }
@@ -498,7 +493,6 @@
             }
         }
 
-        /* ENVIO ASSÍNCRONO VIA AJAX - FORMSUBMIT */
         async function enviarListaDesejos(event) {
             event.preventDefault(); 
 
