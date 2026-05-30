@@ -349,7 +349,7 @@
             <div>
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
-                <button type="button" onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
+                <button type="button" class="btn-download">💾 Verificar Disponibilidade...</button>
             </div>
             
             <div class="aviso-seguranca">
@@ -372,7 +372,6 @@
         </div>
     </div>
 
-    <!-- MODAL 1: FORMULÁRIO DE CADASTRO -->
     <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event, 'modalDesejos')">
         <div class="modal-card">
             <button type="button" class="btn-fechar-modal" onclick="fecharModal('modalDesejos')">&times;</button>
@@ -403,7 +402,6 @@
         </div>
     </div>
 
-    <!-- MODAL 2: CONFIRMAÇÃO E AGRADECIMENTO (VISUAL PREMIUM DO NAVEGADOR) -->
     <div class="modal-overlay" id="modalSucesso" onclick="fecharModalPeloFundo(event, 'modalSucesso')">
         <div class="modal-card" style="text-align: center;">
             <button type="button" class="btn-fechar-modal" onclick="fecharModal('modalSucesso')">&times;</button>
@@ -426,7 +424,63 @@
     </footer>
 
     <script>
-        // Gerenciamento dinâmico dos Modais
+        // URL Raw do GitHub para processar o conteúdo bruto via código
+        const URL_CONFIG_GITHUB = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
+        
+        // Variável global para reter dinamicamente a URL de download capturada
+        let linkDownloadAtualizado = "";
+
+        async function verificarStatusSistema() {
+            const botaoDownload = document.querySelector('.btn-download');
+            
+            try {
+                // 1. Consulta o arquivo remotos de configurações
+                const resposta = await fetch(URL_CONFIG_GITHUB);
+                if (!resposta.ok) throw new Error("Erro na comunicação com o servidor Git.");
+                
+                const textoBruto = await resposta.text();
+                
+                let statusSistema = "";
+                
+                // 2. Fragmenta o texto bruto linha por linha procurando os parâmetros
+                const linhas = textoBruto.split('\n');
+                linhas.forEach(linha => {
+                    if (linha.includes("StatusSistema:")) {
+                        statusSistema = linha.replace("StatusSistema:", "").trim();
+                    }
+                    if (linha.includes("ArquivoAtualizado:")) {
+                        linkDownloadAtualizado = linha.replace("ArquivoAtualizado:", "").trim();
+                    }
+                });
+
+                // 3. Aplica a inteligência de negócios ao botão
+                if (statusSistema === "DISPONÍVEL" && linkDownloadAtualizado !== "") {
+                    botaoDownload.innerText = "💾 Baixar Instalador v1.0";
+                    botaoDownload.onclick = function() {
+                        window.location.href = linkDownloadAtualizado;
+                    };
+                } else {
+                    // Caso esteja INDISPONÍVEL, assume a ação de abrir o modal de interesse
+                    botaoDownload.innerText = "💾 Entrar na Lista de Espera";
+                    botaoDownload.onclick = function() {
+                        abrirModal();
+                    };
+                }
+
+            } catch (erro) {
+                console.error("Falha na varredura remota. Modo de contingência ativo:", erro);
+                // Fallback de segurança: Se falhar a conexão ou arquivo sumir, o botão mantém-se seguro abrindo o formulário
+                botaoDownload.innerText = "💾 Entrar na Lista de Espera";
+                botaoDownload.onclick = function() {
+                    abrirModal();
+                };
+            }
+        }
+
+        // Executa a checagem dinâmica assim que o DOM estiver carregado
+        window.onload = verificarStatusSistema;
+
+        // Gerenciamento dos Modais
         function abrirModal() {
             document.getElementById('modalDesejos').classList.add('ativo');
         }
@@ -444,7 +498,7 @@
             }
         }
 
-        /* ENVIO ASSÍNCRONO ATIVO - ATIVA MODAL INTERNO DE AGRADECIMENTO */
+        /* ENVIO ASSÍNCRONO VIA AJAX - FORMSUBMIT */
         async function enviarListaDesejos(event) {
             event.preventDefault(); 
 
@@ -461,7 +515,6 @@
             const jsonBody = JSON.stringify(objetoJson);
 
             try {
-                // IMPORTANTE: Altere abaixo pelo seu e-mail comercial para receber a notificação de Lead
                 const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
                     method: 'POST',
                     headers: {
@@ -473,9 +526,7 @@
 
                 if (resposta.ok) {
                     form.reset(); 
-                    fecharModal('modalDesejos'); // Fecha o formulário
-                    
-                    // Abre o modal customizado de agradecimento na tela
+                    fecharModal('modalDesejos');
                     document.getElementById('modalSucesso').classList.add('ativo');
                 } else {
                     throw new Error("Erro reportado pelo servidor.");
