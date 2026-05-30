@@ -382,23 +382,24 @@
             <!-- FORMULÁRIO CONFIGURADO VIA FORMSUBMIT (ENVIARÁ DIRETO PARA SEU EMAIL) -->
             <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
 
-                <!-- Configurações do FormSubmit para deixar o processo limpo -->
-                <input type="hidden" name="_next" value="https://jc-softwares.github.io/"> <!-- Redireciona de volta após o envio -->
-                <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
-                <input type="hidden" name="_captcha" value="false"> <!-- Desativa captcha chato para o cliente -->
+    <input type="hidden" name="_template" value="box">
 
-                <div style="margin-bottom: 15px;">
-                    <label for="nomeInteressado">Seu Nome:</label>
-                    <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
-                </div>
+    <input type="hidden" name="_next" value="https://jc-softwares.github.io/"> 
+    <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
+    <input type="hidden" name="_captcha" value="false"> 
 
-                <div style="margin-bottom: 25px;">
-                    <label for="emailInteressado">Seu Melhor E-mail:</label>
-                    <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
-                </div>
+    <div class="grupo-campo">
+        <label for="nomeInteressado">Seu Nome:</label>
+        <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
+    </div>
 
-                <button type="submit" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
-            </form>
+    <div class="grupo-campo">
+        <label for="emailInteressado">Seu Melhor E-mail:</label>
+        <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
+    </div>
+
+    <button type="submit" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
+</form>
         </div>
     </div>
 
