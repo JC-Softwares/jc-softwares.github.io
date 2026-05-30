@@ -9,12 +9,10 @@
             --bg-principal: #0d0f14;
             --bg-card: #161920;
             --azul-jc: #4169E1;
-            --azul-hover: #3558c8;
             --texto-claro: #f0f2f5;
             --texto-mutado: #a0a8b5;
             --borda-sutil: #232833;
-            --verde-sucesso: #2ed573;
-            --vermelho-erro: #ff4757;
+            --verde-sucesso: #2e7d32;
         }
 
         body {
@@ -43,7 +41,9 @@
             letter-spacing: 0.5px;
         }
 
-        .logo h1 span { color: var(--azul-jc); }
+            .logo h1 span {
+                color: var(--azul-jc);
+            }
 
         .nav-links a {
             color: var(--texto-claro);
@@ -70,7 +70,9 @@
             font-weight: 700;
         }
 
-        .hero-section h2 span { color: var(--azul-jc); }
+            .hero-section h2 span {
+                color: var(--azul-jc);
+            }
 
         .hero-section p {
             color: #b4bcda;
@@ -89,7 +91,9 @@
         }
 
         @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
+            .container {
+                grid-template-columns: 1fr;
+            }
         }
 
         .painel {
@@ -102,15 +106,15 @@
             justify-content: space-between;
         }
 
-        .painel h3 {
-            margin: 0 0 20px 0;
-            font-size: 1.5rem;
-            color: #ffffff;
-            border-bottom: 1px solid var(--borda-sutil);
-            padding-bottom: 10px;
-        }
+            .painel h3 {
+                margin: 0 0 20px 0;
+                font-size: 1.5rem;
+                color: #ffffff;
+                border-bottom: 1px solid var(--borda-sutil);
+                padding-bottom: 10px;
+            }
 
-        /* BOTÃO DE DOWNLOAD */
+        /* BOTÃO DE DOWNLOAD (GATILHO DO MODAL) */
         .btn-download {
             background-color: var(--azul-jc);
             color: #ffffff;
@@ -129,10 +133,10 @@
             font-family: inherit;
         }
 
-        .btn-download:hover {
-            background-color: var(--azul-hover);
-            transform: translateY(-2px);
-        }
+            .btn-download:hover {
+                background-color: #3158cd;
+                transform: translateY(-2px);
+            }
 
         .aviso-seguranca {
             background-color: rgba(65, 105, 225, 0.05);
@@ -144,41 +148,43 @@
             line-height: 1.5;
         }
 
-        /* LISTA DE PASSOS */
+        /* LISTA DE PASSOS (AGORA AUTOMÁTICOS) */
         .passos {
             margin: 0;
             padding: 0;
             list-style: none;
         }
 
-        .passos li {
-            margin-bottom: 25px;
-            position: relative;
-            padding-left: 35px;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--texto-mutado);
-        }
+            .passos li {
+                margin-bottom: 25px;
+                position: relative;
+                padding-left: 35px;
+                font-size: 0.95rem;
+                line-height: 1.6;
+                color: var(--texto-mutado);
+            }
 
-        .passos li strong { color: #ffffff; }
+                .passos li strong {
+                    color: #ffffff;
+                }
 
-        .passos li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            top: 2px;
-            background-color: rgba(65, 105, 225, 0.15);
-            color: var(--azul-jc);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
+                .passos li::before {
+                    content: "✓";
+                    position: absolute;
+                    left: 0;
+                    top: 2px;
+                    background-color: rgba(65, 105, 225, 0.15);
+                    color: var(--azul-jc);
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 22px;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                }
 
-        /* --- ESTILIZAÇÃO DOS MODAIS --- */
+        /* --- ESTILIZAÇÃO DO MODAL DA LISTA DE DESEJOS --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -196,10 +202,10 @@
             transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.ativo {
-            opacity: 1;
-            pointer-events: auto;
-        }
+            .modal-overlay.ativo {
+                opacity: 1;
+                pointer-events: auto;
+            }
 
         .modal-card {
             background-color: var(--bg-card);
@@ -212,7 +218,6 @@
             position: relative;
             transform: translateY(-20px);
             transition: transform 0.3s ease;
-            box-sizing: border-box;
         }
 
         .modal-overlay.ativo .modal-card {
@@ -231,7 +236,9 @@
             transition: color 0.2s;
         }
 
-        .btn-fechar-modal:hover { color: #ffffff; }
+            .btn-fechar-modal:hover {
+                color: #ffffff;
+            }
 
         .modal-card h4 {
             margin: 0 0 10px 0;
@@ -239,7 +246,9 @@
             color: #ffffff;
         }
 
-        .modal-card h4 span { color: var(--azul-jc); }
+            .modal-card h4 span {
+                color: var(--azul-jc);
+            }
 
         .modal-card p {
             color: var(--texto-mutado);
@@ -248,11 +257,9 @@
             margin: 0 0 25px 0;
         }
 
-        /* FORMULÁRIO DO MODAL AJUSTADO */
-        .modal-form .grupo-campo {
-            margin-bottom: 22px; /* Garante um distanciamento uniforme entre os blocos */
-            width: 100%;
-            box-sizing: border-box;
+        .modal-form group {
+            display: block;
+            margin-bottom: 20px;
         }
 
         .modal-form label {
@@ -261,65 +268,43 @@
             color: var(--texto-mutado);
             margin-bottom: 8px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .modal-form input[type="email"], .modal-form input[type="text"] {
             width: 100%;
-            padding: 14px;
-            background-color: #06070a;
+            padding: 12px 16px;
+            background-color: #0d0f14;
             border: 1px solid var(--borda-sutil);
             border-radius: 8px;
             color: #ffffff;
             font-family: inherit;
             font-size: 0.95rem;
-            box-sizing: border-box; /* Impede o input de quebrar para fora da borda do modal */
-            transition: border-color 0.2s, box-shadow 0.2s;
-            display: block;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
         }
 
         .modal-form input:focus {
             border-color: var(--azul-jc);
-            box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15);
             outline: none;
         }
 
         .btn-enviar-pedido {
-            background-color: var(--azul-jc);
+            background-color: var(--verde-sucesso);
             color: #ffffff;
             border: none;
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             font-size: 1rem;
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            transition: background-color 0.2s;
             font-family: inherit;
-            margin-top: 15px; /* Espaçamento adicional para separar bem das caixas de input acima */
-            display: block;
-            box-sizing: border-box;
         }
 
-        .btn-enviar-pedido:hover { background-color: var(--azul-hover); }
-        .btn-enviar-pedido:active { transform: scale(0.99); }
-
-        /* ALERTAS DE RESPOSTA COORDENADOS */
-        .msg-status {
-            display: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .msg-status.erro {
-            background-color: rgba(255, 71, 87, 0.1);
-            border: 1px solid var(--vermelho-erro);
-            color: var(--vermelho-erro);
-        }
+            .btn-enviar-pedido:hover {
+                background-color: #236326;
+            }
 
         /* FOOTER */
         footer {
@@ -336,10 +321,9 @@
 
     <div class="navbar">
         <div class="logo">
-            <h1>JC-<span>Softwares</span></h1>
-        </div>
-        <div class="nav-links">
-            <a href="https://jc-softwares.github.io/">← Voltar para Home</a>
+            <a href="https://jc-softwares.github.io/" style="text-decoration: none; color: inherit;">
+                <h1>JC-<span>Softwares</span></h1>
+            </a>
         </div>
     </div>
 
@@ -351,13 +335,15 @@
     </div>
 
     <div class="container">
+
         <div class="painel">
             <div>
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
-                <button type="button" class="btn-download">💾 Verificar Disponibilidade...</button>
+
+                <button onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
             </div>
-            
+
             <div class="aviso-seguranca">
                 <strong>🔒 Banco de Dados Isolado:</strong><br>
                 O sistema utiliza armazenamento local seguro protegido (.dat) garantindo total imunidade contra quedas de internet e curiosos.
@@ -368,7 +354,7 @@
             <div>
                 <h3>2. Tecnologia Multi-Key</h3>
                 <p>Nossa arquitetura foi projetada para poupar o seu tempo. Veja como funciona a validação:</p>
-                
+
                 <ul class="passos">
                     <li><strong>Reconhecimento de Hardware:</strong> No primeiro login, o sistema identifica de forma nativa e segura os componentes da sua máquina.</li>
                     <li><strong>Sincronização Invisível:</strong> Os dados de licença são validados automaticamente com o nosso servidor, dispensando qualquer digitação de chaves longas.</li>
@@ -376,52 +362,33 @@
                 </ul>
             </div>
         </div>
+
     </div>
 
-    <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event, 'modalDesejos')">
+    <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event)">
         <div class="modal-card">
-            <button type="button" class="btn-fechar-modal" onclick="fecharModal('modalDesejos')">&times;</button>
-            
+            <button class="btn-fechar-modal" onclick="fecharModal()">&times;</button>
+
             <h4>Quase pronto! 🚀</h4>
             <p>
-                Tanto o nosso site quanto o ecossistema estão recebendo os <strong>ajustes finais de otimização</strong>. Cadastre-se na nossa lista de interesse. Assim que o instalador for homologado, você receberá o link direto com exclusividade!
+                Tanto o nosso site quanto o sistema estão recebendo os <strong>ajustes finais de otimização</strong>. Entre para a nossa lista de exclusividade inserindo seu e-mail abaixo. Assim que liberarmos o instalador, você receberá o link direto no seu e-mail junto com uma condição especial de lançamento!
             </p>
 
-            <div id="feedback-box" class="msg-status erro"></div>
+            <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
 
-            <form id="form-lista-desejos" class="modal-form" onsubmit="enviarListaDesejos(event)">
-                <input type="hidden" name="_subject" value="Novo Lead - Lista de Espera do Sistema">
-                <input type="hidden" name="_captcha" value="false">
-
-                <div class="grupo-campo">
-                    <label for="txt-nome">Seu Nome / Empresa</label>
-                    <input type="text" id="txt-nome" name="[Nome]" placeholder="Ex: Seu nome ou Empresa" required>
+                <input type="hidden" name="_next" value="https://jc-softwares.github.io/"> <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
+                <input type="hidden" name="_captcha" value="false"> <div style="margin-bottom: 15px;">
+                    <label for="nomeInteressado">Seu Nome:</label>
+                    <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
                 </div>
 
-                <div class="grupo-campo">
-                    <label for="txt-email">E-mail para Notificação</label>
-                    <input type="email" id="txt-email" name="email" placeholder="nome@exemplo.com" required>
+                <div style="margin-bottom: 25px;">
+                    <label for="emailInteressado">Seu Melhor E-mail:</label>
+                    <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
                 </div>
 
-                <button type="submit" id="btn-submit-modal" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
+                <button type="submit" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
             </form>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modalSucesso" onclick="fecharModalPeloFundo(event, 'modalSucesso')">
-        <div class="modal-card" style="text-align: center;">
-            <button type="button" class="btn-fechar-modal" onclick="fecharModal('modalSucesso')">&times;</button>
-            
-            <div style="font-size: 3.5rem; margin-bottom: 15px;">✅</div>
-            <h4>Inscrição Confirmada!</h4>
-            <p style="color: var(--texto-claro); font-weight: 600; margin-bottom: 15px;">
-                Muito obrigado pelo interesse em nosso sistema!
-            </p>
-            <p>
-                Identificamos o seu registro com sucesso. Em breve, você receberá um <strong>e-mail personalizado de confirmação</strong> diretamente na sua fila de espera com as instruções de liberação da versão v1.0.
-            </p>
-            
-            <button type="button" onclick="fecharModal('modalSucesso')" class="btn-enviar-pedido" style="margin-top: 10px;">Entendido</button>
         </div>
     </div>
 
@@ -430,109 +397,20 @@
     </footer>
 
     <script>
-        const URL_CONFIG_GITHUB = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
-        let linkDownloadAtualizado = "";
-
-        async function verificarStatusSistema() {
-            const botaoDownload = document.querySelector('.btn-download');
-            
-            try {
-                const resposta = await fetch(URL_CONFIG_GITHUB);
-                if (!resposta.ok) throw new Error("Erro na comunicação com o servidor Git.");
-                
-                const textoBruto = await resposta.text();
-                let statusSistema = "";
-                
-                const linhas = textoBruto.split('\n');
-                linhas.forEach(linha => {
-                    if (linha.includes("StatusSistema:")) {
-                        statusSistema = line = linha.replace("StatusSistema:", "").trim();
-                    }
-                    if (linha.includes("ArquivoAtualizado:")) {
-                        linkDownloadAtualizado = linha.replace("ArquivoAtualizado:", "").trim();
-                    }
-                });
-
-                if (statusSistema === "DISPONÍVEL" && linkDownloadAtualizado !== "") {
-                    botaoDownload.innerText = "💾 Baixar Instalador v1.0";
-                    botaoDownload.onclick = function() {
-                        window.location.href = linkDownloadAtualizado;
-                    };
-                } else {
-                    botaoDownload.innerText = "💾 Entrar na Lista de Espera";
-                    botaoDownload.onclick = function() {
-                        abrirModal();
-                    };
-                }
-
-            } catch (erro) {
-                console.error("Falha na varredura remota. Modo de contingência ativo:", erro);
-                botaoDownload.innerText = "💾 Entrar na Lista de Espera";
-                botaoDownload.onclick = function() {
-                    abrirModal();
-                };
-            }
-        }
-
-        window.onload = verificarStatusSistema;
+        const modal = document.getElementById('modalDesejos');
 
         function abrirModal() {
-            document.getElementById('modalDesejos').classList.add('ativo');
+            modal.classList.add('ativo');
         }
 
-        function fecharModal(idModal) {
-            document.getElementById(idModal).classList.remove('ativo');
-            if(idModal === 'modalDesejos') {
-                document.getElementById('feedback-box').style.display = "none";
-            }
+        function fecharModal() {
+            modal.classList.remove('ativo');
         }
 
-        function fecharModalPeloFundo(event, idModal) {
-            if (event.target === document.getElementById(idModal)) {
-                fecharModal(idModal);
-            }
-        }
-
-        async function enviarListaDesejos(event) {
-            event.preventDefault(); 
-
-            const form = document.getElementById('form-lista-desejos');
-            const btnSubmit = document.getElementById('btn-submit-modal');
-            const feedbackBox = document.getElementById('feedback-box');
-
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Processando registro técnico...";
-            feedbackBox.style.display = "none";
-
-            const formData = new FormData(form);
-            const objetoJson = Object.fromEntries(formData);
-            const jsonBody = JSON.stringify(objetoJson);
-
-            try {
-                const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: jsonBody
-                });
-
-                if (resposta.ok) {
-                    form.reset(); 
-                    fecharModal('modalDesejos');
-                    document.getElementById('modalSucesso').classList.add('ativo');
-                } else {
-                    throw new Error("Erro reportado pelo servidor.");
-                }
-
-            } catch (erro) {
-                feedbackBox.className = "msg-status erro";
-                feedbackBox.innerText = "✕ Erro no processamento. Envie seu e-mail direto para o nosso contato.";
-                feedbackBox.style.display = "block";
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "✨ Entrar para Lista de Espera";
+        // Fecha o modal caso o usuário clique na parte escura de fora do card
+        function fecharModalPeloFundo(event) {
+            if (event.target === modal) {
+                fecharModal();
             }
         }
     </script>
