@@ -114,7 +114,7 @@
                 padding-bottom: 10px;
             }
 
-        /* BOTÃO DE DOWNLOAD */
+        /* BOTÃO DE DOWNLOAD (GATILHO) */
         .btn-download {
             background-color: var(--azul-jc);
             color: #ffffff;
@@ -341,7 +341,7 @@
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
 
-                <button onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
+                <button id="btnPrincipalDownload" onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
             </div>
 
             <div class="aviso-seguranca">
@@ -390,7 +390,7 @@
                     <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
                 </div>
 
-                <button type="submit" id="btnSubmitForm" class="btn-enviar-pedido">✨ Enviar Inscrição</button>
+                <button type="submit" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
             </form>
         </div>
     </div>
@@ -402,7 +402,7 @@
     <script>
         const modal = document.getElementById('modalDesejos');
 
-        // Executa a verificação assim que a página é totalmente carregada
+        // Verifica o status assim que a página carrega
         document.addEventListener("DOMContentLoaded", function() {
             verificarStatusDoSistema();
         });
@@ -421,38 +421,37 @@
             }
         }
 
-        // --- VERIFICAÇÃO EM TEMPO REAL CORRIGIDA COM PROXY ANTI-CORS ---
-        // --- VERIFICAÇÃO EM TEMPO REAL CORRIGIDA COM PROXY ANTI-CORS ---
-function verificarStatusDoSistema() {
-    const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
-    const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
-    
-    const botaoFormulario = document.getElementById("btnSubmitForm");
-    if (!botaoFormulario) return;
+        // --- VERIFICAÇÃO DIRECIONADA AO BOTÃO DE DOWNLOAD PRINCIPAL ---
+        function verificarStatusDoSistema() {
+            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
+            const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
+            
+            // Agora pegamos especificamente o botão azul da página
+            const botaoPrincipal = document.getElementById("btnPrincipalDownload");
+            if (!botaoPrincipal) return;
 
-    fetch(urlProxy)
-        .then(response => {
-            if (!response.ok) throw new Error("Erro na resposta do Proxy");
-            return response.json();
-        })
-        .then(data => {
-            // Pega o texto bruto do arquivo (Ex: "StatusSistema: INDISPONÍVEL")
-            const textoPuro = data.contents;
-            // Remove espaços extras e joga tudo para maiúsculo para evitar problemas com caixa alta/baixa
-            const linhaCompleta = textoPuro.trim().toUpperCase();
+            fetch(urlProxy)
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro na resposta do Proxy");
+                    return response.json();
+                })
+                .then(data => {
+                    const textoPuro = data.contents;
+                    const linhaCompleta = textoPuro.trim().toUpperCase();
 
-            // Agora verifica se a linha contém a estrutura do StatusSistema como INDISPONÍVEL
-            if (linhaCompleta.includes("STATUSSISTEMA") && (linhaCompleta.includes("INDISPONÍVEL") || linhaCompleta.includes("INDISPONIVEL"))) {
-                botaoFormulario.innerHTML = "Entrar para Lista de Espera";
-            } else {
-                botaoFormulario.innerHTML = "✨ Baixar Agora Comercial";
-            }
-        })
-        .catch(erro => {
-            console.error("Falha ao validar via Proxy, aplicando Fallback:", erro);
-            botaoFormulario.innerHTML = "Entrar para Lista de Espera";
-        });
-}
+                    // Se o arquivo contiver o status INDISPONÍVEL
+                    if (linhaCompleta.includes("STATUSSISTEMA") && (linhaCompleta.includes("INDISPONÍVEL") || linhaCompleta.includes("INDISPONIVEL"))) {
+                        botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                    } else {
+                        botaoPrincipal.innerHTML = "💾 Baixar Instalador v1.0";
+                    }
+                })
+                .catch(erro => {
+                    console.error("Falha ao validar via Proxy, aplicando Fallback:", erro);
+                    // Caso falhe a conexão, altera para Lista de Espera por segurança
+                    botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                });
+        }
     </script>
 
 </body>
