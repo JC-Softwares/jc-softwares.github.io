@@ -114,7 +114,7 @@
                 padding-bottom: 10px;
             }
 
-        /* BOTÃO DE DOWNLOAD (GATILHO DO MODAL) */
+        /* BOTÃO DE DOWNLOAD */
         .btn-download {
             background-color: var(--azul-jc);
             color: #ffffff;
@@ -148,7 +148,7 @@
             line-height: 1.5;
         }
 
-        /* LISTA DE PASSOS (AGORA AUTOMÁTICOS) */
+        /* LISTA DE PASSOS */
         .passos {
             margin: 0;
             padding: 0;
@@ -184,7 +184,7 @@
                     font-weight: 700;
                 }
 
-        /* --- ESTILIZAÇÃO DO MODAL DA LISTA DE DESEJOS --- */
+        /* MODAL DA LISTA DE DESEJOS */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -390,7 +390,7 @@
                     <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
                 </div>
 
-                <button type="submit" id="btnSubmitForm" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
+                <button type="submit" id="btnSubmitForm" class="btn-enviar-pedido">✨ Enviar Inscrição</button>
             </form>
         </div>
     </div>
@@ -402,9 +402,12 @@
     <script>
         const modal = document.getElementById('modalDesejos');
 
-        function abrirModal() {
-            // Toda vez que abre o modal, executa a verificação online no GitHub
+        // Executa a verificação assim que a página é totalmente carregada
+        document.addEventListener("DOMContentLoaded", function() {
             verificarStatusDoSistema();
+        });
+
+        function abrirModal() {
             modal.classList.add('ativo');
         }
 
@@ -418,34 +421,35 @@
             }
         }
 
-        // --- VERIFICAÇÃO EM TEMPO REAL VIA GITHUB RAW ---
+        // --- VERIFICAÇÃO EM TEMPO REAL CORRIGIDA COM PROXY ANTI-CORS ---
         function verificarStatusDoSistema() {
-            // URL Raw necessária para ler o arquivo de texto puro sem a interface do GitHub
-            const urlTxt = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
+            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
+            // Utilizando o proxy allorigins para evitar o bloqueio de CORS do GitHub
+            const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
+            
             const botaoFormulario = document.getElementById("btnSubmitForm");
-
             if (!botaoFormulario) return;
 
-            fetch(urlTxt)
+            fetch(urlProxy)
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao acessar repositório");
-                    }
-                    return response.text();
+                    if (!response.ok) throw new Error("Erro na resposta do Proxy");
+                    return response.json();
                 })
-                .then(texto => {
-                    // Limpa espaços em branco e quebras de linha indesejadas
-                    const StatusSistema = texto.trim().toUpperCase();
+                .then(data => {
+                    // O conteúdo do arquivo txt puro vem dentro de data.contents
+                    const textoPuro = data.contents;
+                    const statusLimpo = textoPuro.trim().toUpperCase();
 
-                    if (StatusSistema.includes("INDISPONÍVEL") || statusLimpo.includes("INDISPONIVEL")) {
+                    // Se conter o texto INDISPONÍVEL (com ou sem acento)
+                    if (statusLimpo.includes("INDISPONÍVEL") || statusLimpo.includes("INDISPONIVEL")) {
                         botaoFormulario.innerHTML = "Entrar para Lista de Espera";
                     } else {
                         botaoFormulario.innerHTML = "✨ Baixar Agora Comercial";
                     }
                 })
                 .catch(erro => {
-                    console.error("Falha ao validar status:", erro);
-                    // Fallback de segurança: Caso o GitHub falhe, assume Lista de Espera por precaução
+                    console.error("Falha ao validar via Proxy, aplicando Fallback:", erro);
+                    // Caso o serviço caia, mantém o botão seguro para captura de Leads
                     botaoFormulario.innerHTML = "Entrar para Lista de Espera";
                 });
         }
