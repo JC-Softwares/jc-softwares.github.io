@@ -422,37 +422,37 @@
         }
 
         // --- VERIFICAÇÃO EM TEMPO REAL CORRIGIDA COM PROXY ANTI-CORS ---
-        function verificarStatusDoSistema() {
-            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
-            // Utilizando o proxy allorigins para evitar o bloqueio de CORS do GitHub
-            const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
-            
-            const botaoFormulario = document.getElementById("btnSubmitForm");
-            if (!botaoFormulario) return;
+        // --- VERIFICAÇÃO EM TEMPO REAL CORRIGIDA COM PROXY ANTI-CORS ---
+function verificarStatusDoSistema() {
+    const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
+    const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
+    
+    const botaoFormulario = document.getElementById("btnSubmitForm");
+    if (!botaoFormulario) return;
 
-            fetch(urlProxy)
-                .then(response => {
-                    if (!response.ok) throw new Error("Erro na resposta do Proxy");
-                    return response.json();
-                })
-                .then(data => {
-                    // O conteúdo do arquivo txt puro vem dentro de data.contents
-                    const textoPuro = data.contents;
-                    const statusLimpo = textoPuro.trim().toUpperCase();
+    fetch(urlProxy)
+        .then(response => {
+            if (!response.ok) throw new Error("Erro na resposta do Proxy");
+            return response.json();
+        })
+        .then(data => {
+            // Pega o texto bruto do arquivo (Ex: "StatusSistema: INDISPONÍVEL")
+            const textoPuro = data.contents;
+            // Remove espaços extras e joga tudo para maiúsculo para evitar problemas com caixa alta/baixa
+            const linhaCompleta = textoPuro.trim().toUpperCase();
 
-                    // Se conter o texto INDISPONÍVEL (com ou sem acento)
-                    if (statusLimpo.includes("INDISPONÍVEL") || statusLimpo.includes("INDISPONIVEL")) {
-                        botaoFormulario.innerHTML = "Entrar para Lista de Espera";
-                    } else {
-                        botaoFormulario.innerHTML = "✨ Baixar Agora Comercial";
-                    }
-                })
-                .catch(erro => {
-                    console.error("Falha ao validar via Proxy, aplicando Fallback:", erro);
-                    // Caso o serviço caia, mantém o botão seguro para captura de Leads
-                    botaoFormulario.innerHTML = "Entrar para Lista de Espera";
-                });
-        }
+            // Agora verifica se a linha contém a estrutura do StatusSistema como INDISPONÍVEL
+            if (linhaCompleta.includes("STATUSSISTEMA") && (linhaCompleta.includes("INDISPONÍVEL") || linhaCompleta.includes("INDISPONIVEL"))) {
+                botaoFormulario.innerHTML = "Entrar para Lista de Espera";
+            } else {
+                botaoFormulario.innerHTML = "✨ Baixar Agora Comercial";
+            }
+        })
+        .catch(erro => {
+            console.error("Falha ao validar via Proxy, aplicando Fallback:", erro);
+            botaoFormulario.innerHTML = "Entrar para Lista de Espera";
+        });
+}
     </script>
 
 </body>
