@@ -41,9 +41,9 @@
             letter-spacing: 0.5px;
         }
 
-            .logo h1 span {
-                color: var(--azul-jc);
-            }
+        .logo h1 span {
+            color: var(--azul-jc);
+        }
 
         .nav-links a {
             color: var(--texto-claro);
@@ -70,9 +70,9 @@
             font-weight: 700;
         }
 
-            .hero-section h2 span {
-                color: var(--azul-jc);
-            }
+        .hero-section h2 span {
+            color: var(--azul-jc);
+        }
 
         .hero-section p {
             color: #b4bcda;
@@ -106,13 +106,13 @@
             justify-content: space-between;
         }
 
-            .painel h3 {
-                margin: 0 0 20px 0;
-                font-size: 1.5rem;
-                color: #ffffff;
-                border-bottom: 1px solid var(--borda-sutil);
-                padding-bottom: 10px;
-            }
+        .painel h3 {
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            color: #ffffff;
+            border-bottom: 1px solid var(--borda-sutil);
+            padding-bottom: 10px;
+        }
 
         /* BOTÃO DE DOWNLOAD (GATILHO DO MODAL) */
         .btn-download {
@@ -133,10 +133,10 @@
             font-family: inherit;
         }
 
-            .btn-download:hover {
-                background-color: #3158cd;
-                transform: translateY(-2px);
-            }
+        .btn-download:hover {
+            background-color: #3158cd;
+            transform: translateY(-2px);
+        }
 
         .aviso-seguranca {
             background-color: rgba(65, 105, 225, 0.05);
@@ -148,43 +148,43 @@
             line-height: 1.5;
         }
 
-        /* LISTA DE PASSOS (AGORA AUTOMÁTICOS) */
+        /* LISTA DE PASSOS NATIVOS */
         .passos {
             margin: 0;
             padding: 0;
             list-style: none;
         }
 
-            .passos li {
-                margin-bottom: 25px;
-                position: relative;
-                padding-left: 35px;
-                font-size: 0.95rem;
-                line-height: 1.6;
-                color: var(--texto-mutado);
-            }
+        .passos li {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 35px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--texto-mutado);
+        }
 
-                .passos li strong {
-                    color: #ffffff;
-                }
+        .passos li strong {
+            color: #ffffff;
+        }
 
-                .passos li::before {
-                    content: "✓";
-                    position: absolute;
-                    left: 0;
-                    top: 2px;
-                    background-color: rgba(65, 105, 225, 0.15);
-                    color: var(--azul-jc);
-                    width: 22px;
-                    height: 22px;
-                    border-radius: 50%;
-                    text-align: center;
-                    line-height: 22px;
-                    font-size: 0.8rem;
-                    font-weight: 700;
-                }
+        .passos li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            background-color: rgba(65, 105, 225, 0.15);
+            color: var(--azul-jc);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 22px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
 
-        /* --- ESTILIZAÇÃO DO MODAL DA LISTA DE DESEJOS --- */
+        /* --- ESTILIZAÇÃO DO MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -202,10 +202,10 @@
             transition: opacity 0.3s ease;
         }
 
-            .modal-overlay.ativo {
-                opacity: 1;
-                pointer-events: auto;
-            }
+        .modal-overlay.ativo {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         .modal-card {
             background-color: var(--bg-card);
@@ -218,6 +218,7 @@
             position: relative;
             transform: translateY(-20px);
             transition: transform 0.3s ease;
+            box-sizing: border-box;
         }
 
         .modal-overlay.ativo .modal-card {
@@ -236,19 +237,15 @@
             transition: color 0.2s;
         }
 
-            .btn-fechar-modal:hover {
-                color: #ffffff;
-            }
+        .btn-fechar-modal:hover {
+            color: #ffffff;
+        }
 
         .modal-card h4 {
             margin: 0 0 10px 0;
             font-size: 1.6rem;
             color: #ffffff;
         }
-
-            .modal-card h4 span {
-                color: var(--azul-jc);
-            }
 
         .modal-card p {
             color: var(--texto-mutado);
@@ -257,12 +254,13 @@
             margin: 0 0 25px 0;
         }
 
-        .modal-form group {
-            display: block;
+        /* FORMULÁRIO INTERNO DO MODAL */
+        .grupo-campo {
             margin-bottom: 20px;
+            text-align: left;
         }
 
-        .modal-form label {
+        .grupo-campo label {
             display: block;
             font-size: 0.85rem;
             color: var(--texto-mutado);
@@ -270,9 +268,9 @@
             font-weight: 600;
         }
 
-        .modal-form input[type="email"], .modal-form input[type="text"] {
+        .grupo-campo input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px;
             background-color: #0d0f14;
             border: 1px solid var(--borda-sutil);
             border-radius: 8px;
@@ -283,7 +281,7 @@
             transition: border-color 0.2s;
         }
 
-        .modal-form input:focus {
+        .grupo-campo input:focus {
             border-color: var(--azul-jc);
             outline: none;
         }
@@ -293,7 +291,7 @@
             color: #ffffff;
             border: none;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             font-size: 1rem;
             font-weight: 700;
             border-radius: 8px;
@@ -302,9 +300,9 @@
             font-family: inherit;
         }
 
-            .btn-enviar-pedido:hover {
-                background-color: #236326;
-            }
+        .btn-enviar-pedido:hover {
+            background-color: #1b5e20;
+        }
 
         /* FOOTER */
         footer {
@@ -337,13 +335,11 @@
 
     <div class="container">
 
-        <!-- COLUNA 1: DOWNLOAD (CHAMA O MODAL AGORA) -->
         <div class="painel">
             <div>
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
 
-                <!-- Botão modificado para abrir o modal via JavaScript -->
                 <button onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0</button>
             </div>
 
@@ -353,7 +349,6 @@
             </div>
         </div>
 
-        <!-- COLUNA 2: ATIVAÇÃO AUTOMÁTICA -->
         <div class="painel">
             <div>
                 <h3>2. Tecnologia Multi-Key</h3>
@@ -369,7 +364,6 @@
 
     </div>
 
-    <!-- --- ESTRUTURA DO MODAL (ESTILO LISTA DE DESEJOS) --- -->
     <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event)">
         <div class="modal-card">
             <button class="btn-fechar-modal" onclick="fecharModal()">&times;</button>
@@ -379,27 +373,23 @@
                 Tanto o nosso site quanto o sistema estão recebendo os <strong>ajustes finais de otimização</strong>. Entre para a nossa lista de exclusividade inserindo seu e-mail abaixo. Assim que liberarmos o instalador, você receberá o link direto no seu e-mail junto com uma condição especial de lançamento!
             </p>
 
-            <!-- FORMULÁRIO CONFIGURADO VIA FORMSUBMIT (ENVIARÁ DIRETO PARA SEU EMAIL) -->
-            <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
+            <form id="form-lista-desejos" onsubmit="enviarListaDesejos(event)" class="modal-form">
 
-    <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
+                <input type="hidden" name="_captcha" value="false"> 
 
-    <input type="hidden" name="_next" value="https://jc-softwares.github.io/"> 
-    <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
-    <input type="hidden" name="_captcha" value="false"> 
+                <div class="grupo-campo">
+                    <label for="nomeInteressado">Seu Nome:</label>
+                    <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
+                </div>
 
-    <div class="grupo-campo">
-        <label for="nomeInteressado">Seu Nome:</label>
-        <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
-    </div>
+                <div class="grupo-campo">
+                    <label for="emailInteressado">Seu Melhor E-mail:</label>
+                    <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
+                </div>
 
-    <div class="grupo-campo">
-        <label for="emailInteressado">Seu Melhor E-mail:</label>
-        <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
-    </div>
-
-    <button type="submit" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
-</form>
+                <button type="submit" id="btn-submit-modal" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
+            </form>
         </div>
     </div>
 
@@ -407,7 +397,6 @@
         <p>&copy; 2026 JC-Softwares. Licenciamento automatizado via Hardware ID Validation.</p>
     </footer>
 
-    <!-- INTERAÇÃO JAVASCRIPT DO MODAL -->
     <script>
         const modal = document.getElementById('modalDesejos');
 
@@ -419,10 +408,52 @@
             modal.classList.remove('ativo');
         }
 
-        // Fecha o modal caso o usuário clique na parte escura de fora do card
         function fecharModalPeloFundo(event) {
             if (event.target === modal) {
                 fecharModal();
+            }
+        }
+
+        /* ENVIO ASSÍNCRONO PARADO NA API - REMOVE PROPAGANDAS */
+        async function enviarListaDesejos(event) {
+            event.preventDefault(); 
+
+            const form = document.getElementById('form-lista-desejos');
+            const btnSubmit = document.getElementById('btn-submit-modal');
+
+            // Sinalização visual profissional durante a requisição
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Processando registro técnico...";
+
+            const formData = new FormData(form);
+            const objetoJson = Object.fromEntries(formData);
+            const jsonBody = JSON.stringify(objetoJson);
+
+            try {
+                // Rota /ajax/ desativa a injeção de templates HTML e propagandas do FormSubmit
+                const resposta = await fetch('https://formsubmit.co/ajax/suporte.jc.softwares@outlook.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: jsonBody
+                });
+
+                if (resposta.ok) {
+                    alert("✓ Sucesso! Seu e-mail foi registrado na nossa lista de exclusividade.");
+                    form.reset(); 
+                    fecharModal();
+                } else {
+                    throw new Error("Erro de resposta do servidor.");
+                }
+
+            } catch (erro) {
+                alert("✕ Não foi possível processar o envio automático. Entre em contato direto com o suporte.");
+            } finally {
+                // Devolve o estado inicial ao botão
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "✨ Entrar para Lista de Espera";
             }
         }
     </script>
