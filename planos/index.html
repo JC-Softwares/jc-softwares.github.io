@@ -4,7 +4,707 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planos e Licenciamento | JC-Softwares</title>
+    <style><!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos e Licenciamento | JC-Softwares</title>
     <style>
+        :root {
+            --bg-principal: #0d0f14;
+            --bg-card: #161920;
+            --azul-jc: #4169E1;
+            --texto-claro: #f0f2f5;
+            --texto-mutado: #a0a8b5;
+            --borda-sutil: #232833;
+            --verde-sucesso: #2e7d32;
+            --verde-whatsapp: #25d366;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-claro);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        /* NAVBAR PRINCIPAL ALINHADA À ESQUERDA */
+        .navbar {
+            background-color: #06070a;
+            border-bottom: 2px solid var(--azul-jc);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+            .logo h1 span {
+                color: var(--azul-jc);
+            }
+
+        /* HERO AJUSTADO */
+        .hero-section {
+            background: linear-gradient(to bottom, rgba(65, 105, 225, 0.25) 0%, var(--bg-principal) 100%);
+            padding: 20px 20px 10px 20px;
+            text-align: center;
+        }
+
+            .hero-section h2 {
+                margin: 0;
+                font-size: 2.4rem;
+                font-weight: 700;
+            }
+
+                .hero-section h2 span {
+                    color: var(--azul-jc);
+                }
+
+        /* SEÇÃO DE TITULO APROXIMADA */
+        .secao-titulo-interna {
+            text-align: center;
+            margin: 25px 0 10px 0;
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+
+        /* CONTEÚDO DE PLANOS RECONFIGURADO PARA 3 COLUNAS */
+        .container-planos {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        @media (max-width: 992px) {
+            .container-planos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container-planos {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card-plano {
+            background-color: var(--bg-card);
+            border: 2px solid var(--borda-sutil);
+            border-radius: 12px;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+            .card-plano:hover {
+                transform: translateY(-2px);
+            }
+
+            /* PLANO PRO DESTAQUE VISUAL PREMIUM */
+            .card-plano.premium {
+                border-color: var(--azul-jc);
+                background: linear-gradient(135deg, #161920 0%, #11141b 100%);
+                box-shadow: 0 4px 20px rgba(65, 105, 225, 0.15);
+            }
+
+            .card-plano h3 {
+                margin: 0 0 5px 0;
+                font-size: 1.45rem;
+                color: #ffffff;
+            }
+
+        .sub-titulo-plano {
+            font-size: 0.85rem;
+            color: var(--texto-mutado);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .preco {
+            font-size: 2.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            min-height: 55px; /* Evita quebra de layout caso vire botão */
+            display: flex;
+            align-items: center;
+        }
+
+            .preco span.sufixo-preco {
+                font-size: 1rem;
+                color: var(--texto-mutado);
+                font-weight: normal;
+                opacity: 0.7;
+            }
+
+        /* BOTÃO CONSULTAR VALOR ROSTANDO DENTRO DA PRÓPRIA TELA */
+        .btn-consultar-valores {
+            background-color: transparent;
+            color: #7393ff;
+            border: 1px solid rgba(65, 105, 225, 0.5);
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+            .btn-consultar-valores:hover {
+                background-color: rgba(65, 105, 225, 0.1);
+                border-color: var(--azul-jc);
+                color: #ffffff;
+            }
+
+        .recursos {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .recursos li {
+                margin-bottom: 12px;
+                color: var(--texto-mutado);
+                font-size: 0.92rem;
+                line-height: 1.4;
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+                .recursos li::before {
+                    content: "✓";
+                    color: var(--verde-sucesso);
+                    font-weight: bold;
+                }
+
+        .card-plano.premium .recursos li::before {
+            color: #7393ff;
+        }
+
+        /* CONTAINER PARA O BOTÃO SUPERIOR */
+        .container-botao-superior {
+            text-align: center;
+            margin: 20px 0 10px 0;
+        }
+
+        /* BOTÃO PRINCIPAL DOWNLOAD DE LICENÇAS - ESTÁTICO E NITIDO */
+        .btn-principal-download {
+            background-color: var(--azul-jc);
+            color: #ffffff;
+            text-decoration: none;
+            display: inline-block;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+            .btn-principal-download:hover {
+                background-color: #3158cd;
+            }
+
+        /* ANIMAÇÃO APENAS NA BORDA E SOMBRA */
+        .btn-pulsante {
+            outline: 0px solid rgba(65, 105, 225, 0.7);
+            animation: pulsarBorda 2s infinite ease-in-out;
+        }
+
+        @keyframes pulsarBorda {
+            0% {
+                box-shadow: 0 0 0 0 rgba(65, 105, 225, 0.7), 0 4px 15px rgba(65, 105, 225, 0.4);
+                outline: 0px solid rgba(65, 105, 225, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(65, 105, 225, 0), 0 4px 20px rgba(65, 105, 225, 0.6);
+                outline: 3px solid rgba(65, 105, 225, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(65, 105, 225, 0), 0 4px 15px rgba(65, 105, 225, 0.4);
+                outline: 0px solid rgba(65, 105, 225, 0);
+            }
+        }
+
+        /* BANNER CENTRAL DE DEGUSTAÇÃO GRATUITA */
+        .container-cta-central {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .banner-degustacao {
+            background: linear-gradient(135deg, #1e2530 0%, #161920 100%);
+            border: 2px dashed var(--azul-jc);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+            .banner-degustacao h3 {
+                margin: 0 0 15px 0;
+                font-size: 1.8rem;
+                color: #ffffff;
+            }
+
+                .banner-degustacao h3 span {
+                    color: #7393ff;
+                }
+
+            .banner-degustacao p {
+                color: var(--texto-mutado);
+                font-size: 1.05rem;
+                line-height: 1.6;
+                max-width: 700px;
+                margin: 0 auto 30px auto;
+            }
+
+        /* SEÇÃO DE CRÉDITOS DE SUPORTE */
+        .secao-suporte {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card-suporte {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            border-top: 4px solid #ff9800;
+            border-radius: 12px;
+            padding: 40px 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .card-suporte-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+
+        .card-suporte-info p {
+            color: var(--texto-mutado);
+            line-height: 1.6;
+            font-size: 0.98rem;
+            margin: 0;
+        }
+
+        /* REPLICAÇÃO DO CARD DO CONSULTOR (DO SUPORTE) */
+        .contato-suporte-box {
+            max-width: 810px;
+            margin: 50px auto 30px auto;
+            background-color: #06070a;
+            border: 1px solid var(--borda-sutil);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            scroll-margin-top: 30px; /* Margem suave para a rolagem interna parar perfeitamente */
+        }
+
+            .contato-suporte-box h3 {
+                margin: 0 0 10px 0;
+                font-size: 1.4rem;
+                color: #ffffff;
+            }
+
+            .contato-suporte-box p {
+                color: var(--texto-mutado);
+                margin: 0 0 25px 0;
+                font-size: 0.95rem;
+            }
+
+            .contato-suporte-box input {
+                width: 100%;
+                padding: 12px 16px;
+                background-color: #111319;
+                border: 1px solid var(--borda-sutil) !important;
+                border-radius: 8px;
+                color: #ffffff;
+                font-family: inherit;
+                font-size: 0.95rem;
+                box-sizing: border-box;
+                outline: none !important;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+                .contato-suporte-box input:focus {
+                    border-color: var(--azul-jc) !important;
+                    outline: none !important;
+                    box-shadow: 0 0 8px rgba(65, 105, 225, 0.4);
+                }
+
+        .btn-whatsapp {
+            background-color: var(--verde-whatsapp);
+            color: #ffffff;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            transition: transform 0.2s, background-color 0.2s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+            .btn-whatsapp:hover {
+                transform: translateY(-2px);
+                background-color: #1ebd56;
+            }
+
+        /* SEÇÃO EXPLICATIVA DA API (MERCADO PAGO) */
+        .secao-api {
+            max-width: 1200px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+        }
+
+        .box-api {
+            background-color: #06070a;
+            border: 1px solid var(--borda-sutil);
+            border-left: 4px solid var(--azul-jc);
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+            .box-api h4 {
+                margin: 0 0 15px 0;
+                font-size: 1.25rem;
+                color: #ffffff;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .box-api p {
+                margin: 0;
+                font-size: 1rem;
+                line-height: 1.6;
+                color: var(--texto-mutado);
+            }
+
+        /* FOOTER */
+        footer {
+            background-color: #050608;
+            border-top: 1px solid var(--borda-sutil);
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--texto-mutado);
+            position: relative;
+        }
+
+        .btn-voltar-topo {
+            background-color: var(--bg-card);
+            color: var(--texto-claro);
+            border: 1px solid var(--borda-sutil);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: inline-block;
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+
+            .btn-voltar-topo:hover {
+                border-color: var(--azul-jc);
+            }
+    </style>
+</head>
+<body id="topo">
+
+    <div class="navbar">
+        <a href="../" class="logo-link">
+            <div class="logo">
+                <h1>JC-<span>Softwares</span></h1>
+            </div>
+        </a>
+    </div>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h2>Licenciamento <span>Comercial</span></h2>
+        </div>
+    </div>
+
+    <div class="container-botao-superior">
+        <a href="../download/" class="btn-principal-download btn-pulsante">🚀 Baixar Sistema e Iniciar Teste Grátis</a>
+    </div>
+
+    <h3 class="secao-titulo-interna">1. Valores das Licenças de Uso</h3>
+    <div class="container-planos">
+
+        <div class="card-plano">
+            <div>
+                <h3>Licença Lite</h3>
+                <div class="sub-titulo-plano" style="color: #b8860b;">Segmento Varejo & PDV</div>
+                <div class="preco" id="ContainerLite">
+                    <span id="TxtLite">R$ <span id="ValorLite">--</span></span><span class="sufixo-preco"> /Único</span>
+                </div>
+                <ul class="recursos">
+                    <li>Frente de Caixa (PDV) de alta performance</li>
+                    <li>Controle automatizado de estoque e fluxo de caixa</li>
+                    <li>Cadastro estruturado de clientes e fornecedores</li>
+                    <li>Faturamento ágil e banco de dados local (.DAT)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card-plano" style="border-color: var(--verde-sucesso);">
+            <div>
+                <h3>Licença Plus</h3>
+                <div class="sub-titulo-plano" style="color: var(--verde-sucesso);">Segmento Gestão de Obras</div>
+                <div class="preco" id="ContainerPlus">
+                    <span id="TxtPlus">R$ <span id="ValorPlus">--</span></span><span class="sufixo-preco"> /Único</span>
+                </div>
+                <ul class="recursos">
+                    <li>Painel avançado de cadastro de obras e projetos</li>
+                    <li>Controle financeiro e faturamento segregado por obra</li>
+                    <li>Rastreamento de receitas/despesas por centro de custo</li>
+                    <li>Gestão de custos vinculada diretamente ao cliente</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card-plano premium">
+            <div>
+                <h3>Licença Pro</h3>
+                <div class="sub-titulo-plano" style="color: #7393ff;">Segmento Corporativo Híbrido</div>
+                <div class="preco" id="ContainerPro">
+                    <span id="TxtPro">R$ <span id="ValorPro">--</span></span><span class="sufixo-preco"> /Único</span>
+                </div>
+                <ul class="recursos">
+                    <li><strong>Fusão Completa:</strong> Varejo + Construção Civil</li>
+                    <li>Gerenciamento centralizado de múltiplos Hardware IDs</li>
+                    <li>Impressão Silenciosa Direta Automática (80mm e A4)</li>
+                    <li>Banco de Dados Autônomo, Criptografado e Unificado</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-cta-central">
+        <div class="banner-degustacao">
+            <h3>Baixe Agora e Teste <span>Gratuitamente!</span></h3>
+            <p>
+                Acreditamos na qualidade da nossa solução. Instale o sistema hoje mesmo e ganhe automaticamente <strong>10 acessos completos e gratuitos</strong> para testar todas as funções operacionais, além de <strong>1 mês de suporte técnico cortesia</strong> para te auxiliar na implantação. Sem compromisso!
+            </p>
+            <a href="../download/" class="btn-principal-download">🚀 Baixar Sistema e Iniciar Teste Grátis</a>
+        </div>
+    </div>
+
+    <h3 class="secao-titulo-interna">2. Suporte Técnico Adicional</h3>
+    <div class="secao-suporte">
+        <div class="card-suporte">
+            <div class="card-suporte-info">
+                <h3>Pacote de Créditos de Suporte</h3>
+            </div>
+
+            <div class="preco" id="ContainerSuporte" style="margin: 0 0 20px 0;">
+                <span id="TxtSuporte">R$ <span id="ValorPacoteCreditos">--</span></span><span class="sufixo-preco"> / <span id="QtdCreditosPacote">--</span>  Créditos</span>
+            </div>
+
+            <div class="card-suporte-info" style="width: 100%;">
+                <p style="margin-bottom: 15px;">
+                    Para manter o valor do software acessível, nosso suporte humano opera sob demanda por sistema de créditos. O consumo varia de acordo com a complexidade do chamado, existindo atendimentos que são gratuitos.
+                </p>
+
+                <p style="margin-bottom: 15px;">
+                    Este é o valor base do pacote mínimo. Diretamente na tela de compras do próprio sistema, você pode adquirir de forma flexível até 10 pacotes por transação. O faturamento é processado em tempo real via Pix com QR Code dinâmico gerado na hora, garantindo a compensação e liberação instantânea do saldo na sua conta assim que o pagamento for confirmado.
+                </p>
+
+                <p style="margin-bottom: 20px;">
+                    Se nossa equipe não responder <strong>*dentro de um certo período de tempo*</strong>, os créditos utilizados retornam automaticamente para a sua conta.
+                </p>
+
+                <p style="font-size: 0.85rem; color: #ff9800; font-style: italic; border-top: 1px solid var(--borda-sutil); padding-top: 12px; margin: 0;">
+                    *A contagem do tempo de resposta do Suporte para validação do estorno é contabilizada exclusivamente durante o horário comercial de dias úteis.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="secao-api">
+        <div class="box-api">
+            <h4>⚡ Faturamento e Ativação em Tempo Real</h4>
+            <p>
+                O ecossistema JC-Softwares é integrado de forma nativa à API de pagamentos do Mercado Pago. Ao realizar a contratação ou renovação da licença diretamente na interface do software, o sistema gera dinamicamente um Dynamic QR Code. Assim que o gateway valida o recebimento do Pix, uma requisição de callback é processada pelo software, executando o desbloqueio local e a atualização das chaves de Hardware ID instantaneamente, sem necessidade de intervenção humana ou envio de comprovantes.
+            </p>
+        </div>
+    </div>
+
+    <div class="contato-suporte-box" id="card-consultor-planos">
+        <h3>Ficou com alguma dúvida comercial?</h3>
+        <p>Este canal é exclusivo para suporte de vendas, esclarecimento de dúvidas sobre os planos ou auxílio no processo de contratação das licenças.</p>
+
+        <div style="max-width: 320px; margin: 0 auto 20px auto; text-align: left;">
+            <label for="nomeCliente" style="display: block; font-size: 0.85rem; color: var(--texto-mutado); margin-bottom: 8px; font-weight: 600;">
+                Seu nome (Opcional):
+            </label>
+            <input type="text" id="nomeCliente" placeholder="Ex: Júlio">
+        </div>
+
+        <button onclick="enviarWhatsappComInput()" class="btn-whatsapp">
+            💬 Conversar com o Consultor de Vendas
+        </button>
+    </div>
+
+
+
+    <footer>
+        <a href="#topo" class="btn-voltar-topo">▲ Voltar ao Topo</a>
+        <p>&copy; 2026 JC-Softwares. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlPlanotxt = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Planotxt";
+
+            function transformarEmBotao(containerId) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    // O link agora aponta para a ID local da própria página de planos!
+                    container.innerHTML = `<a href="#card-consultor-planos" class="btn-consultar-valores">📋 Consultar Valor</a>`;
+                }
+            }
+
+            fetch(urlPlanotxt)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Falha total de conexão");
+                    }
+                    return response.text();
+                })
+                .then(texto => {
+                    const linhas = texto.split('\n');
+
+                    let realizouLite = false;
+                    let realizouPlus = false;
+                    let realizouPro = false;
+                    let realizouSuporte = false;
+
+                    linhas.forEach(linha => {
+                        if (linha.includes("ValorLite:")) {
+                            const valor = inlineValue(linha, "ValorLite:");
+                            if (valor && valor !== "--" && valor !== "") {
+                                document.getElementById("ValorLite").innerText = valor;
+                                realizouLite = true;
+                            }
+                        }
+                        if (linha.includes("ValorPlus:")) {
+                            const valor = inlineValue(linha, "ValorPlus:");
+                            if (valor && valor !== "--" && valor !== "") {
+                                document.getElementById("ValorPlus").innerText = valor;
+                                realizouPlus = true;
+                            }
+                        }
+                        if (linha.includes("ValorPro:")) {
+                            const valor = inlineValue(linha, "ValorPro:");
+                            if (valor && valor !== "--" && valor !== "") {
+                                document.getElementById("ValorPro").innerText = valor;
+                                realizouPro = true;
+                            }
+                        }
+                        if (linha.includes("ValorPacoteCreditos:")) {
+                            const valor = inlineValue(linha, "ValorPacoteCreditos:");
+                            if (valor && valor !== "--" && valor !== "") {
+                                document.getElementById("ValorPacoteCreditos").innerText = valor;
+                                realizouSuporte = true;
+                            }
+                        }
+                        if (linha.includes("QtdCreditosPacote:")) {
+                            const qtd = inlineValue(linha, "QtdCreditosPacote:");
+                            const campo = document.getElementById("QtdCreditosPacote");
+                            if (campo && qtd) campo.innerText = qtd;
+                        }
+                    });
+
+                    // Aplica o botão APENAS no card cujo valor falhou na leitura
+                    if (!realizouLite) transformarEmBotao("ContainerLite");
+                    if (!realizouPlus) transformarEmBotao("ContainerPlus");
+                    if (!realizouPro) transformarEmBotao("ContainerPro");
+                    if (!realizouSuporte) transformarEmBotao("ContainerSuporte");
+                })
+                .catch(error => {
+                    console.error("Falha geral. Modificando todos os cards:", error);
+                    transformarEmBotao("ContainerLite");
+                    transformarEmBotao("ContainerPlus");
+                    transformarEmBotao("ContainerPro");
+                    transformarEmBotao("ContainerSuporte");
+                });
+
+            function inlineValue(str, key) {
+                try {
+                    return str.split(key)[1].trim();
+                } catch (e) {
+                    return null;
+                }
+            }
+        });
+
+        // Função de envio do WhatsApp adaptada para a página de planos
+        function enviarWhatsappComInput() {
+            let inputNome = document.getElementById("nomeCliente");
+            let nome = inputNome ? inputNome.value : "";
+
+            let textoMensagem = "";
+
+            if (nome && nome.trim() !== "") {
+                textoMensagem = "Olá, meu nome é " + nome.trim() + " e gostaria de tirar algumas dúvidas sobre a contratação do Sistema de Vendas JC-SOFTWARES, poderia me ajudar?";
+            } else {
+                textoMensagem = "Olá, gostaria de tirar algumas dúvidas sobre a contratação do Sistema de Vendas JC-SOFTWARES, poderia me ajudar?";
+            }
+
+            let textoCodificado = encodeURIComponent(textoMensagem);
+            let numeroTelefone = "5514991536140";
+
+            let urlFinal = "https://api.whatsapp.com/send?phone=" + numeroTelefone + "&text=" + textoCodificado;
+
+            window.open(urlFinal, '_blank');
+        }
+    </script>
+
+</body>
+</html>
         :root {
             --bg-principal: #0d0f14;
             --bg-card: #161920;
