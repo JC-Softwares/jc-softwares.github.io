@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central de Suporte | JC-Softwares</title>
+    <title>Central de Ajuda e Suporte | JC-Softwares</title>
     <style>
         :root {
             --bg-principal: #0d0f14;
@@ -47,7 +47,9 @@
             letter-spacing: 0.5px;
         }
 
-        .logo h1 span { color: var(--azul-jc); }
+            .logo h1 span {
+                color: var(--azul-jc);
+            }
 
         .nav-links a {
             color: var(--texto-claro);
@@ -63,13 +65,15 @@
             text-align: center;
         }
 
-        .hero-section h2 {
-            margin: 0 0 15px 0;
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
+            .hero-section h2 {
+                margin: 0 0 15px 0;
+                font-size: 2.2rem;
+                font-weight: 700;
+            }
 
-        .hero-section h2 span { color: var(--azul-jc); }
+                .hero-section h2 span {
+                    color: var(--azul-jc);
+                }
 
         /* SEÇÃO CENTRAL DE FAQ */
         .suporte-container {
@@ -109,12 +113,12 @@
             user-select: none;
         }
 
-        .faq-pergunta::after {
-            content: "▼";
-            font-size: 0.8rem;
-            color: var(--texto-mutado);
-            transition: transform 0.2s;
-        }
+            .faq-pergunta::after {
+                content: "▼";
+                font-size: 0.8rem;
+                color: var(--texto-mutado);
+                transition: transform 0.2s;
+            }
 
         .faq-resposta {
             max-height: 0;
@@ -135,11 +139,12 @@
             transform: rotate(180deg);
             color: var(--azul-jc);
         }
+
         .faq-item.ativo .faq-resposta {
-            max-height: 200px; /* Limite de altura seguro para transição fluida */
+            max-height: 500px; /* Suporta tópicos longos sem cortar texto */
         }
 
-        /* CANAL DE TRANSBORDO HUMANO */
+        /* CANAL DE ATENDIMENTO COMERCIAL - COM ID PARA ANCORAGEM */
         .contato-suporte-box {
             background-color: #06070a;
             border: 1px solid var(--borda-sutil);
@@ -147,19 +152,41 @@
             padding: 40px;
             text-align: center;
             margin-top: 60px;
+            scroll-margin-bottom: 40px; /* Garante um espaçamento confortável ao rolar */
         }
 
-        .contato-suporte-box h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.4rem;
-            color: #ffffff;
-        }
+            .contato-suporte-box h3 {
+                margin: 0 0 10px 0;
+                font-size: 1.4rem;
+                color: #ffffff;
+            }
 
-        .contato-suporte-box p {
-            color: var(--texto-mutado);
-            margin: 0 0 25px 0;
-            font-size: 0.95rem;
-        }
+            .contato-suporte-box p {
+                color: var(--texto-mutado);
+                margin: 0 0 25px 0;
+                font-size: 0.95rem;
+            }
+
+            /* ESTILIZAÇÃO DO INPUT */
+            .contato-suporte-box input {
+                width: 100%;
+                padding: 12px 16px;
+                background-color: #111319;
+                border: 1px solid var(--borda-sutil) !important;
+                border-radius: 8px;
+                color: #ffffff;
+                font-family: inherit;
+                font-size: 0.95rem;
+                box-sizing: border-box;
+                outline: none !important;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+                .contato-suporte-box input:focus {
+                    border-color: var(--azul-jc) !important;
+                    outline: none !important;
+                    box-shadow: 0 0 8px rgba(65, 105, 225, 0.4);
+                }
 
         .btn-whatsapp {
             background-color: var(--verde-whatsapp);
@@ -173,12 +200,15 @@
             font-weight: 700;
             border-radius: 30px;
             transition: transform 0.2s, background-color 0.2s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
         }
 
-        .btn-whatsapp:hover {
-            transform: translateY(-2px);
-            background-color: #1ebd56;
-        }
+            .btn-whatsapp:hover {
+                transform: translateY(-2px);
+                background-color: #1ebd56;
+            }
 
         /* FOOTER */
         footer {
@@ -186,9 +216,14 @@
             border-top: 1px solid var(--borda-sutil);
             padding: 40px 20px;
             text-align: center;
-            font-size: 0.85rem;
-            color: var(--texto-mutado);
         }
+
+            footer p {
+                font-size: 0.85rem;
+                color: var(--texto-mutado);
+                margin: 0;
+                text-align: center;
+            }
 
         .btn-voltar-topo {
             background-color: var(--bg-card);
@@ -204,7 +239,10 @@
             text-decoration: none;
             transition: border-color 0.2s;
         }
-        .btn-voltar-topo:hover { border-color: var(--azul-jc); }
+
+            .btn-voltar-topo:hover {
+                border-color: var(--azul-jc);
+            }
     </style>
 </head>
 <body id="topo">
@@ -218,18 +256,33 @@
     </div>
 
     <div class="hero-section">
-        <h2>Central de <span>Ajuda e Suporte</span></h2>
+        <h2>Central de <span>Ajuda e Suporte de Vendas</span></h2>
     </div>
 
     <div class="suporte-container">
 
         <div class="categoria-titulo">Licenciamento & Fluxo de Caixa</div>
-        
+
         <div class="faq-item">
-            <div class="faq-pergunta">Efetuei o pagamento via QR Code (PIX). Como recebo a chave de ativação?</div>
+            <div class="faq-pergunta">O sistema atende a quais segmentos de mercado? Como funciona a ativação?</div>
             <div class="faq-resposta">
                 <div class="faq-resposta-conteudo">
-                    O processo é 100% automatizado. Nossa infraestrutura está integrada diretamente com a API do Mercado Pago. Assim que a transação é confirmada pelo gateway, o servidor valida o recebimento e updates o token de segurança local na sua máquina em tempo real. Não há necessidade de inserção manual de seriais ou envio de comprovantes por e-mail.
+                    O ecossistema JC-Softwares possui uma arquitetura modular inteligente única. Através de um único instalador unificado, o sistema permite parametrizar e alternar a sua interface para operar em **3 diretrizes de segmentos distintos**, garantindo que o usuário visualize apenas as ferramentas essenciais para o seu nicho, sem poluição visual na tela inicial:
+                    <ul style="margin: 12px 0; padding-left: 20px; list-style-type: disc;">
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">1. Segmento Varejo (PDV & Estoque):</strong> Interface totalmente otimizada para o comércio em geral (lojas de roupas, mercados, conveniências, etc.). Conta com catálogo estruturado de produtos, Frente de Caixa (PDV) dinâmico, controle rigoroso de estoque, cadastro de clientes e fluxo financeiro tradicional;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">2. Segmento Construção Civil (Gestão de Obras):</strong> Configuration técnica voltada para empreiteiros, construtores e engenheiros. Dispõe de um módulo avançado de cadastro de obras e gerenciamento financeiro segregado (centros de custo), permitindo rastrear exatamente as receitas e despesas de forma isolada por projeto e por cliente;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">3. Segmento Híbrido (Corporativo Completo):</strong> A fusão definitiva dos dois ecossistemas em uma única aplicação. Ideal para empresas como depósitos de materiais de construção, que necessitam tanto do PDV de balcão quanto do gerenciamento externo de projetos e obras simultaneamente.</li>
+                    </ul>
+                    <strong style="color: #ffffff;">Flexibilidade Total:</strong> A definição do segmento pode ser realizada logo no primeiro acesso ou alterada a qualquer momento através do painel de parametrização do sistema, adaptando a aplicação conforme a evolução e expansão do seu modelo de negócio.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-pergunta">Efetuei o pagamento via QR Code (PIX). Como ocorre a liberação da licença?</div>
+            <div class="faq-resposta">
+                <div class="faq-resposta-conteudo">
+                    O fluxo de homologação é 100% automatizado. Nossa arquitetura é integrada diretamente à API oficial do gateway do Mercado Pago. No exato instante em que a transação é confirmada pela instituição bancária, nosso servidor valida o recebimento e atualiza o token de segurança local na sua máquina em tempo real. O processo é instantâneo: sem digitação manual de seriais, sem espera e sem necessidade de envio de comprovantes.
                 </div>
             </div>
         </div>
@@ -243,32 +296,94 @@
             </div>
         </div>
 
+        <div class="faq-item">
+            <div class="faq-pergunta">Como o sistema me ajuda no fechamento e envio de dados para a contabilidade?</div>
+            <div class="faq-resposta">
+                <div class="faq-resposta-conteudo">
+                    Para facilitar a sua gestão, o sistema gera relatórios consolidados de vendas estruturados por período e totalmente segregados por formas de recebimento (como Cartão de Crédito/Débito, Dinheiro e PIX). Ao finalizar o período, o operador pode optar por realizar a impressão física do fechamento ou disparar o relatório diretamente para o e-mail do seu contador de forma totalmente automatizada e sem complicações.
+                </div>
+            </div>
+        </div>
+
         <div class="categoria-titulo">Arquitetura de Dados & Hardware</div>
 
         <div class="faq-item">
             <div class="faq-pergunta">O sistema precisa de conexão constante com a internet?</div>
             <div class="faq-resposta">
                 <div class="faq-resposta-conteudo">
-                    Não. O ecossistema JC-Softwares foi projetado com engenharia de persistência local autônoma (.dat). O ponto de venda (PDV) opera de forma isolada e contínua em caso de quedas de rede. A conexão com a internet é requisitada apenas na inicialização para a rotina rápida de verificação de licença técnica.
+                    Não. O ecossistema JC-Softwares foi projetado para garantir total autonomia operacional off-line. Toda a inteligência de negócios e o banco de dados (.dat) rodam de forma nativa e isolada na máquina. Em caso de quedas de rede ou instabilidade na sua região, o seu balcão continua operando continuamente e sem interrupções. A conexão com a internet é requisitada exclusivamente na inicialização da aplicação para uma rotina rápida e imperceptível de validação da licença técnica.
                 </div>
             </div>
         </div>
 
         <div class="faq-item">
-            <div class="faq-pergunta">Como funcionam as impressões de cupom e relatórios?</div>
+            <div class="faq-pergunta">Como é feita a gestão de impressões de cupons e relatórios administrativos?</div>
             <div class="faq-resposta">
                 <div class="faq-resposta-conteudo">
-                    O sistema possui gerenciamento silencioso direto com o spooler do Windows. Se o código do documento disparado for de venda ou segunda via, o layout é formatado automaticamente em bobinas térmicas de 80mm. Se for um relatório administrativo estrutural, a saída é configurada para folhas A4, tudo executado sem exibir telas de diálogo travando a operação do operador.
+                    O software realiza o gerenciamento inteligente de impressão diretamente em background (segundo plano) com o spooler de comandos do Windows. O sistema identifica a natureza do documento disparado no fluxo: se for uma venda ou segunda via, o layout é formatado nativamente para bobinas de impressoras térmicas de 80mm; se for um fechamento ou relatório estrutural, o documento é gerado em layout A4. Tudo é processado sem exibir telas de diálogo ou caixas de confirmação, mantendo o foco do operador totalmente livre e dinâmico.
                 </div>
             </div>
         </div>
 
-        <div class="contato-suporte-box">
-            <h3>Não encontrou a solução técnica?</h3>
-            <p>Se a sua dúvida não está listada acima ou você enfrenta alguma anomalia de Hardware ID específica, acione nosso time técnico.</p>
-            <a href="https://wa.me/5500000000000" target="_blank" class="btn-whatsapp">
-                💬 Chamar Suporte no WhatsApp
-            </a>
+        <div class="faq-item">
+            <div class="faq-pergunta">O sistema realiza a emissão de cupom fiscal ou integração com o SAT/Fisco?</div>
+            <div class="faq-resposta">
+                <div class="faq-resposta-conteudo">
+                    Não. O sistema JC-Softwares foi desenvolvido exclusivamente para a gestão interna de vendas, fluxo de caixa e controle de estoque, operando de forma independente e off-line. O sistema realiza a impressão de <strong>cupons de venda não fiscais</strong> (recibos de balcão para o cliente) e relatórios administrativos. Ele não possui integração com o módulo SAT, SEFAZ ou qualquer outro órgão do Fisco. A responsabilidade pela conformidade fiscal e tributária da empresa permanece integralmente com o proprietário do estabelecimento junto ao seu contador.
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-titulo">Sistema de Cadastro</div>
+
+        <div class="faq-item">
+            <div class="faq-pergunta">Quais módulos de cadastro e gerenciamento estão inclusos no sistema?</div>
+            <div class="faq-resposta">
+                <div class="faq-resposta-conteudo">
+                    O ecossistema JC-Softwares possui módulos nativos de alta performance para a centralização e organization das operações do seu negócio:
+                    <ul style="margin: 12px 0; padding-left: 20px; list-style-type: disc;">
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Perfil Institucional da Empresa:</strong> Parametrização completa contendo Razão Social, CNPJ, Inscrição Estadual, Endereço Corporativo e customização de Logotipo para documentos;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Catálogo Estruturado de Produtos:</strong> Controle por Código de Barras (EAN) ou Código Interno, Descrição Comercial, Margem de Lucro, Preço de Custo/Venda, Unidade de Medida e Alerta Automático de Estoque Mínimo;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Painel de Clientes (CRM Local):</strong> Registro de Identificação (CPF/CNPJ), Dados de Contato, Histórico de Compras e acompanhamento de fluxo financeiro;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Gestão de Fornecedores:</strong> Mapeamento de Parceiros Comerciais, CNPJ, Canais de Atendimento e vinculação direta de insumos/produtos;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Controle de Operadores e Usuários:</strong> Autenticação por credenciais individuais com senhas protegidas e Níveis de Acesso restritos por privilégio de cargo.</li>
+                    </ul>
+                    Toda a base de dados opera com armazenamento local em arquivos de engenharia própria (.dat). Isso garante blindagem absoluta contra acessos externos não autorizados, privacidade total das suas informações comerciais e velocidade máxima na busca de registros.
+                </div>
+            </div>
+        </div>
+
+        <div class="categoria-titulo">Sistema de Backup de Segurança do Banco de Dados</div>
+
+        <div class="faq-item">
+            <div class="faq-pergunta">Como funciona a rotina de backup e segurança das informações?</div>
+            <div class="faq-resposta">
+                <div class="faq-resposta-conteudo">
+                    O ecossistema JC-Softwares prioriza a integridade absoluta dos seus dados comerciais e possui um módulo flexível de segurança, permitindo configurar a política de cópia de salvaguarda (backup) em três modalidades distintas:
+                    <ul style="margin: 12px 0; padding-left: 20px; list-style-type: disc;">
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Rotina Automatizada:</strong> O sistema realiza a compactação e exportação dos dados (.dat) de forma totalmente automática no exato momento em que a aplicação é encerrada pelo operador;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Disparo Manual:</strong> O administrador do sistema retém o controle total, podendo acionar a geração do ponto de recuperação a qualquer momento através do painel de configurações;</li>
+                        <li style="margin-bottom: 6px;"><strong style="color: var(--azul-jc);">Desativado (Não recomendado):</strong> A rotina de proteção é completamente suspensa, ficando sob total responsabilidade do usuário a gestão de segurança dos arquivos.</li>
+                    </ul>
+                    <strong style="color: #ffffff;">Recomendação de Segurança Crucial:</strong> Para garantir uma política de redundância estrita e proteção contra falhas físicas de hardware (como queima do HD ou pane do sistema operacional), é altamente recomendado parametrizar o diretório de destino do backup para **dispositivos removíveis externos** (como Pendrives ou HDs Externos) ou pastas sincronizadas em nuvem corporativa.
+                </div>
+            </div>
+        </div>
+
+        <div class="contato-suporte-box" id="card-consultor">
+            <h3>Ficou com alguma dúvida comercial?</h3>
+            <p>Este canal é exclusivo para suporte de vendas, esclarecimento de dúvidas sobre os planos ou auxílio no processo de contratação das licenças.</p>
+
+            <div style="max-width: 320px; margin: 0 auto 20px auto; text-align: left;">
+                <label for="nomeCliente" style="display: block; font-size: 0.85rem; color: var(--texto-mutado); margin-bottom: 8px; font-weight: 600;">
+                    Seu nome (Opcional):
+                </label>
+                <input type="text" id="nomeCliente" placeholder="Ex: Júlio">
+            </div>
+
+            <button onclick="enviarWhatsappComInput()" class="btn-whatsapp">
+                💬 Conversar com o Consultor de Vendas
+            </button>
         </div>
 
     </div>
@@ -283,7 +398,7 @@
 
         itensFaq.forEach(item => {
             const pergunta = item.querySelector('.faq-pergunta');
-            
+
             pergunta.addEventListener('click', () => {
                 // Fecha as outras que estiverem abertas (efeito sanfona puro)
                 itensFaq.forEach(outroItem => {
@@ -291,10 +406,44 @@
                         outroItem.classList.remove('ativo');
                     }
                 });
-                
+
                 // Alterna o estado da clicada
                 item.classList.toggle('ativo');
             });
+        });
+
+        function enviarWhatsappComInput() {
+            let inputNome = document.getElementById("nomeCliente");
+            let nome = inputNome ? inputNome.value : "";
+
+            let textoMensagem = "";
+
+            if (nome && nome.trim() !== "") {
+                textoMensagem = "Olá, meu nome é " + nome.trim() + " e gostaria de tirar algumas dúvidas sobre a contratação do Sistema de Vendas JC-SOFTWARES, poderia me ajudar?";
+            } else {
+                textoMensagem = "Olá, gostaria de tirar algumas dúvidas sobre a contratação do Sistema de Vendas JC-SOFTWARES, poderia me ajudar?";
+            }
+
+            let textoCodificado = encodeURIComponent(textoMensagem);
+            let numeroTelefone = "5514991536140";
+
+            let urlFinal = "https://api.whatsapp.com/send?phone=" + numeroTelefone + "&text=" + textoCodificado;
+
+            window.open(urlFinal, '_blank');
+        }
+
+        // --- CÓDIGO NOVO: CORREÇÃO DA ROLAGEM AUTOMÁTICA DA ÂNCORA ---
+        window.addEventListener("load", function () {
+            // Verifica se o usuário veio transferido com a tag #card-consultor na URL
+            if (window.location.hash === "#card-consultor") {
+                const card = document.getElementById("card-consultor");
+                if (card) {
+                    // Dá uma leve pausa de 100 milissegundos para o navegador assentar o layout
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: "smooth", block: "end" });
+                    }, 100);
+                }
+            }
         });
     </script>
 
