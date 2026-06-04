@@ -305,16 +305,22 @@
             const chaveSecreta = localStorage.getItem('jc_chave_secreta');
             if (!chaveSecreta) return;
 
+            // 1. Pega o minuto atual (Igual ao Backend)
             const minutoAtual = Math.floor(Date.now() / 60000);
-            const stringCombinada = chaveSecreta + minutoAtual;
-
-            let hash = 0;
-            for (let i = 0; i < stringCombinada.length; i++) {
-                hash = (hash << 5) - hash + stringCombinada.charCodeAt(i);
-                hash |= 0; 
-            }
             
-            const tokenCalculado = String(Math.abs(hash) % 10000).padStart(4, '0');
+            // 2. Junta a chave única com o minuto usando o padrão com underline "_"
+            const stringCombinada = chaveSecreta + "_" + minutoAtual;
+
+            // 3. Gera o Hash SHA-256 real usando a biblioteca CryptoJS já importada
+            const hashHex = CryptoJS.SHA256(stringCombinada).toString(CryptoJS.enc.Hex);
+            
+            // 4. Pega os primeiros 8 caracteres do hash hexadecimal e converte para número inteiro
+            const numeroEstavel = parseInt(hashHex.substring(0, 8), 16);
+            
+            // 5. Isola os 4 dígitos finais e garante os zeros à esquerda (ex: "0521")
+            const tokenCalculado = String(Math.abs(numeroEstavel) % 10000).padStart(4, '0');
+            
+            // 6. Atualiza o ecrã do telemóvel
             document.getElementById('displayToken').innerText = tokenCalculado;
         }
 
