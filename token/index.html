@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JC-SOFTWARES | Gerador de Token</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         :root {
             --bg-principal: #1a1a1a;
@@ -43,11 +44,10 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
             border-top: 6px solid var(--azul-jc);
-            transition: all 0.3s ease;
         }
 
         h2 {
-            margin: 0 0 5px 0;
+            margin: 0;
             color: var(--azul-jc);
             letter-spacing: 1px;
             font-size: 1.6rem;
@@ -55,11 +55,10 @@
 
         .subtitulo {
             margin: 0 0 25px 0;
-            color: var(--texto-mutated);
+            color: var(--texto-mutado);
             font-size: 0.9rem;
         }
 
-        /* STATUS DE CONFIGURAÇÃO */
         .status-badge {
             display: inline-block;
             padding: 6px 14px;
@@ -81,7 +80,12 @@
             border: 1px solid var(--vermelho-erro);
         }
 
-        /* DISPLAY DO TOKEN GERADO */
+        .status-validando {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+            border: 1px solid #f1c40f;
+        }
+
         .box-token-resultado {
             background: var(--bg-input);
             padding: 20px;
@@ -105,7 +109,30 @@
             margin-top: 5px;
         }
 
-        /* BOTÕES DE AÇÃO RECURSIVOS */
+        .campo-grupo {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .campo-grupo label {
+            font-size: 0.85rem;
+            color: var(--texto-mutado);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #34495e;
+            background: var(--bg-input);
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
         .btn-acao {
             width: 100%;
             padding: 14px;
@@ -117,14 +144,10 @@
             font-weight: bold;
             font-size: 1rem;
             margin-top: 10px;
-            transition: 0.2s;
             box-sizing: border-box;
         }
 
-        .btn-acao:hover {
-            background: var(--azul-hover);
-            transform: translateY(-2px);
-        }
+        .btn-acao:hover { background: var(--azul-hover); }
 
         .btn-limpar {
             background: transparent;
@@ -136,23 +159,7 @@
             text-decoration: underline;
         }
 
-        .btn-limpar:hover {
-            color: var(--vermelho-erro);
-        }
-
-        /* AJUSTES PARA FORMATO MOBILE (CELULARES) */
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            .card-token {
-                padding: 25px 15px;
-                box-shadow: none; /* Remove sombra pesada no celular para ficar mais flat */
-            }
-            .numero-token {
-                font-size: 2.5rem;
-            }
-        }
+        .btn-limpar:hover { color: var(--vermelho-erro); }
     </style>
 </head>
 <body>
@@ -162,19 +169,36 @@
             <h2>JC-SOFTWARES</h2>
             <p class="subtitulo">Autenticador de Segurança Offline</p>
 
-            <div id="conteudoDinamic">
-                <div id="telaNaoVinculado">
+            <div id="conteudoDinamico">
+                
+                <div id="telaNaoVinculado" style="display: none;">
                     <span class="status-badge status-nao-vinculado">DISPOSITIVO NÃO VINCULADO</span>
                     <p style="font-size: 0.95rem; line-height: 1.5; color: #bdc3c7;">
                         Para começar, acesse o painel do administrador no seu sistema desktop e leia o QR Code de ativação do seu usuário.
                     </p>
                 </div>
 
+                <div id="telaConfirmarSenha" style="display: none;">
+                    <span class="status-badge status-validando">CONFIRMAÇÃO DE SEGURANÇA</span>
+                    <p style="font-size: 0.9rem; color: #bdc3c7; margin-bottom: 20px;">
+                        Olá <strong id="txtNomeUsuarioValidar">...</strong>, digite sua senha do sistema para ativar o token neste aparelho.
+                    </p>
+                    
+                    <div class="campo-grupo">
+                        <label>Sua Senha do Sistema</label>
+                        <input type="password" id="inputSenhaValidar" placeholder="Digite sua senha de acesso">
+                    </div>
+                    
+                    <p id="msgErroSenha" style="color: var(--vermelho-erro); font-size: 0.85rem; display: none; margin: 5px 0;"></p>
+
+                    <button class="btn-acao" onclick="verificarSenhaLocal()">VINCULAR DISPOSITIVO</button>
+                </div>
+
                 <div id="telaVinculado" style="display: none;">
                     <span class="status-badge status-vinculado">DISPOSITIVO ATIVO</span>
                     
                     <div class="box-token-resultado">
-                        <p style="margin: 0 0 5px 0; font-size: 0.8rem; color: var(--texto-mutado); uppercase;">Seu Token de Acesso</p>
+                        <p style="margin: 0 0 5px 0; font-size: 0.8rem; color: var(--texto-mutado); text-transform: uppercase;">Seu Token de Acesso</p>
                         <div class="numero-token" id="displayToken">----</div>
                         <div class="info-usuario" id="displayNomeUsuario">Usuário</div>
                     </div>
@@ -185,96 +209,117 @@
 
                     <button class="btn-limpar" onclick="removerVinculo()">Desvincular este dispositivo</button>
                 </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        // Ao carregar a página, verifica se este celular já tem a chave mestra salva
+        // Variáveis na memória temporária do celular
+        let usuarioPendente = "";
+        let chavePendente = "";
+        let hashSenhaEsperado = ""; // Vai guardar o hash que veio do QR Code
+
         document.addEventListener("DOMContentLoaded", () => {
             verificarEstadoDispositivo();
         });
 
         function verificarEstadoDispositivo() {
-            // Lendo a Hash que o site capturou na leitura da URL (Se houver)
             processarUrlVinculacao();
 
             const chaveSalva = localStorage.getItem('jc_chave_secreta');
             const usuarioSalvo = localStorage.getItem('jc_usuario');
 
             const telaNV = document.getElementById('telaNaoVinculado');
+            const telaSenha = document.getElementById('telaConfirmarSenha');
             const telaV = document.getElementById('telaVinculado');
 
             if (chaveSalva && usuarioSalvo) {
                 telaNV.style.display = 'none';
+                telaSenha.style.display = 'none';
                 telaV.style.display = 'block';
                 document.getElementById('displayNomeUsuario').innerText = usuarioSalvo.toUpperCase();
                 
-                // Inicia o loop matemático para atualizar o Token na tela a cada segundo
                 loopGeradorToken();
                 setInterval(loopGeradorToken, 1000);
-            } else {
+            } 
+            else if (usuarioPendente && hashSenhaEsperado) {
+                telaNV.style.display = 'none';
+                telaV.style.display = 'none';
+                telaSenha.style.display = 'block';
+                document.getElementById('txtNomeUsuarioValidar').innerText = usuarioPendente.toUpperCase();
+            } 
+            else {
                 telaNV.style.display = 'block';
+                telaSenha.style.display = 'none';
                 telaV.style.display = 'none';
             }
         }
 
-        // Função responsável por ler os parâmetros da URL caso o celular venha de uma leitura de QR Code de Ativação
         function processarUrlVinculacao() {
-            // Exemplo esperado de URL vinda do QR Code de cadastro:
-            // https://www.jcsoftware.com.br/token/#vincular?user=julio&chave=SUACHAVEMESTRAOFFLINE
             const hashUrl = window.location.hash;
-            
             if (hashUrl && hashUrl.includes('vincular')) {
                 try {
                     const queryString = hashUrl.split('?')[1];
                     const urlParams = new URLSearchParams(queryString);
                     
-                    const user = urlParams.get('user');
-                    const chave = urlParams.get('chave');
+                    usuarioPendente = urlParams.get('user');
+                    chavePendente = urlParams.get('chave');
+                    hashSenhaEsperado = urlParams.get('sh'); // 'sh' é o Hash da senha vindo do Desktop
 
-                    if (user && chave) {
-                        // Salva os dados de identidade de forma definitiva no armazenamento local do navegador do celular
-                        localStorage.setItem('jc_usuario', user);
-                        localStorage.setItem('jc_chave_secreta', chave);
-                        
-                        // Limpa a URL limpando o hash para evitar re-vincular ao recarregar
-                        window.location.hash = '';
-                    }
+                    window.location.hash = '';
                 } catch (e) {
-                    console.error("Erro ao processar QR Code de ativação", e);
+                    console.error("Erro ao processar parâmetros", e);
                 }
             }
         }
 
-        // A MÁGICA MATEMÁTICA: Roda localmente no celular de forma idêntica ao do PC
+        // VALIDAÇÃO 100% OFFLINE E LOCAL NO CELULAR
+        function verificarSenhaLocal() {
+            const senhaDigitada = document.getElementById('inputSenhaValidar').value;
+            const erroTxt = document.getElementById('msgErroSenha');
+
+            if (senhaDigitada.trim() === "") {
+                erroTxt.innerText = "Por favor, digite sua senha!";
+                erroTxt.style.display = "block";
+                return;
+            }
+
+            // Transforma a senha que o funcionário digitou em SHA256
+            const hashSenhaDigitada = CryptoJS.SHA256(senhaDigitada).toString();
+
+            // Compara os dois hashes localmente no celular
+            if (hashSenhaDigitada === hashSenhaEsperado) {
+                // Sucesso! Grava no celular e libera o Token
+                localStorage.setItem('jc_usuario', usuarioPendente);
+                localStorage.setItem('jc_chave_secreta', chavePendente);
+                
+                verificarEstadoDispositivo();
+            } else {
+                erroTxt.innerText = "Senha incorreta! Vinculação rejeitada.";
+                erroTxt.style.display = "block";
+            }
+        }
+
         function loopGeradorToken() {
             const chaveSecreta = localStorage.getItem('jc_chave_secreta');
             if (!chaveSecreta) return;
 
-            // Pega o minuto atual baseado no relógio do próprio celular
             const minutoAtual = Math.floor(Date.now() / 60000);
-
-            // Mistura a chave única do funcionário com o minuto atual do tempo
             const stringCombinada = chaveSecreta + minutoAtual;
 
-            // Algoritmo leve de espalhamento matemático para gerar o Hash numérico sem precisar de pacotes npm externos
             let hash = 0;
             for (let i = 0; i < stringCombinada.length; i++) {
                 hash = (hash << 5) - hash + stringCombinada.charCodeAt(i);
                 hash |= 0; 
             }
             
-            // Extrai a combinação positiva exata de 4 dígitos (Ex: "0432")
             const tokenCalculado = String(Math.abs(hash) % 10000).padStart(4, '0');
-
-            // Injeta o número na interface
             document.getElementById('displayToken').innerText = tokenCalculado;
         }
 
-        // Permite remover o usuário se precisar trocar de celular ou operador
         function removerVinculo() {
-            if (confirm("Tem certeza que deseja remover o vínculo deste celular com o sistema?")) {
+            if (confirm("Tem certeza que deseja remover o vínculo?")) {
                 localStorage.clear();
                 window.location.reload();
             }
