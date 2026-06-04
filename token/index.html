@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JC-SOFTWARES | Gerador de Token</title>
+    <style>
+        :root {
+            --bg-principal: #1a1a1a;
+            --bg-card: #2c3e50;
+            --bg-input: #1e272e;
+            --azul-jc: #4169E1;
+            --azul-hover: #3456b3;
+            --texto-claro: #ffffff;
+            --texto-mutado: #95a5a6;
+            --verde-sucesso: #2ecc71;
+            --vermelho-erro: #e74c3c;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-principal);
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--texto-claro);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card-token {
+            background: var(--bg-card);
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border-top: 6px solid var(--azul-jc);
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            margin: 0 0 5px 0;
+            color: var(--azul-jc);
+            letter-spacing: 1px;
+            font-size: 1.6rem;
+        }
+
+        .subtitulo {
+            margin: 0 0 25px 0;
+            color: var(--texto-mutated);
+            font-size: 0.9rem;
+        }
+
+        /* STATUS DE CONFIGURAÇÃO */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .status-vinculado {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--verde-sucesso);
+            border: 1px solid var(--verde-sucesso);
+        }
+
+        .status-nao-vinculado {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--vermelho-erro);
+            border: 1px solid var(--vermelho-erro);
+        }
+
+        /* DISPLAY DO TOKEN GERADO */
+        .box-token-resultado {
+            background: var(--bg-input);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #34495e;
+        }
+
+        .numero-token {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: var(--verde-sucesso);
+            margin: 0;
+        }
+
+        .info-usuario {
+            font-size: 1rem;
+            color: var(--texto-claro);
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        /* BOTÕES DE AÇÃO RECURSIVOS */
+        .btn-acao {
+            width: 100%;
+            padding: 14px;
+            background: var(--azul-jc);
+            color: var(--texto-claro);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: 0.2s;
+            box-sizing: border-box;
+        }
+
+        .btn-acao:hover {
+            background: var(--azul-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-limpar {
+            background: transparent;
+            color: var(--texto-mutado);
+            font-size: 0.8rem;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            text-decoration: underline;
+        }
+
+        .btn-limpar:hover {
+            color: var(--vermelho-erro);
+        }
+
+        /* AJUSTES PARA FORMATO MOBILE (CELULARES) */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            .card-token {
+                padding: 25px 15px;
+                box-shadow: none; /* Remove sombra pesada no celular para ficar mais flat */
+            }
+            .numero-token {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card-token">
+            <h2>JC-SOFTWARES</h2>
+            <p class="subtitulo">Autenticador de Segurança Offline</p>
+
+            <div id="conteudoDinamic">
+                <div id="telaNaoVinculado">
+                    <span class="status-badge status-nao-vinculado">DISPOSITIVO NÃO VINCULADO</span>
+                    <p style="font-size: 0.95rem; line-height: 1.5; color: #bdc3c7;">
+                        Para começar, acesse o painel do administrador no seu sistema desktop e leia o QR Code de ativação do seu usuário.
+                    </p>
+                </div>
+
+                <div id="telaVinculado" style="display: none;">
+                    <span class="status-badge status-vinculado">DISPOSITIVO ATIVO</span>
+                    
+                    <div class="box-token-resultado">
+                        <p style="margin: 0 0 5px 0; font-size: 0.8rem; color: var(--texto-mutado); uppercase;">Seu Token de Acesso</p>
+                        <div class="numero-token" id="displayToken">----</div>
+                        <div class="info-usuario" id="displayNomeUsuario">Usuário</div>
+                    </div>
+
+                    <p style="font-size: 0.85rem; color: var(--texto-mutado);">
+                        O código acima expira automaticamente a cada minuto. Digite-o na tela de login do computador.
+                    </p>
+
+                    <button class="btn-limpar" onclick="removerVinculo()">Desvincular este dispositivo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ao carregar a página, verifica se este celular já tem a chave mestra salva
+        document.addEventListener("DOMContentLoaded", () => {
+            verificarEstadoDispositivo();
+        });
+
+        function verificarEstadoDispositivo() {
+            // Lendo a Hash que o site capturou na leitura da URL (Se houver)
+            processarUrlVinculacao();
+
+            const chaveSalva = localStorage.getItem('jc_chave_secreta');
+            const usuarioSalvo = localStorage.getItem('jc_usuario');
+
+            const telaNV = document.getElementById('telaNaoVinculado');
+            const telaV = document.getElementById('telaVinculado');
+
+            if (chaveSalva && usuarioSalvo) {
+                telaNV.style.display = 'none';
+                telaV.style.display = 'block';
+                document.getElementById('displayNomeUsuario').innerText = usuarioSalvo.toUpperCase();
+                
+                // Inicia o loop matemático para atualizar o Token na tela a cada segundo
+                loopGeradorToken();
+                setInterval(loopGeradorToken, 1000);
+            } else {
+                telaNV.style.display = 'block';
+                telaV.style.display = 'none';
+            }
+        }
+
+        // Função responsável por ler os parâmetros da URL caso o celular venha de uma leitura de QR Code de Ativação
+        function processarUrlVinculacao() {
+            // Exemplo esperado de URL vinda do QR Code de cadastro:
+            // https://www.jcsoftware.com.br/token/#vincular?user=julio&chave=SUACHAVEMESTRAOFFLINE
+            const hashUrl = window.location.hash;
+            
+            if (hashUrl && hashUrl.includes('vincular')) {
+                try {
+                    const queryString = hashUrl.split('?')[1];
+                    const urlParams = new URLSearchParams(queryString);
+                    
+                    const user = urlParams.get('user');
+                    const chave = urlParams.get('chave');
+
+                    if (user && chave) {
+                        // Salva os dados de identidade de forma definitiva no armazenamento local do navegador do celular
+                        localStorage.setItem('jc_usuario', user);
+                        localStorage.setItem('jc_chave_secreta', chave);
+                        
+                        // Limpa a URL limpando o hash para evitar re-vincular ao recarregar
+                        window.location.hash = '';
+                    }
+                } catch (e) {
+                    console.error("Erro ao processar QR Code de ativação", e);
+                }
+            }
+        }
+
+        // A MÁGICA MATEMÁTICA: Roda localmente no celular de forma idêntica ao do PC
+        function loopGeradorToken() {
+            const chaveSecreta = localStorage.getItem('jc_chave_secreta');
+            if (!chaveSecreta) return;
+
+            // Pega o minuto atual baseado no relógio do próprio celular
+            const minutoAtual = Math.floor(Date.now() / 60000);
+
+            // Mistura a chave única do funcionário com o minuto atual do tempo
+            const stringCombinada = chaveSecreta + minutoAtual;
+
+            // Algoritmo leve de espalhamento matemático para gerar o Hash numérico sem precisar de pacotes npm externos
+            let hash = 0;
+            for (let i = 0; i < stringCombinada.length; i++) {
+                hash = (hash << 5) - hash + stringCombinada.charCodeAt(i);
+                hash |= 0; 
+            }
+            
+            // Extrai a combinação positiva exata de 4 dígitos (Ex: "0432")
+            const tokenCalculado = String(Math.abs(hash) % 10000).padStart(4, '0');
+
+            // Injeta o número na interface
+            document.getElementById('displayToken').innerText = tokenCalculado;
+        }
+
+        // Permite remover o usuário se precisar trocar de celular ou operador
+        function removerVinculo() {
+            if (confirm("Tem certeza que deseja remover o vínculo deste celular com o sistema?")) {
+                localStorage.clear();
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
