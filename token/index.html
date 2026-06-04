@@ -174,7 +174,7 @@
                 <div id="telaNaoVinculado" style="display: none;">
                     <span class="status-badge status-nao-vinculado">DISPOSITIVO NÃO VINCULADO</span>
                     <p style="font-size: 0.95rem; line-height: 1.5; color: #bdc3c7;">
-                        Para começar, acesse o painel do administrador no seu sistema desktop e leia o QR Code de ativação do seu usuário.
+                        Para começar, acesse a tela de login ou o painel do administrador no seu sistema desktop e leia o QR Code de ativação do seu usuário.
                     </p>
                 </div>
 
@@ -210,6 +210,17 @@
                     <button class="btn-limpar" onclick="removerVinculo()">Desvincular este dispositivo</button>
                 </div>
 
+                <div id="telaSucessoLogin" style="display: none;">
+                    <span class="status-badge status-vinculado" style="background: rgba(46, 204, 113, 0.2); color: var(--verde-sucesso); border: 1px solid var(--verde-sucesso);">ACESSO CONFIRMADO</span>
+                    <div class="box-token-resultado" style="border-color: var(--verde-sucesso);">
+                        <h1 style="font-size: 5rem; margin: 0; color: var(--verde-sucesso);">✅</h1>
+                        <div class="info-usuario" style="color: var(--verde-sucesso); margin-top: 15px; font-size: 1.2rem;">LOGIN EFETUADO!</div>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--texto-mutado);">
+                        Seu acesso foi validado com sucesso no computador. Esta tela voltará ao gerador automaticamente.
+                    </p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -219,6 +230,7 @@
         let usuarioPendente = "";
         let chavePendente = "";
         let hashSenhaEsperado = ""; // Vai guardar o hash que veio do QR Code
+        let checagemTemporizador = null; // Controla o loop de monitoramento da API web
 
         document.addEventListener("DOMContentLoaded", () => {
             verificarEstadoDispositivo();
@@ -233,6 +245,10 @@
             const telaNV = document.getElementById('telaNaoVinculado');
             const telaSenha = document.getElementById('telaConfirmarSenha');
             const telaV = document.getElementById('telaVinculado');
+            const telaSucesso = document.getElementById('telaSucessoLogin');
+
+            // Mantém a tela de animação de sucesso limpa no reset
+            telaSucesso.style.display = 'none';
 
             if (chaveSalva && usuarioSalvo) {
                 telaNV.style.display = 'none';
@@ -241,7 +257,13 @@
                 document.getElementById('displayNomeUsuario').innerText = usuarioSalvo.toUpperCase();
                 
                 loopGeradorToken();
+                // O loop de renderização do token continua rodando a cada 1 segundo perfeitamente
                 setInterval(loopGeradorToken, 1000);
+
+                // Dispara a escuta em segundo plano para o servidor web da JC-Softwares
+                if (!checagemTemporizador) {
+                    checagemTemporizador = setInterval(verificarSeComputadorLogou, 2500);
+                }
             } 
             else if (usuarioPendente && hashSenhaEsperado) {
                 telaNV.style.display = 'none';
@@ -265,7 +287,7 @@
                     
                     usuarioPendente = urlParams.get('user');
                     chavePendente = urlParams.get('chave');
-                    hashSenhaEsperado = urlParams.get('sh'); // 'sh' é o Hash da senha vindo do Desktop
+                    hashSenhaEsperado = urlParams.get('sh'); 
 
                     window.location.hash = '';
                 } catch (e) {
@@ -285,15 +307,12 @@
                 return;
             }
 
-            // Transforma a senha que o funcionário digitou em SHA256
+            // Transforma a senha que o funcionário digitou em SHA256 para comparar
             const hashSenhaDigitada = CryptoJS.SHA256(senhaDigitada).toString();
 
-            // Compara os dois hashes localmente no celular
             if (hashSenhaDigitada === hashSenhaEsperado) {
-                // Sucesso! Grava no celular e libera o Token
                 localStorage.setItem('jc_usuario', usuarioPendente);
                 localStorage.setItem('jc_chave_secreta', chavePendente);
-                
                 verificarEstadoDispositivo();
             } else {
                 erroTxt.innerText = "Senha incorreta! Vinculação rejeitada.";
@@ -305,28 +324,52 @@
             const chaveSecreta = localStorage.getItem('jc_chave_secreta');
             if (!chaveSecreta) return;
 
-            // 1. Pega o minuto atual (Igual ao Backend)
             const minutoAtual = Math.floor(Date.now() / 60000);
-            
-            // 2. Junta a chave única com o minuto usando o padrão com underline "_"
             const stringCombinada = chaveSecreta + "_" + minutoAtual;
-
-            // 3. Gera o Hash SHA-256 real usando a biblioteca CryptoJS já importada
+            
             const hashHex = CryptoJS.SHA256(stringCombinada).toString(CryptoJS.enc.Hex);
-            
-            // 4. Pega os primeiros 8 caracteres do hash hexadecimal e converte para número inteiro
             const numeroEstavel = parseInt(hashHex.substring(0, 8), 16);
-            
-            // 5. Isola os 4 dígitos finais e garante os zeros à esquerda (ex: "0521")
             const tokenCalculado = String(Math.abs(numeroEstavel) % 10000).padStart(4, '0');
             
-            // 6. Atualiza o ecrã do telemóvel
             document.getElementById('displayToken').innerText = tokenCalculado;
+        }
+
+        // CONSULTA EM SEGUNDO PLANO (Sem interferir no token offline)
+        function verificarSeComputadorLogou() {
+            const chaveSecreta = localStorage.getItem('jc_chave_secreta');
+            if (!chaveSecreta) return;
+
+            // Transforma a chave em MD5 para consultar a API mantendo a semente oculta na rede
+            const hashConsulta = CryptoJS.MD5(chaveSecreta).toString();
+
+            fetch(`https://jcsoftware.com.br/api/checar-status.php?chave=${hashConsulta}`)
+                .then(res => res.json())
+                .then(dados => {
+                    if (dados && dados.status === 'sucesso') {
+                        // Desliga as requisições temporariamente enquanto exibe a mensagem de sucesso
+                        clearInterval(checagemTemporizador);
+                        checagemTemporizador = null;
+
+                        // Esconde os números do token e abre o card verde de sucesso com feedback
+                        document.getElementById('telaVinculado').style.display = 'none';
+                        document.getElementById('telaSucessoLogin').style.display = 'block';
+
+                        // Faz o celular vibrar de forma suave em confirmação física (se compatível)
+                        if (navigator.vibrate) { navigator.vibrate([200, 100, 200]); }
+
+                        // Aguarda 6 segundos exibindo o aviso na tela do celular e depois reseta de forma lisa
+                        setTimeout(() => {
+                            verificarEstadoDispositivo();
+                        }, 6000);
+                    }
+                })
+                .catch(err => console.log("Aguardando ação de login no computador..."));
         }
 
         function removerVinculo() {
             if (confirm("Tem certeza que deseja remover o vínculo?")) {
                 localStorage.clear();
+                if (checagemTemporizador) { clearInterval(checagemTemporizador); checagemTemporizador = null; }
                 window.location.reload();
             }
         }
