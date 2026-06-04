@@ -1,0 +1,45 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+
+$dados = json_get_contents(); // Pega o JSON enviado pelo Electron
+if (!empty($dados['chave'])) {
+    // Cria um arquivo temporário em disco com o nome do hash da chave do funcionário
+    $nomeArquivo = __DIR__ . "/status_" . md5($dados['chave']) . ".json";
+    
+    // Grava que o status é sucesso e coloca o timestamp atual
+    $payload = json_encode(["status" => "sucesso", "tempo" => time()]);
+    file_put_contents($nomeArquivo, $payload);
+    
+    echo json_encode(["enviado" => true]);
+    exit;
+}
+echo json_encode(["enviado" => false]);
+
+function json_get_contents() {
+    return json_decode(file_get_contents("php://input"), true) ?? [];
+}
+
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+
+if (!empty($_GET['chave'])) {
+    $nomeArquivo = __DIR__ . "/status_" . md5($_GET['chave']) . ".json";
+    
+    if (file_exists($nomeArquivo)) {
+        $conteudo = json_decode(file_get_contents($nomeArquivo), true);
+        
+        // SEGURANÇA: Se a notificação foi gerada há mais de 10 segundos, ela já expirou
+        if (time() - $conteudo['tempo'] <= 10) {
+            echo json_encode(["status" => "sucesso"]);
+            // Apaga o arquivo imediatamente para que o mesmo aviso nunca seja lido duas vezes
+            @unlink($nomeArquivo); 
+            exit;
+        } else {
+            @unlink($nomeArquivo); // Limpa lixo antigo do servidor
+        }
+    }
+}
+
+echo json_encode(["status" => "aguardando"]);
