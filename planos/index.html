@@ -591,89 +591,72 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const urlPlanotxt = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/PlanoSitetxt";
+    // Aponta diretamente para o novo arquivo público sem criptografia
+    const urlPlanoSite = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/PlanoSitetxt";
 
-            function transformarEmBotao(containerId) {
-                const container = document.getElementById(containerId);
-                if (container) {
-                    // O link agora aponta para a ID local da própria página de planos!
-                    container.innerHTML = `<a href="#card-consultor-planos" class="btn-consultar-valores">📋 Consultar Valor</a>`;
+    function transformarEmBotao(containerId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<a href="#card-consultor-planos" class="btn-consultar-valores">📋 Consultar Valor</a>`;
+        }
+    }
+
+    fetch(urlPlanoSite, { cache: "no-store" })
+        .then(response => {
+            if (!response.ok) throw new Error("Erro HTTP: " + response.status);
+            return response.text();
+        })
+        .then(texto => {
+            const linhas = texto.replace(/\r/g, '').split('\n');
+
+            let realizouLite = false;
+            let realizouPlus = false;
+            let realizouPro = false;
+            let realizouSuporte = false;
+
+            linhas.forEach(linha => {
+                if (!linha.includes(":")) return;
+
+                const partes = linha.split(":");
+                const chave = partes[0].trim();
+                const valor = partes.slice(1).join(":").trim();
+
+                if (chave === "ValorLite" && valor && valor !== "--") {
+                    document.getElementById("ValorLite").innerText = valor;
+                    realizouLite = true;
                 }
-            }
-
-            fetch(urlPlanotxt)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Falha total de conexão");
-                    }
-                    return response.text();
-                })
-                .then(texto => {
-                    const linhas = texto.split('\n');
-
-                    let realizouLite = false;
-                    let realizouPlus = false;
-                    let realizouPro = false;
-                    let realizouSuporte = false;
-
-                    linhas.forEach(linha => {
-                        if (linha.includes("ValorLite:")) {
-                            const valor = inlineValue(linha, "ValorLite:");
-                            if (valor && valor !== "--" && valor !== "") {
-                                document.getElementById("ValorLite").innerText = valor;
-                                realizouLite = true;
-                            }
-                        }
-                        if (linha.includes("ValorPlus:")) {
-                            const valor = inlineValue(linha, "ValorPlus:");
-                            if (valor && valor !== "--" && valor !== "") {
-                                document.getElementById("ValorPlus").innerText = valor;
-                                realizouPlus = true;
-                            }
-                        }
-                        if (linha.includes("ValorPro:")) {
-                            const valor = inlineValue(linha, "ValorPro:");
-                            if (valor && valor !== "--" && valor !== "") {
-                                document.getElementById("ValorPro").innerText = valor;
-                                realizouPro = true;
-                            }
-                        }
-                        if (linha.includes("ValorPacoteCreditos:")) {
-                            const valor = inlineValue(linha, "ValorPacoteCreditos:");
-                            if (valor && valor !== "--" && valor !== "") {
-                                document.getElementById("ValorPacoteCreditos").innerText = valor;
-                                realizouSuporte = true;
-                            }
-                        }
-                        if (linha.includes("QtdCreditosPacote:")) {
-                            const qtd = inlineValue(linha, "QtdCreditosPacote:");
-                            const campo = document.getElementById("QtdCreditosPacote");
-                            if (campo && qtd) campo.innerText = qtd;
-                        }
-                    });
-
-                    // Aplica o botão APENAS no card cujo valor falhou na leitura
-                    if (!realizouLite) transformarEmBotao("ContainerLite");
-                    if (!realizouPlus) transformarEmBotao("ContainerPlus");
-                    if (!realizouPro) transformarEmBotao("ContainerPro");
-                    if (!realizouSuporte) transformarEmBotao("ContainerSuporte");
-                })
-                .catch(error => {
-                    console.error("Falha geral. Modificando todos os cards:", error);
-                    transformarEmBotao("ContainerLite");
-                    transformarEmBotao("ContainerPlus");
-                    transformarEmBotao("ContainerPro");
-                    transformarEmBotao("ContainerSuporte");
-                });
-
-            function inlineValue(str, key) {
-                try {
-                    return str.split(key)[1].trim();
-                } catch (e) {
-                    return null;
+                if (chave === "ValorPlus" && valor && valor !== "--") {
+                    document.getElementById("ValorPlus").innerText = valor;
+                    realizouPlus = true;
                 }
-            }
+                if (chave === "ValorPro" && valor && valor !== "--") {
+                    document.getElementById("ValorPro").innerText = valor;
+                    realizouPro = true;
+                }
+                if (chave === "ValorPacoteCreditos" && valor && valor !== "--") {
+                    document.getElementById("ValorPacoteCreditos").innerText = valor;
+                    realizouSuporte = true;
+                }
+                if (chave === "QtdCreditosPacote" && valor) {
+                    const el = document.getElementById("QtdCreditosPacote");
+                    if (el) el.innerText = valor;
+                }
+            });
+
+            // Se algum valor não veio ou falhou, aplica o botão de consulta
+            if (!realizouLite) transformarEmBotao("ContainerLite");
+            if (!realizouPlus) transformarEmBotao("ContainerPlus");
+            if (!realizouPro) transformarEmBotao("ContainerPro");
+            if (!realizouSuporte) transformarEmBotao("ContainerSuporte");
+        })
+        .catch(error => {
+            console.error("Erro ao carregar os preços no site:", error);
+            transformarEmBotao("ContainerLite");
+            transformarEmBotao("ContainerPlus");
+            transformarEmBotao("ContainerPro");
+            transformarEmBotao("ContainerSuporte");
         });
+});
 
         // Função de envio do WhatsApp adaptada para a página de planos
         function enviarWhatsappComInput() {
