@@ -421,12 +421,14 @@
             }
         }
 
+        // Variable global para armazenar o link de download se disponível
+        let urlDownloadDireto = "";
+
         // --- VERIFICAÇÃO DIRECIONADA AO BOTÃO DE DOWNLOAD PRINCIPAL ---
         function verificarStatusDoSistema() {
-            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/Sistematxt";
+            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/refs/heads/main/ArquivoSitetxt";
             const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
             
-            // Agora pegamos especificamente o botão azul da página
             const botaoPrincipal = document.getElementById("btnPrincipalDownload");
             if (!botaoPrincipal) return;
 
@@ -437,19 +439,47 @@
                 })
                 .then(data => {
                     const textoPuro = data.contents;
-                    const linhaCompleta = textoPuro.trim().toUpperCase();
+                    const linhas = textoPuro.split('\n');
 
-                    // Se o arquivo contiver o status INDISPONÍVEL
-                    if (linhaCompleta.includes("STATUSSISTEMA") && (linhaCompleta.includes("INDISPONÍVEL") || linhaCompleta.includes("INDISPONIVEL"))) {
+                    let statusIndisponivel = false;
+                    let linkEncontrado = "";
+
+                    linhas.forEach(linha => {
+                        const l = linha.trim();
+                        const lUpper = l.toUpperCase();
+
+                        // Verifica Status
+                        if (lUpper.includes("STATUSSISTEMA") && (lUpper.includes("INDISPONÍVEL") || lUpper.includes("INDISPONIVEL"))) {
+                            statusIndisponivel = true;
+                        }
+
+                        // Captura o link do ArquivoDownload
+                        if (lUpper.startsWith("ARQUIVODOWNLOAD:")) {
+                            linkEncontrado = l.substring(l.indexOf(":") + 1).trim();
+                        }
+                    });
+
+                    if (statusIndisponivel) {
+                        // Se indisponível: mantém a função de abrir modal
                         botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                        botaoPrincipal.onclick = abrirModal;
+                    } else if (linkEncontrado !== "") {
+                        // Se disponível e tem link: redireciona para o .exe diretamente ao clicar
+                        urlDownloadDireto = linkEncontrado;
+                        botaoPrincipal.innerHTML = "💾 Baixar Instalador v1.1";
+                        botaoPrincipal.onclick = function() {
+                            window.location.href = urlDownloadDireto;
+                        };
                     } else {
-                        botaoPrincipal.innerHTML = "💾 Baixar Instalador v1.0";
+                        // Fallback se não achar a linha do link
+                        botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                        botaoPrincipal.onclick = abrirModal;
                     }
                 })
                 .catch(erro => {
                     console.error("Falha ao validar via Proxy, aplicando Fallback:", erro);
-                    // Caso falhe a conexão, altera para Lista de Espera por segurança
                     botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                    botaoPrincipal.onclick = abrirModal;
                 });
         }
     </script>
