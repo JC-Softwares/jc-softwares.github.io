@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JC-Softwares | Validação de Acesso</title>
+    
+    <style>
+        :root {
+            --fundo-principal: #121214;
+            --fundo-card: #1e1e24;
+            --texto-claro: #ffffff;
+            --texto-mutado: #a0a0a0;
+            --borda-sutil: rgba(255, 255, 255, 0.1);
+            --azul-destaque: #0066cc;
+            --azul-hover: #0052a3;
+            --vermelho-erro: #ff5555;
+            --verde-sucesso: #00cc66;
+        }
+
+        body {
+            background-color: var(--fundo-principal);
+            color: var(--texto-claro);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card-validacao {
+            background-color: var(--fundo-card);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-validacao h2 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: var(--texto-claro);
+        }
+
+        .card-validacao p {
+            color: var(--texto-mutado);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .input-email {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            background-color: var(--fundo-principal);
+            border: 1px solid #323238;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-email:focus {
+            border-color: var(--azul-destaque);
+        }
+
+        .btn-validar {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--azul-destaque);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-validar:hover {
+            background-color: var(--azul-hover);
+        }
+
+        .msg-status {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .msg-erro {
+            background: rgba(255, 85, 85, 0.1);
+            color: var(--vermelho-erro);
+            border: 1px solid rgba(255, 85, 85, 0.2);
+        }
+
+        .msg-sucesso {
+            background: rgba(0, 204, 102, 0.1);
+            color: var(--verde-sucesso);
+            border: 1px solid rgba(0, 204, 102, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-validacao" id="boxValidacao">
+        <h2>🔒 Liberação do Download</h2>
+        <p>Para confirmar sua autorização, digite o mesmo <strong>e-mail</strong> onde você recebeu o link de acesso.</p>
+
+        <form onsubmit="validarAcesso(event)">
+            <input type="email" id="emailUsuario" class="input-email" placeholder="seu-email@exemplo.com" required autocomplete="email">
+            <button type="submit" class="btn-validar">✨ Liberar e Baixar (.exe)</button>
+        </form>
+
+        <div id="mensagemStatus" class="msg-status"></div>
+    </div>
+
+    <script>
+        // URL real do seu executável (pode ser relativa ou link direto)
+        const urlInstaladorExe = "https://jc-softwares.github.io/downloads/Instalador_v1.exe";
+
+        let dadosToken = null;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (!token) {
+                bloquearTela("Acesso não autorizado. Nenhum token de segurança foi encontrado na URL.");
+                return;
+            }
+
+            try {
+                // Decodifica o token em Base64 (Estrutura esperada: "email|YYYYMMDDHHMMSS")
+                const textoDecodificado = atob(token);
+                const partes = textoDecodificado.split('|');
+
+                if (partes.length < 2) {
+                    bloquearTela("Token de acesso inválido ou corrompido.");
+                    return;
+                }
+
+                dadosToken = {
+                    emailAutorizado: partes[0].trim().toLowerCase(),
+                    timestampCriacao: partes[1].trim() // Formato: "20260807170600"
+                };
+
+                // Validação Matemática das 24 Horas de Expiração
+                if (!validarValidade24Horas(dadosToken.timestampCriacao)) {
+                    bloquearTela("⏱️ Este link de teste expirou! Os links de download têm validade máxima de 24 horas por motivos de segurança.");
+                }
+
+            } catch (e) {
+                bloquearTela("Token de segurança inválido.");
+            }
+        });
+
+        function validarValidade24Horas(strTimestamp) {
+            // Extrai as partes do timestamp AAAAMMDDHHMMSS
+            const ano = parseInt(strTimestamp.substring(0, 4));
+            const mes = parseInt(strTimestamp.substring(4, 6)) - 1; // Mês no JS começa em 0
+            const dia = parseInt(strTimestamp.substring(6, 8));
+            const hora = parseInt(strTimestamp.substring(8, 10));
+            const minuto = parseInt(strTimestamp.substring(10, 12));
+            const segundo = parseInt(strTimestamp.substring(12, 14));
+
+            const dataCriacao = new Date(ano, mes, dia, hora, minuto, segundo);
+            const dataAtual = new Date();
+
+            // Diferença de tempo em milissegundos
+            const diferencaMS = dataAtual.getTime() - dataCriacao.getTime();
+            
+            // 24 horas em milissegundos = 24 * 60 * 60 * 1000 = 86.400.000 ms
+            const limite24HorasMS = 86400000;
+
+            // Retorna true se ainda estiver dentro da janela de 24h
+            return diferencaMS >= 0 && diferencaMS <= limite24HorasMS;
+        }
+
+        function validarAcesso(event) {
+            event.preventDefault();
+            const emailDigitado = document.getElementById("emailUsuario").value.trim().toLowerCase();
+            const divStatus = document.getElementById("mensagemStatus");
+
+            if (!dadosToken) return;
+
+            // Compara o e-mail digitado com o e-mail contido no token
+            if (emailDigitado === dadosToken.emailAutorizado) {
+                divStatus.className = "msg-status msg-sucesso";
+                divStatus.innerText = "✅ E-mail verificado com sucesso! Seu download começará em instantes...";
+                divStatus.style.display = "block";
+                
+                // Dispara o download após 1.5 segundo
+                setTimeout(() => {
+                    window.location.href = urlInstaladorExe;
+                }, 1500);
+            } else {
+                divStatus.className = "msg-status msg-erro";
+                divStatus.innerText = "❌ E-mail não confere com o e-mail autorizador deste link.";
+                divStatus.style.display = "block";
+            }
+        }
+
+        function bloquearTela(mensagem) {
+            const box = document.getElementById("boxValidacao");
+            box.innerHTML = `
+                <h3 style="color: var(--vermelho-erro); margin-top: 0;">Acesso Negado</h3>
+                <p style="color: var(--texto-mutado);">${mensagem}</p>
+                <a href="https://jc-softwares.github.io/" style="color: var(--azul-destaque); text-decoration: none; font-size: 0.9rem; font-weight: bold;">← Voltar ao site principal</a>
+            `;
+        }
+    </script>
+</body>
+</html>
