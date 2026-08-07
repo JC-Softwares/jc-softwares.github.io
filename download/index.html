@@ -528,61 +528,62 @@
         let urlDownloadDireto = "";
 
         function verificarStatusDoSistema() {
-            // Adicionado timestamp para evitar cache no arquivo TXT
-            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/refs/heads/main/ArquivoSitetxt?v=" + new Date().getTime();
-            const urlProxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlTarget);
-            
-            const botaoPrincipal = document.getElementById("btnPrincipalDownload");
-            if (!botaoPrincipal) return;
+    // Busca direto no GitHub adicionando timestamp para ignorar o cache do navegador
+    const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/refs/heads/main/ArquivoSitetxt?t=" + new Date().getTime();
+    
+    const botaoPrincipal = document.getElementById("btnPrincipalDownload");
+    if (!botaoPrincipal) return;
 
-            const svgWin = `<svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/></svg>`;
+    const svgWin = `<svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/></svg>`;
 
-            fetch(urlProxy)
-                .then(response => {
-                    if (!response.ok) throw new Error("Erro na resposta do Proxy");
-                    return response.json();
-                })
-                .then(data => {
-                    const textoPuro = data.contents;
-                    const linhas = textoPuro.split('\n');
+    fetch(urlTarget)
+        .then(response => {
+            if (!response.ok) throw new Error("Erro ao acessar o arquivo no GitHub");
+            return response.text(); // Lê como Texto Puro direto, sem JSON proxy
+        })
+        .then(textoPuro => {
+            // Trata quebras de linha do Windows (\r\n) e do Linux (\n)
+            const linhas = textoPuro.split(/\r?\n/);
 
-                    let statusIndisponivel = false;
-                    let linkEncontrado = "";
+            let statusIndisponivel = false;
+            let linkEncontrado = "";
 
-                    linhas.forEach(linha => {
-                        const l = linha.trim();
-                        const lUpper = l.toUpperCase();
+            linhas.forEach(linha => {
+                const l = linha.trim();
+                const lUpper = l.toUpperCase();
 
-                        if (lUpper.includes("STATUSSISTEMA") && (lUpper.includes("INDISPONÍVEL") || lUpper.includes("INDISPONIVEL"))) {
-                            statusIndisponivel = true;
-                        }
+                if (lUpper.includes("STATUSSISTEMA") && (lUpper.includes("INDISPONÍVEL") || lUpper.includes("INDISPONIVEL"))) {
+                    statusIndisponivel = true;
+                }
 
-                        if (lUpper.includes("ARQUIVODOWNLOAD:")) {
-                            // Extrai tudo depois de "ARQUIVODOWNLOAD:" e limpa aspas ou espaços extras
-                            linkEncontrado = l.substring(lUpper.indexOf("ARQUIVODOWNLOAD:") + 16).trim().replace(/['"]/g, '');
-                        }
-                    });
+                if (lUpper.startsWith("ARQUIVODOWNLOAD:")) {
+                    // Pega a URL após o primeiro ':' e limpa espaços/aspas
+                    linkEncontrado = l.substring(l.indexOf(":") + 1).trim().replace(/['"]/g, '');
+                }
+            });
 
-                    console.log("Status Indisponivel:", statusIndisponivel);
-                    console.log("Link Encontrado:", linkEncontrado);
+            console.log("Status Indisponivel:", statusIndisponivel);
+            console.log("Link do EXE encontrado:", linkEncontrado);
 
-                    if (!statusIndisponivel && linkEncontrado !== "") {
-                        urlDownloadDireto = linkEncontrado;
-                        botaoPrincipal.innerHTML = svgWin + " Baixar Instalador para Windows";
-                        botaoPrincipal.onclick = function() {
-                            window.location.href = urlDownloadDireto;
-                        };
-                    } else {
-                        botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
-                        botaoPrincipal.onclick = abrirModal;
-                    }
-                })
-                .catch(erro => {
-                    console.error("Falha ao validar via Proxy:", erro);
-                    botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
-                    botaoPrincipal.onclick = abrirModal;
-                });
-        }
+            // Validação estrita
+            if (!statusIndisponivel && linkEncontrado.length > 5) {
+                urlDownloadDireto = linkEncontrado;
+                botaoPrincipal.innerHTML = svgWin + " Baixar Instalador para Windows";
+                botaoPrincipal.onclick = function() {
+                    window.location.href = urlDownloadDireto;
+                };
+            } else {
+                botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
+                botaoPrincipal.onclick = abrirModal;
+            }
+        })
+        .catch(erro => {
+            console.error("Falha ao ler o status do sistema:", erro);
+            // Fallback em caso de falha de conexão
+            botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
+            botaoPrincipal.onclick = abrirModal;
+        });
+}
     </script>
 
 </body>
