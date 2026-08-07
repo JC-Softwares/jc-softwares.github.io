@@ -90,6 +90,26 @@
             background-color: var(--azul-hover);
         }
 
+        .btn-home {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: transparent;
+            color: var(--texto-mutado);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        .btn-home:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--texto-claro);
+        }
+
         .msg-status {
             margin-top: 15px;
             font-size: 0.85rem;
@@ -109,6 +129,11 @@
             color: var(--verde-sucesso);
             border: 1px solid rgba(0, 204, 102, 0.2);
         }
+
+        .contador {
+            font-weight: bold;
+            color: var(--azul-destaque);
+        }
     </style>
 </head>
 <body>
@@ -117,16 +142,20 @@
         <h2>🔒 Liberação do Download</h2>
         <p>Para confirmar sua autorização, digite o mesmo <strong>e-mail</strong> onde você recebeu o link de acesso.</p>
 
-        <form onsubmit="validarAcesso(event)">
+        <form id="formValidacao" onsubmit="validarAcesso(event)">
             <input type="email" id="emailUsuario" class="input-email" placeholder="seu-email@exemplo.com" required autocomplete="email">
             <button type="submit" class="btn-validar">✨ Liberar e Baixar (.exe)</button>
         </form>
 
         <div id="mensagemStatus" class="msg-status"></div>
+
+        <!-- Tela de Sucesso Completo (exibida após acertar o e-mail) -->
+        <div id="areaSucesso" style="display: none;">
+            <a href="index.html" class="btn-home">🏠 Voltar ao Início</a>
+        </div>
     </div>
 
     <script>
-        
         const urlInstaladorExe = "https://github.com/JC-Softwares/JCSoftwares_Config/releases/download/2026/Instalador_JC_Softwares_v1.1.0.4.exe";
 
         let dadosToken = null;
@@ -136,17 +165,16 @@
             const token = urlParams.get('token');
 
             if (!token) {
-                bloquearTela("Acesso não autorizado. Nenhum token de segurança foi encontrado na URL.");
+                bloquearETeleportar("Acesso não autorizado. Nenhum token de segurança foi encontrado na URL.");
                 return;
             }
 
             try {
-                
                 const textoDecodificado = atob(token);
                 const partes = textoDecodificado.split('|');
 
                 if (partes.length < 2) {
-                    bloquearTela("Token de acesso inválido ou corrompido.");
+                    bloquearETeleportar("Token de acesso inválido ou corrompido.");
                     return;
                 }
 
@@ -155,18 +183,16 @@
                     timestampCriacao: partes[1].trim() 
                 };
 
-                
                 if (!validarValidade24Horas(dadosToken.timestampCriacao)) {
-                    bloquearTela("⏱️ Este link de teste expirou! Os links de download têm validade máxima de 24 horas por motivos de segurança.");
+                    bloquearETeleportar("⏱️ Este link de teste expirou! Por favor, faça um novo pedido de link no site.");
                 }
 
             } catch (e) {
-                bloquearTela("Token de segurança inválido.");
+                bloquearETeleportar("Token de segurança inválido.");
             }
         });
 
         function validarValidade24Horas(strTimestamp) {
-            
             const ano = parseInt(strTimestamp.substring(0, 4));
             const mes = parseInt(strTimestamp.substring(4, 6)) - 1; 
             const dia = parseInt(strTimestamp.substring(6, 8));
@@ -177,13 +203,9 @@
             const dataCriacao = new Date(ano, mes, dia, hora, minuto, segundo);
             const dataAtual = new Date();
 
-            
             const diferencaMS = dataAtual.getTime() - dataCriacao.getTime();
-            
-            
             const limite24HorasMS = 86400000;
 
-            
             return diferencaMS >= 0 && diferencaMS <= limite24HorasMS;
         }
 
@@ -191,16 +213,22 @@
             event.preventDefault();
             const emailDigitado = document.getElementById("emailUsuario").value.trim().toLowerCase();
             const divStatus = document.getElementById("mensagemStatus");
+            const formValidacao = document.getElementById("formValidacao");
+            const areaSucesso = document.getElementById("areaSucesso");
 
             if (!dadosToken) return;
 
-    
             if (emailDigitado === dadosToken.emailAutorizado) {
+                // Esconde o formulário (input e botão de liberar)
+                formValidacao.style.display = "none";
+
+                // Exibe a mensagem de sucesso e o botão da Home
                 divStatus.className = "msg-status msg-sucesso";
                 divStatus.innerText = "✅ E-mail verificado com sucesso! Seu download começará em instantes...";
                 divStatus.style.display = "block";
+                areaSucesso.style.display = "block";
                 
-                
+                // Dispara o download automático do arquivo
                 setTimeout(() => {
                     window.location.href = urlInstaladorExe;
                 }, 1500);
@@ -211,13 +239,29 @@
             }
         }
 
-        function bloquearTela(mensagem) {
+        function bloquearETeleportar(mensagem) {
             const box = document.getElementById("boxValidacao");
+            let segundos = 5;
+
             box.innerHTML = `
-                <h3 style="color: var(--vermelho-erro); margin-top: 0;">Acesso Negado</h3>
+                <h3 style="color: var(--vermelho-erro); margin-top: 0;">Acesso Indisponível</h3>
                 <p style="color: var(--texto-mutado);">${mensagem}</p>
-                <a href="https://jc-softwares.github.io/" style="color: var(--azul-destaque); text-decoration: none; font-size: 0.9rem; font-weight: bold;">← Voltar ao site principal</a>
+                <p style="font-size: 0.85rem; color: var(--texto-mutado); margin-top: 15px;">
+                    Redirecionando para a página inicial em <span id="tempoRedirecionar" class="contador">${segundos}</span> segundos...
+                </p>
+                <a href="/download/index.html" class="btn-home" style="margin-top: 10px;">Ir para o Início Agora</a>
             `;
+
+            const intervalo = setInterval(() => {
+                segundos--;
+                const elContador = document.getElementById("tempoRedirecionar");
+                if (elContador) elContador.innerText = segundos;
+
+                if (segundos <= 0) {
+                    clearInterval(intervalo);
+                    window.location.href = "/download/index.html";
+                }
+            }, 1000);
         }
     </script>
 </body>
