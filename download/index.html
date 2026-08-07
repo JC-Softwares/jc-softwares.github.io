@@ -258,7 +258,7 @@
             font-size: 0.95rem;
         }
 
-        /* MODAL DA LISTA DE DESEJOS */
+        /* MODAL DE ATENDIMENTO E NOTIFICAÇÕES */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -357,9 +357,28 @@
             transition: border-color 0.2s;
         }
 
-        .modal-form input:focus {
+        .modal-form input[type="email"]:focus, .modal-form input[type="text"]:focus {
             border-color: var(--azul-jc);
             outline: none;
+        }
+
+        /* ESTILIZAÇÃO DO GRUPO DE DECISÃO (RADIO BUTTONS) */
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: normal !important;
+            color: var(--texto-claro);
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .radio-option input[type="radio"] {
+            accent-color: var(--azul-jc);
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
         }
 
         .btn-enviar-pedido {
@@ -415,7 +434,7 @@
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
 
-                <!-- Inicializado com estado de busca para evitar a "piscada" de texto -->
+                <!-- Botão principal -->
                 <button id="btnPrincipalDownload" onclick="abrirModal()" class="btn-download">
                     <svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/>
@@ -470,19 +489,23 @@
         </div>
     </div>
 
+    <!-- MODAL GENÉRICO DE ATENDIMENTO E NOTIFICAÇÕES -->
     <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event)">
         <div class="modal-card">
             <button class="btn-fechar-modal" onclick="fecharModal()">&times;</button>
 
-            <h4>Quase pronto! 🚀</h4>
-            <p>
-                Tanto o nosso site quanto o sistema estão recebendo os <strong>ajustes finais de otimização</strong>. Entre para a nossa lista de exclusividade inserindo seu e-mail abaixo. Assim que liberarmos o instalador, você receberá o link direto no seu e-mail junto com uma condição especial de lançamento!
+            <!-- TÍTULO GENÉRICO (Fixo para qualquer cenário) -->
+            <h4>Central de Notificações 🛠️</h4>
+            
+            <!-- TEXTO DINÂMICO (Preenchido via JavaScript pela linha MOTIVO: do arquivo txt) -->
+            <p id="txtMotivoModal">
+                O link de download está temporariamente indisponível. Deixe seu contato para avisarmos assim que o acesso for liberado.
             </p>
 
             <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
 
                 <input type="hidden" name="_next" value="https://jc-softwares.github.io/"> 
-                <input type="hidden" name="_subject" value="Novo interessado na Lista de Desejos! 🚀">
+                <input type="hidden" name="_subject" value="Novo aviso registrado no site! 🛠️">
                 <input type="hidden" name="_captcha" value="false"> 
                 
                 <div class="form-group" style="margin-bottom: 15px;">
@@ -490,12 +513,27 @@
                     <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 25px;">
+                <div class="form-group" style="margin-bottom: 20px;">
                     <label for="emailInteressado">Seu Melhor E-mail:</label>
                     <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
                 </div>
 
-                <button type="submit" class="btn-enviar-pedido">✨ Entrar para Lista de Espera</button>
+                <!-- BLOCO DE DECISÃO OBRIGATÓRIA -->
+                <div class="form-group" style="margin-bottom: 25px; background: rgba(0, 0, 0, 0.25); padding: 14px; border-radius: 8px; border: 1px solid var(--borda-sutil);">
+                    <label style="color: #ffffff; margin-bottom: 10px; font-size: 0.9rem;">Confirmação de Envio:</label>
+                    
+                    <label class="radio-option">
+                        <input type="radio" name="Interesse_Receber_Link" value="SIM - Deseja receber o link no email" required>
+                        Desejo receber o Link no meu e-mail quando normalizar
+                    </label>
+
+                    <label class="radio-option" style="color: var(--texto-mutado); margin-bottom: 0;">
+                        <input type="radio" name="Interesse_Receber_Link" value="NÃO - Não deseja receber o link" required>
+                        Não desejo receber o Link no meu e-mail quando normalizar
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-enviar-pedido">✨ Enviar Notificação / Feedback</button>
             </form>
         </div>
     </div>
@@ -528,62 +566,66 @@
         let urlDownloadDireto = "";
 
         function verificarStatusDoSistema() {
-    // Busca direto no GitHub adicionando timestamp para ignorar o cache do navegador
-    const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/refs/heads/main/ArquivoSitetxt?t=" + new Date().getTime();
-    
-    const botaoPrincipal = document.getElementById("btnPrincipalDownload");
-    if (!botaoPrincipal) return;
+            const urlTarget = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/refs/heads/main/ArquivoSitetxt?t=" + new Date().getTime();
+            
+            const botaoPrincipal = document.getElementById("btnPrincipalDownload");
+            const modalTexto = document.getElementById("txtMotivoModal");
+            if (!botaoPrincipal) return;
 
-    const svgWin = `<svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/></svg>`;
+            const svgWin = `<svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/></svg>`;
 
-    fetch(urlTarget)
-        .then(response => {
-            if (!response.ok) throw new Error("Erro ao acessar o arquivo no GitHub");
-            return response.text(); // Lê como Texto Puro direto, sem JSON proxy
-        })
-        .then(textoPuro => {
-            // Trata quebras de linha do Windows (\r\n) e do Linux (\n)
-            const linhas = textoPuro.split(/\r?\n/);
+            fetch(urlTarget)
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao acessar o arquivo no GitHub");
+                    return response.text();
+                })
+                .then(textoPuro => {
+                    const linhas = textoPuro.split(/\r?\n/);
 
-            let statusIndisponivel = false;
-            let linkEncontrado = "";
+                    let statusIndisponivel = false;
+                    let linkEncontrado = "";
+                    let motivoMensagem = "";
 
-            linhas.forEach(linha => {
-                const l = linha.trim();
-                const lUpper = l.toUpperCase();
+                    linhas.forEach(linha => {
+                        const l = linha.trim();
+                        const lUpper = l.toUpperCase();
 
-                if (lUpper.includes("STATUSSISTEMA") && (lUpper.includes("INDISPONÍVEL") || lUpper.includes("INDISPONIVEL"))) {
-                    statusIndisponivel = true;
-                }
+                        if (lUpper.includes("STATUSSISTEMA") && (lUpper.includes("INDISPONÍVEL") || lUpper.includes("INDISPONIVEL"))) {
+                            statusIndisponivel = true;
+                        }
 
-                if (lUpper.startsWith("ARQUIVODOWNLOAD:")) {
-                    // Pega a URL após o primeiro ':' e limpa espaços/aspas
-                    linkEncontrado = l.substring(l.indexOf(":") + 1).trim().replace(/['"]/g, '');
-                }
-            });
+                        if (lUpper.startsWith("MOTIVO:")) {
+                            motivoMensagem = l.substring(l.indexOf(":") + 1).trim();
+                        }
 
-            console.log("Status Indisponivel:", statusIndisponivel);
-            console.log("Link do EXE encontrado:", linkEncontrado);
+                        if (lUpper.startsWith("ARQUIVODOWNLOAD:")) {
+                            linkEncontrado = l.substring(l.indexOf(":") + 1).trim().replace(/['"]/g, '');
+                        }
+                    });
 
-            // Validação estrita
-            if (!statusIndisponivel && linkEncontrado.length > 5) {
-                urlDownloadDireto = linkEncontrado;
-                botaoPrincipal.innerHTML = svgWin + " Baixar Instalador para Windows";
-                botaoPrincipal.onclick = function() {
-                    window.location.href = urlDownloadDireto;
-                };
-            } else {
-                botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
-                botaoPrincipal.onclick = abrirModal;
-            }
-        })
-        .catch(erro => {
-            console.error("Falha ao ler o status do sistema:", erro);
-            // Fallback em caso de falha de conexão
-            botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
-            botaoPrincipal.onclick = abrirModal;
-        });
-}
+                    // Se houver um texto na linha MOTIVO:, injeta diretamente no parágrafo do modal
+                    if (motivoMensagem.length > 0 && modalTexto) {
+                        modalTexto.innerText = motivoMensagem;
+                    }
+
+                    if (!statusIndisponivel && linkEncontrado.length > 5) {
+                        urlDownloadDireto = linkEncontrado;
+                        botaoPrincipal.innerHTML = svgWin + " Baixar Instalador para Windows";
+                        botaoPrincipal.onclick = function() {
+                            window.location.href = urlDownloadDireto;
+                        };
+                    } else {
+                        // Botão genérico para qualquer motivo de indisponibilidade
+                        botaoPrincipal.innerHTML = svgWin + " Avisar-me sobre o Download 🛠️";
+                        botaoPrincipal.onclick = abrirModal;
+                    }
+                })
+                .catch(erro => {
+                    console.error("Falha ao ler o status do sistema:", erro);
+                    botaoPrincipal.innerHTML = svgWin + " Avisar-me sobre o Download 🛠️";
+                    botaoPrincipal.onclick = abrirModal;
+                });
+        }
     </script>
 
 </body>
