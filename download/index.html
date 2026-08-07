@@ -14,6 +14,8 @@
             --borda-sutil: #232833;
             --verde-sucesso: #2e7d32;
             --amarelo-alerta: #ffb74d;
+            --alerta-bg: rgba(255, 183, 77, 0.08);
+            --alerta-borda: rgba(255, 183, 77, 0.3);
         }
 
         body {
@@ -44,13 +46,6 @@
 
         .logo h1 span {
             color: var(--azul-jc);
-        }
-
-        .nav-links a {
-            color: var(--texto-claro);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
         }
 
         /* HERO COM DEGRADÊ */
@@ -315,20 +310,22 @@
         }
 
         .modal-card h4 {
-            margin: 0 0 10px 0;
-            font-size: 1.6rem;
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
             color: #ffffff;
         }
 
-        .modal-card h4 span {
-            color: var(--azul-jc);
-        }
-
-        .modal-card p {
-            color: var(--texto-mutado);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin: 0 0 25px 0;
+        /* CARD DE AVISO LARANJA DENTRO DO MODAL */
+        .card-motivo-alerta {
+            background-color: var(--alerta-bg);
+            border: 1px solid var(--alerta-borda);
+            border-left: 4px solid var(--amarelo-alerta);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            color: var(--texto-claro);
+            font-size: 0.92rem;
+            line-height: 1.5;
         }
 
         .modal-form .form-group {
@@ -362,7 +359,6 @@
             outline: none;
         }
 
-        /* ESTILIZAÇÃO DO GRUPO DE DECISÃO (RADIO BUTTONS) */
         .radio-option {
             display: flex;
             align-items: center;
@@ -379,6 +375,15 @@
             cursor: pointer;
             width: 16px;
             height: 16px;
+        }
+
+        .aviso-privacidade {
+            font-size: 0.78rem;
+            color: var(--texto-mutado);
+            margin-top: 10px;
+            line-height: 1.4;
+            border-top: 1px dashed var(--borda-sutil);
+            padding-top: 8px;
         }
 
         .btn-enviar-pedido {
@@ -434,7 +439,6 @@
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
 
-                <!-- Botão principal -->
                 <button id="btnPrincipalDownload" onclick="abrirModal()" class="btn-download">
                     <svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/>
@@ -489,25 +493,28 @@
         </div>
     </div>
 
-    <!-- MODAL GENÉRICO DE ATENDIMENTO E NOTIFICAÇÕES -->
+    <!-- MODAL DE ATENDIMENTO E NOTIFICAÇÕES -->
     <div class="modal-overlay" id="modalDesejos" onclick="fecharModalPeloFundo(event)">
         <div class="modal-card">
             <button class="btn-fechar-modal" onclick="fecharModal()">&times;</button>
 
-            <!-- TÍTULO GENÉRICO (Fixo para qualquer cenário) -->
             <h4>Central de Notificações 🛠️</h4>
             
-            <!-- TEXTO DINÂMICO (Preenchido via JavaScript pela linha MOTIVO: do arquivo txt) -->
-            <p id="txtMotivoModal">
-                O link de download está temporariamente indisponível. Deixe seu contato para avisarmos assim que o acesso for liberado.
-            </p>
+            <!-- CARD LARANJA/AMARELO COM A MENSAGEM DO REPOSITÓRIO -->
+            <div class="card-motivo-alerta" id="txtMotivoModal">
+                O link de download está temporariamente indisponível. Deixe seu e-mail para enviarmos o link direto de acesso assim que for liberado.
+            </div>
 
             <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
 
-                <input type="hidden" name="_next" value="https://jc-softwares.github.io/"> 
+                <!-- Redireciona para a página de agradecimento personalizada -->
+                <input type="hidden" name="_next" value="https://jc-softwares.github.io/obrigado.html"> 
                 <input type="hidden" name="_subject" value="Novo aviso registrado no site! 🛠️">
                 <input type="hidden" name="_captcha" value="false"> 
                 
+                <!-- Resposta automática sem ansiedade e com garantia de privacidade -->
+                <input type="hidden" name="_autoresponse" value="Olá! Confirmamos o recebimento da sua solicitação. Assim que o arquivo de download for liberado/normalizado, enviaremos o link direto de acesso para o seu e-mail. A JC-Softwares não envia mensagens de spam ou publicidades — utilizaremos seu contato estritamente para o envio do link solicitado, conforme a sua escolha. Atenciosamente, Equipe JC-Softwares.">
+
                 <div class="form-group" style="margin-bottom: 15px;">
                     <label for="nomeInteressado">Seu Nome:</label>
                     <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
@@ -524,16 +531,20 @@
                     
                     <label class="radio-option">
                         <input type="radio" name="Interesse_Receber_Link" value="SIM - Deseja receber o link no email" required>
-                        Desejo receber o Link no meu e-mail quando normalizar
+                        Desejo receber o Link de download no meu e-mail assim que liberado
                     </label>
 
                     <label class="radio-option" style="color: var(--texto-mutado); margin-bottom: 0;">
                         <input type="radio" name="Interesse_Receber_Link" value="NÃO - Não deseja receber o link" required>
-                        Não desejo receber o Link no meu e-mail quando normalizar
+                        Não desejo receber o Link de download no meu e-mail
                     </label>
+
+                    <div class="aviso-privacidade">
+                        🔒 <strong>Zero Spam:</strong> A JC-Softwares envia apenas o link solicitado. Não enviamos propagandas ou e-mails promocionais.
+                    </div>
                 </div>
 
-                <button type="submit" class="btn-enviar-pedido">✨ Enviar Notificação / Feedback</button>
+                <button type="submit" class="btn-enviar-pedido">✨ Confirmar Registro</button>
             </form>
         </div>
     </div>
@@ -603,7 +614,6 @@
                         }
                     });
 
-                    // Se houver um texto na linha MOTIVO:, injeta diretamente no parágrafo do modal
                     if (motivoMensagem.length > 0 && modalTexto) {
                         modalTexto.innerText = motivoMensagem;
                     }
@@ -615,7 +625,6 @@
                             window.location.href = urlDownloadDireto;
                         };
                     } else {
-                        // Botão genérico para qualquer motivo de indisponibilidade
                         botaoPrincipal.innerHTML = svgWin + " Avisar-me sobre o Download 🛠️";
                         botaoPrincipal.onclick = abrirModal;
                     }
