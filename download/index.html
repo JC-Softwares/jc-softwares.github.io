@@ -137,6 +137,16 @@
             .btn-download:hover {
                 background-color: #3158cd;
                 transform: translateY(-2px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px; /* Espaço entre a logo e o texto */
+            }
+            
+            .ico-win {
+                width: 20px;
+                height: 20px;
+                fill: currentColor; /* Garante que o ícone fique branco como o texto */
             }
 
         .nota-download {
@@ -403,7 +413,12 @@
                 <h3>1. Obter o Instalador</h3>
                 <p>Clique abaixo para descarregar o pacote de instalação inteligente do sistema.</p>
 
-                <button id="btnPrincipalDownload" onclick="abrirModal()" class="btn-download">💾 Baixar Instalador v1.0.0</button>
+                <button id="btnPrincipalDownload" onclick="abrirModal()" class="btn-download">
+                <svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/>
+                </svg>
+                Baixar Instalador para Windows
+                    </button>
                 <div class="nota-download">🛡️ 100% Seguro & Livre de Vírus</div>
             </div>
 
@@ -546,20 +561,21 @@
                         }
                     });
 
+                    // Exemplo de como ajustar dentro da função verificarStatusDoSistema():
+
+                    const svgWin = `<svg class="ico-win" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.328l.028 34.453L0 75.34V45.927zM40.237 6.91L88 0v41.972l-47.763.303zm47.76 38.647V88l-47.76-6.732-.02-35.708z" fill="currentColor"/></svg>`;
+                    
                     if (statusIndisponivel) {
-                        // Se indisponível: mantém a função de abrir modal
-                        botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                        botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
                         botaoPrincipal.onclick = abrirModal;
                     } else if (linkEncontrado !== "") {
-                        // Se disponível e tem link: redireciona para o .exe diretamente ao clicar
                         urlDownloadDireto = linkEncontrado;
-                        botaoPrincipal.innerHTML = "💾 Baixar Instalador v1.1";
+                        botaoPrincipal.innerHTML = svgWin + " Baixar Instalador para Windows";
                         botaoPrincipal.onclick = function() {
                             window.location.href = urlDownloadDireto;
                         };
                     } else {
-                        // Fallback se não achar a linha do link
-                        botaoPrincipal.innerHTML = "Entrar para Lista de Espera";
+                        botaoPrincipal.innerHTML = svgWin + " Entrar para Lista de Espera";
                         botaoPrincipal.onclick = abrirModal;
                     }
                 })
