@@ -110,7 +110,7 @@
             padding-bottom: 10px;
         }
 
-        /* BOTÃO DE DOWNLOAD (GATILHO) */
+        /* BOTÃO DE DOWNLOAD */
         .btn-download {
             background-color: var(--azul-jc);
             color: #ffffff;
@@ -276,17 +276,37 @@
             pointer-events: auto;
         }
 
+        /* CARD DO MODAL COM AJUSTE DE ALTURA E ROLAGEM */
         .modal-card {
             background-color: var(--bg-card);
             border: 2px solid var(--borda-sutil);
             border-radius: 14px;
             max-width: 480px;
             width: 90%;
-            padding: 35px;
+            padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
             transform: translateY(-20px);
             transition: transform 0.3s ease;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* BARRA DE ROLAGEM ESTILIZADA PARA O MODAL */
+        .modal-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-card::-webkit-scrollbar-track {
+            background: #0d0f14;
+            border-radius: 4px;
+        }
+        .modal-card::-webkit-scrollbar-thumb {
+            background-color: var(--borda-sutil);
+            border-radius: 4px;
+        }
+        .modal-card::-webkit-scrollbar-thumb:hover {
+            background-color: var(--azul-jc);
         }
 
         .modal-overlay.ativo .modal-card {
@@ -500,19 +520,16 @@
 
             <h4>Central de Notificações 🛠️</h4>
             
-            <!-- CARD LARANJA/AMARELO COM A MENSAGEM DO REPOSITÓRIO -->
             <div class="card-motivo-alerta" id="txtMotivoModal">
                 O link de download está temporariamente indisponível. Deixe seu e-mail para enviarmos o link direto de acesso assim que for liberado.
             </div>
 
             <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
 
-                <!-- Redireciona para a página de agradecimento personalizada -->
                 <input type="hidden" name="_next" value="https://jc-softwares.github.io/obrigado.html"> 
                 <input type="hidden" name="_subject" value="Novo aviso registrado no site! 🛠️">
                 <input type="hidden" name="_captcha" value="false"> 
                 
-                <!-- Resposta automática sem ansiedade e com garantia de privacidade -->
                 <input type="hidden" name="_autoresponse" value="Olá! Confirmamos o recebimento da sua solicitação. Assim que o arquivo de download for liberado/normalizado, enviaremos o link direto de acesso para o seu e-mail. A JC-Softwares não envia mensagens de spam ou publicidades — utilizaremos seu contato estritamente para o envio do link solicitado, conforme a sua escolha. Atenciosamente, Equipe JC-Softwares.">
 
                 <div class="form-group" style="margin-bottom: 15px;">
@@ -522,10 +539,10 @@
 
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label for="emailInteressado">Seu Melhor E-mail:</label>
-                    <input type="email" id="emailInteressado" name="Email" placeholder="exemplo@email.com" required>
+                    <!-- CORRIGIDO: name em minúsculas "email" para garantir a resposta automática -->
+                    <input type="email" id="emailInteressado" name="email" placeholder="exemplo@email.com" required>
                 </div>
 
-                <!-- BLOCO DE DECISÃO OBRIGATÓRIA -->
                 <div class="form-group" style="margin-bottom: 25px; background: rgba(0, 0, 0, 0.25); padding: 14px; border-radius: 8px; border: 1px solid var(--borda-sutil);">
                     <label style="color: #ffffff; margin-bottom: 10px; font-size: 0.9rem;">Confirmação de Envio:</label>
                     
