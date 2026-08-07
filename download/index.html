@@ -526,43 +526,52 @@
 
             <form action="https://formsubmit.co/suporte.jc.softwares@outlook.com" method="POST" class="modal-form">
 
-                <input type="hidden" name="_next" value="https://jc-softwares.github.io/obrigado.html"> 
-                <input type="hidden" name="_subject" value="Novo aviso registrado no site! 🛠️">
-                <input type="hidden" name="_captcha" value="true"> 
-                
-                <input type="hidden" name="_autoresponse" value="Olá! Confirmamos o recebimento da sua solicitação. Assim que o arquivo de download for liberado/normalizado, enviaremos o link direto de acesso para o seu e-mail. A JC-Softwares não envia mensagens de spam ou publicidades — utilizaremos seu contato estritamente para o envio do link solicitado, conforme a sua escolha. Atenciosamente, Equipe JC-Softwares.">
+    <!-- Configurações Ocultas do FormSubmit -->
+    <input type="hidden" name="_next" value="https://jc-softwares.github.io/obrigado.html"> 
+    <input type="hidden" name="_subject" value="Novo aviso registrado no site! 🛠️">
+    
+    <!-- DEFINE O E-MAIL DO SUPORTE COMO RESPOSTA PADRÃO (Melhora a entrega nos filtros) -->
+    <input type="hidden" name="_replyto" value="suporte.jc.softwares@outlook.com">
 
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <label for="nomeInteressado">Seu Nome:</label>
-                    <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
-                </div>
+    <!-- RESPOSTA AUTOMÁTICA OTIMIZADA PARA EVITAR SPAM -->
+    <input type="hidden" name="_autoresponse" value="Ola! Confirmamos o recebimento da sua solicitacao na JC-Softwares. Assim que o instalador for liberado, enviaremos as orientacoes de acesso diretamente para este e-mail. Este e um aviso automatico de confirmacao. Atenciosamente, Equipe JC-Softwares.">
 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label for="emailInteressado">Seu Melhor E-mail:</label>
-                    
-                    <input type="email" id="emailInteressado" name="email" placeholder="exemplo@email.com" required>
-                </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+        <label for="nomeInteressado">Seu Nome:</label>
+        <input type="text" id="nomeInteressado" name="Nome" placeholder="Ex: Júlio" required>
+    </div>
 
-                <div class="form-group" style="margin-bottom: 25px; background: rgba(0, 0, 0, 0.25); padding: 14px; border-radius: 8px; border: 1px solid var(--borda-sutil);">
-                    <label style="color: #ffffff; margin-bottom: 10px; font-size: 0.9rem;">Confirmação de Envio:</label>
-                    
-                    <label class="radio-option">
-                        <input type="radio" name="Interesse_Receber_Link" value="SIM - Deseja receber o link no email" required>
-                        Desejo receber o Link de download no meu e-mail assim que liberado
-                    </label>
+    <div class="form-group" style="margin-bottom: 20px;">
+        <label for="emailInteressado">Seu Melhor E-mail:</label>
+        <input type="email" id="emailInteressado" name="email" placeholder="exemplo@email.com" required>
+    </div>
 
-                    <label class="radio-option" style="color: var(--texto-mutado); margin-bottom: 0;">
-                        <input type="radio" name="Interesse_Receber_Link" value="NÃO - Não deseja receber o link" required>
-                        Não desejo receber o Link de download no meu e-mail
-                    </label>
+    <!-- BLOCO DE DECISÃO -->
+    <div class="form-group" style="margin-bottom: 25px; background: rgba(0, 0, 0, 0.25); padding: 14px; border-radius: 8px; border: 1px solid var(--borda-sutil);">
+        <label style="color: #ffffff; margin-bottom: 10px; font-size: 0.9rem;">Confirmação de Envio:</label>
+        
+        <label class="radio-option">
+            <input type="radio" name="Interesse_Receber_Link" value="SIM - Deseja receber o link no email" required>
+            Desejo receber o Link de download no meu e-mail assim que liberado
+        </label>
 
-                    <div class="aviso-privacidade">
-                        🔒 <strong>Zero Spam:</strong> A JC-Softwares envia apenas o link solicitado. Não enviamos propagandas ou e-mails promocionais.
-                    </div>
-                </div>
+        <label class="radio-option" style="color: var(--texto-mutado); margin-bottom: 0;">
+            <input type="radio" name="Interesse_Receber_Link" value="NÃO - Não deseja receber o link" required>
+            Não desejo receber o Link de download no meu e-mail
+        </label>
 
-                <button type="submit" class="btn-enviar-pedido">✨ Confirmar Registro</button>
-            </form>
+        <div class="aviso-privacidade">
+            🔒 <strong>Zero Spam:</strong> A JC-Softwares envia apenas o link solicitado. Não enviamos propagandas ou e-mails promocionais.
+        </div>
+    </div>
+
+    <!-- AVISO SUTIL PARA O USUÁRIO SABER DO RECAPTCHA -->
+    <p style="font-size: 0.8rem; color: var(--texto-mutado); text-align: center; margin-bottom: 12px;">
+        ℹ️ Na próxima tela, confirme a verificação para concluir o registro.
+    </p>
+
+    <button type="submit" class="btn-enviar-pedido">✨ Confirmar Registro</button>
+</form>
         </div>
     </div>
 
