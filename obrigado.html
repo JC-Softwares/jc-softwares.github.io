@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação Recebida | JC-Softwares</title>
+    <style>
+        :root {
+            --bg-principal: #0d0f14;
+            --bg-card: #161920;
+            --azul-jc: #4169E1;
+            --texto-claro: #f0f2f5;
+            --texto-mutado: #a0a8b5;
+            --borda-sutil: #232833;
+            --verde-sucesso: #2e7d32;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-claro);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #06070a;
+            border-bottom: 2px solid var(--azul-jc);
+            padding: 20px 50px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo h1 span {
+            color: var(--azul-jc);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card-sucesso {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda-sutil);
+            border-radius: 14px;
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .ico-check {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(46, 125, 50, 0.15);
+            color: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px auto;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .card-sucesso h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+
+        .card-sucesso p {
+            color: var(--texto-mutado);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0 0 25px 0;
+        }
+
+        .btn-voltar {
+            background-color: var(--azul-jc);
+            color: #ffffff;
+            text-decoration: none;
+            display: inline-block;
+            padding: 12px 28px;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-voltar:hover {
+            background-color: #3158cd;
+        }
+
+        footer {
+            background-color: #050608;
+            border-top: 1px solid var(--borda-sutil);
+            padding: 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--texto-mutado);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+            <a href="https://jc-softwares.github.io/" style="text-decoration: none; color: inherit;">
+                <h1>JC-<span>Softwares</span></h1>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="card-sucesso">
+            <div class="ico-check">✓</div>
+            <h2>Solicitação Registrada!</h2>
+            <p>
+                Obrigado pelo registro. Caso tenha optado por receber o link, enviaremos o acesso direto no seu e-mail assim que estiver disponível.<br><br>
+                <em>Enviamos uma confirmação para sua caixa de entrada.</em>
+            </p>
+            <a href="https://jc-softwares.github.io/" class="btn-voltar">Voltar à Página Principal</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 JC-Softwares. Licenciamento automatizado via Hardware ID Validation.</p>
+    </footer>
+
+</body>
+</html>
