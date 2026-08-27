@@ -156,11 +156,19 @@
     </div>
 
     <script>
-        const urlInstaladorExe = "https://github.com/JC-Softwares/JCSoftwares_Config/releases/download/1.0.0/JC.Softwares.-.Gestao.Comercial-1.0.0.Setup.exe";
+        // URL da versão RAW do arquivo .txt no GitHub
+        const urlArquivoTxt = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/ArquivoSitetxt";
+        
+        // Fallback caso a busca do .txt falhe
+        let urlInstaladorExe = "https://github.com/JC-Softwares/JCSoftwares_Config/releases/download/1.0.0/JC.Softwares.-.Gestao.Comercial-1.0.0.Setup.exe";
 
         let dadosToken = null;
 
         document.addEventListener("DOMContentLoaded", function() {
+            // 1. Busca o link de download atualizado do .txt
+            carregarUrlDownload();
+
+            // 2. Valida o Token da URL
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
 
@@ -192,6 +200,29 @@
             }
         });
 
+        // Função responsável por ler o arquivo .txt do GitHub e extrair o link
+        async function carregarUrlDownload() {
+            try {
+                // Adicionado timestamp (?t=...) para evitar cache do navegador/CDN
+                const resposta = await fetch(`${urlArquivoTxt}?t=${Date.now()}`);
+                if (!resposta.ok) return;
+
+                const texto = await resposta.text();
+                
+                // Procura a linha que começa com ARQUIVODOWNLOAD:
+                const linhaLink = texto.split('\n').find(linha => linha.includes('ARQUIVODOWNLOAD:'));
+                
+                if (linhaLink) {
+                    const linkExtraido = linhaLink.replace('ARQUIVODOWNLOAD:', '').trim();
+                    if (linkExtraido.startsWith('http')) {
+                        urlInstaladorExe = linkExtraido;
+                    }
+                }
+            } catch (erro) {
+                console.warn("Não foi possível carregar a URL do .txt, usando link padrão.", erro);
+            }
+        }
+
         function validarValidade24Horas(strTimestamp) {
             const ano = parseInt(strTimestamp.substring(0, 4));
             const mes = parseInt(strTimestamp.substring(4, 6)) - 1; 
@@ -219,16 +250,13 @@
             if (!dadosToken) return;
 
             if (emailDigitado === dadosToken.emailAutorizado) {
-                // Esconde o formulário (input e botão de liberar)
                 formValidacao.style.display = "none";
 
-                // Exibe a mensagem de sucesso e o botão da Home
                 divStatus.className = "msg-status msg-sucesso";
                 divStatus.innerText = "✅ E-mail verificado com sucesso! Seu download começará em instantes...";
                 divStatus.style.display = "block";
                 areaSucesso.style.display = "block";
                 
-                // Dispara o download automático do arquivo
                 setTimeout(() => {
                     window.location.href = urlInstaladorExe;
                 }, 1500);
