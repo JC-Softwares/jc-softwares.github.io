@@ -32,16 +32,44 @@
             box-sizing: border-box;
         }
 
-        .card-validacao {
-            background-color: var(--fundo-card);
-            border: 1px solid var(--borda-sutil);
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 480px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-        }
+  /* Aumentamos o limite de largura para acomodar 2 colunas no desktop */
+.card-validacao {
+    background-color: var(--fundo-card);
+    border: 1px solid var(--borda-sutil);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 800px; /* Aumentado de 480px para 800px */
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    transition: max-width 0.3s ease;
+}
+
+/* Container dos passos em Grid responsivo */
+.grid-passos {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 coluna por padrão (celular) */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Ajusta o padding da caixa do passo */
+.passo-box {
+    background: #18181c;
+    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid var(--borda-sutil);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Desktop: Ajusta para 2 colunas lado a lado */
+@media (min-width: 640px) {
+    .grid-passos {
+        grid-template-columns: 1fr 1fr; /* 2 colunas no PC */
+    }
+}
 
         .card-validacao h2 {
             margin-top: 0;
@@ -199,24 +227,27 @@
         <div id="mensagemStatus" class="msg-status"></div>
 
         <!-- Tela de Sucesso + Instruções de Instalação -->
-        <div id="areaSucesso" style="display: none;">
-            <div class="guia-smartscreen">
-                <h3>⚠️ Aviso Importante do Windows SmartScreen</h3>
-                <p>Por se tratar de um software novo no mercado, o Windows pode exibir uma tela azul de proteção. Siga os passos abaixo para prosseguir com a instalação:</p>
-                
-                <div class="passo-box">
-                    <span>Passo 1: Clique em "Mais informações"</span>
-                    <img src="https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/prints/smartscreen_1.png" alt="Clique em Mais informações" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'40\'><text x=\'10\' y=\'25\' fill=\'%23fff\'>Passo 1</text></svg>'">
-                </div>
-
-                <div class="passo-box">
-                    <span>Passo 2: Clique em "Executar assim mesmo"</span>
-                    <img src="https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/prints/smartscreen_2.png" alt="Clique em Executar assim mesmo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'40\'><text x=\'10\' y=\'25\' fill=\'%23fff\'>Passo 2</text></svg>'">
-                </div>
+<div id="areaSucesso" style="display: none;">
+    <div class="guia-smartscreen">
+        <h3>⚠️ Aviso Importante do Windows SmartScreen</h3>
+        <p>Por se tratar de um software novo no mercado, o Windows pode exibir uma tela azul de proteção. Siga os passos abaixo para prosseguir com a instalação:</p>
+        
+        <!-- Grid Responsivo para colocar lado a lado em PCs -->
+        <div class="grid-passos">
+            <div class="passo-box">
+                <span>Passo 1: Clique em "Mais informações"</span>
+                <img src="https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/prints/smartscreen_1.png" alt="Passo 1">
             </div>
 
-            <a href="index.html" class="btn-home">🏠 Voltar ao Início</a>
+            <div class="passo-box">
+                <span>Passo 2: Clique em "Executar assim mesmo"</span>
+                <img src="https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/prints/smartscreen_2.png" alt="Passo 2">
+            </div>
         </div>
+    </div>
+
+    <a href="index.html" class="btn-home">🏠 Voltar ao Início</a>
+</div>
     </div>
 
     <script>
