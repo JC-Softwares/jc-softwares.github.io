@@ -16,6 +16,7 @@
             --azul-hover: #0052a3;
             --vermelho-erro: #ff5555;
             --verde-sucesso: #00cc66;
+            --amarelo-alerta: #ffcc00;
         }
 
         body {
@@ -36,7 +37,7 @@
             border: 1px solid var(--borda-sutil);
             border-radius: 12px;
             padding: 30px;
-            max-width: 420px;
+            max-width: 480px;
             width: 100%;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -134,6 +135,54 @@
             font-weight: bold;
             color: var(--azul-destaque);
         }
+
+        /* --- GUIA SMARTSCREEN --- */
+        .guia-smartscreen {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .guia-smartscreen h3 {
+            margin: 0 0 10px 0;
+            font-size: 0.95rem;
+            color: var(--amarelo-alerta);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .guia-smartscreen p {
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+            color: #d0d0d0;
+        }
+
+        .passo-box {
+            background: #18181c;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--borda-sutil);
+        }
+
+        .passo-box span {
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--azul-destaque);
+        }
+
+        .passo-box img {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -149,26 +198,35 @@
 
         <div id="mensagemStatus" class="msg-status"></div>
 
-        <!-- Tela de Sucesso Completo (exibida após acertar o e-mail) -->
+        <!-- Tela de Sucesso + Instruções de Instalação -->
         <div id="areaSucesso" style="display: none;">
+            <div class="guia-smartscreen">
+                <h3>⚠️ Aviso Importante do Windows SmartScreen</h3>
+                <p>Por se tratar de um software novo no mercado, o Windows pode exibir uma tela azul de proteção. Siga os passos abaixo para prosseguir com a instalação:</p>
+                
+                <div class="passo-box">
+                    <span>Passo 1: Clique em "Mais informações"</span>
+                    <img src="https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/prints/smartscreen_1.png" alt="Clique em Mais informações" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'40\'><text x=\'10\' y=\'25\' fill=\'%23fff\'>Passo 1</text></svg>'">
+                </div>
+
+                <div class="passo-box">
+                    <span>Passo 2: Clique em "Executar assim mesmo"</span>
+                    <img src="https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/prints/smartscreen_2.png" alt="Clique em Executar assim mesmo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'40\'><text x=\'10\' y=\'25\' fill=\'%23fff\'>Passo 2</text></svg>'">
+                </div>
+            </div>
+
             <a href="index.html" class="btn-home">🏠 Voltar ao Início</a>
         </div>
     </div>
 
     <script>
-        // URL da versão RAW do arquivo .txt no GitHub
         const urlArquivoTxt = "https://raw.githubusercontent.com/JC-Softwares/JCSoftwares_Config/main/ArquivoSitetxt";
-        
-        // Fallback caso a busca do .txt falhe
         let urlInstaladorExe = "https://github.com/JC-Softwares/JCSoftwares_Config/releases/download/1.0.20/Instalador_JC_Softwares_v1.0.20.exe";
-
         let dadosToken = null;
 
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. Busca o link de download atualizado do .txt
             carregarUrlDownload();
 
-            // 2. Valida o Token da URL
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
 
@@ -200,16 +258,12 @@
             }
         });
 
-        // Função responsável por ler o arquivo .txt do GitHub e extrair o link
         async function carregarUrlDownload() {
             try {
-                // Adicionado timestamp (?t=...) para evitar cache do navegador/CDN
                 const resposta = await fetch(`${urlArquivoTxt}?t=${Date.now()}`);
                 if (!resposta.ok) return;
 
                 const texto = await resposta.text();
-                
-                // Procura a linha que começa com ARQUIVODOWNLOAD:
                 const linhaLink = texto.split('\n').find(linha => linha.includes('ARQUIVODOWNLOAD:'));
                 
                 if (linhaLink) {
@@ -253,13 +307,14 @@
                 formValidacao.style.display = "none";
 
                 divStatus.className = "msg-status msg-sucesso";
-                divStatus.innerText = "✅ E-mail verificado com sucesso! Seu download começará em instantes...";
+                divStatus.innerText = "✅ E-mail verificado! O download começará em instantes...";
                 divStatus.style.display = "block";
                 areaSucesso.style.display = "block";
                 
+                // Dispara o download abrindo o link
                 setTimeout(() => {
                     window.location.href = urlInstaladorExe;
-                }, 1500);
+                }, 1000);
             } else {
                 divStatus.className = "msg-status msg-erro";
                 divStatus.innerText = "❌ E-mail não confere com o e-mail autorizador deste link.";
