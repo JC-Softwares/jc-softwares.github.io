@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de QR Code Offline</title>
-    <!-- Biblioteca QRCode.js via CDN (funciona offline após o primeiro cache) -->
+    <!-- Biblioteca QRCode.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
@@ -50,14 +50,8 @@
             padding: 0 20px;
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
         }
 
         .card {
@@ -131,17 +125,6 @@
             background-color: var(--danger-hover);
         }
 
-        #qrcode-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            min-height: 200px;
-            margin-top: 10px;
-        }
-
         .history-list {
             max-height: 320px;
             overflow-y: auto;
@@ -191,36 +174,110 @@
         }
 
         .full-width {
-            grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        /* --- ESTILOS DO MODAL --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        #qrcode-modal-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* --- CONFIGURAÇÃO DE IMPRESSÃO (Oculta tudo exceto o modal na hora de imprimir) --- */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #modalQrCode, #modalQrCode * {
+                visibility: visible;
+            }
+            #modalQrCode {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white !important;
+                display: flex !important;
+                justify-content: center;
+                align-items: center;
+            }
+            .modal-content {
+                background: white !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .modal-content h3 {
+                color: black !important;
+            }
+            .modal-buttons {
+                display: none !important; /* Esconde os botões Fechar/Imprimir no papel */
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        Gerador de QR Code Offline
+        Gerador de QR Code Grátis
     </header>
 
     <div class="container">
-        <!-- Coluna Esquerda: Gerador -->
+        <!-- Coluna Única: Gerador -->
         <div class="card">
             <h2>Novo QR Code</h2>
             <textarea id="textoInput" placeholder="Digite ou cole o texto/link aqui..."></textarea>
             
             <div class="btn-group">
-                <button class="btn-secondary" onclick="colarDaAreaDeTransferencia()">Colar</button>
-                <button onclick="gerarQRCode()">Gerar QR Code</button>
-            </div>
-
-            <div id="qrcode-container">
-                <span style="color: #666; font-size: 0.9rem;">O QR Code aparecerá aqui</span>
+                <button class="btn-secondary" onclick="colarDaAreaDeTransferencia()">Colar da Área de Transferência</button>
+                <button onclick="dispararGeracao()">Gerar QR Code</button>
             </div>
         </div>
 
-        <!-- Coluna Direita: Histórico -->
+        <!-- Histórico Recente -->
         <div class="card">
             <h2>Histórico Recente</h2>
             <div class="history-list" id="listaHistorico">
@@ -230,7 +287,7 @@
 
         <!-- Rodapé do Container com ações globais -->
         <div class="card full-width" style="padding: 15px 20px;">
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Os dados ficam salvos de forma segura no navegador.</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Salvamento seguro no navegador local.</span>
             <div style="display: flex; gap: 10px;">
                 <button class="btn-secondary" onclick="exportarTxt()" style="padding: 8px 15px;">Exportar .txt</button>
                 <button class="btn-danger" onclick="limparHistorico()" style="padding: 8px 15px;">Limpar Histórico</button>
@@ -238,10 +295,19 @@
         </div>
     </div>
 
-    <script>
-        let qrCodeInstance = null;
+    <!-- MODAL DO QR CODE -->
+    <div class="modal-overlay" id="modalQrCode">
+        <div class="modal-content">
+            <h3>QR Code Gerado</h3>
+            <div id="qrcode-modal-container"></div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="fecharModal()">Fechar</button>
+                <button onclick="imprimirQRCode()">Imprimir</button>
+            </div>
+        </div>
+    </div>
 
-        // Ao carregar a página, renderiza o histórico salvo
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             atualizarListaHistorico();
         });
@@ -250,35 +316,54 @@
             try {
                 const texto = await navigator.clipboard.readText();
                 document.getElementById("textoInput").value = texto;
-                gerarQRCode();
+                dispararGeracao();
             } catch (err) {
-                alert("Não foi possível acessar a área de transferência automaticamente. Use Ctrl+V.");
+                alert("Use Ctrl+V para colar o texto.");
             }
         }
 
-        function gerarQRCode() {
+        function dispararGeracao() {
             const texto = document.getElementById("textoInput").value.trim();
-            const container = document.getElementById("qrcode-container");
-
             if (!texto) {
                 alert("Por favor, insira algum texto ou link.");
                 return;
             }
+            gerarQRCodeNoModal(texto);
+            salvarNoHistorico(texto);
+        }
 
-            // Limpa o container anterior
-            container.innerHTML = "";
+        function gerarQRCodeNoModal(texto) {
+            const container = document.getElementById("qrcode-modal-container");
+            container.innerHTML = ""; // Limpa anterior
 
-            // Cria o QR Code usando a biblioteca qrcode.js
-            qrCodeInstance = new QRCode(container, {
+            // Cria o QR Code dentro do modal
+            new QRCode(container, {
                 text: texto,
-                width: 180,
-                height: 180,
+                width: 200,
+                height: 200,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
 
-            salvarNoHistorico(texto);
+            // Mostra o modal
+            document.getElementById("modalQrCode").style.display = "flex";
+        }
+
+        function fecharModal() {
+            document.getElementById("modalQrCode").style.display = "none";
+        }
+
+        function imprimirQRCode() {
+            window.print();
+        }
+
+        // Fecha o modal se clicar fora da caixa central
+        window.onclick = function(event) {
+            const modal = document.getElementById("modalQrCode");
+            if (event.target === modal) {
+                fecharModal();
+            }
         }
 
         function obterHistorico() {
@@ -290,18 +375,12 @@
             let historico = obterHistorico();
             const agora = new Date().toLocaleString("pt-BR");
 
-            // Evita duplicar exatamente o último item gerado em sequência
             if (historico.length > 0 && historico[0].texto === texto) {
                 return; 
             }
 
-            // Adiciona no topo
             historico.unshift({ texto, data: agora });
-
-            // Mantém no máximo os últimos 50 itens
-            if (historico.length > 50) {
-                historico.pop();
-            }
+            if (historico.length > 50) historico.pop();
 
             localStorage.setItem("qrcode_historico", JSON.stringify(historico));
             atualizarListaHistorico();
@@ -326,7 +405,7 @@
                         <div class="history-date">${item.data}</div>
                     </div>
                     <div class="history-actions">
-                        <button class="btn-secondary" onclick="regerar(${index})">Usar</button>
+                        <button class="btn-secondary" onclick="regerar(${index})">Abrir</button>
                         <button class="btn-danger" onclick="excluirItem(${index})">X</button>
                     </div>
                 `;
@@ -338,7 +417,7 @@
             const historico = obterHistorico();
             if (historico[index]) {
                 document.getElementById("textoInput").value = historico[index].texto;
-                gerarQRCode();
+                gerarQRCodeNoModal(historico[index].texto);
             }
         }
 
