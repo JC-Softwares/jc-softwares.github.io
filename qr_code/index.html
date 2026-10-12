@@ -1,1 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de QR Code Offline</title>
+    <!-- Biblioteca QRCode.js via CDN (funciona offline após o primeiro cache) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #121212;
+            --bg-card: #1e1e1e;
+            --border-color: #333333;
+            --accent-blue: #0d47a1;
+            --accent-blue-hover: #1565c0;
+            --text-main: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --danger: #c62828;
+            --danger-hover: #d32f2f;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 12px;
+            font-size: 0.95rem;
+            resize: none;
+            margin-bottom: 12px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            flex: 1;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-blue-hover);
+        }
+
+        button.btn-secondary {
+            background-color: #424242;
+        }
+        button.btn-secondary:hover {
+            background-color: #616161;
+        }
+
+        button.btn-danger {
+            background-color: var(--danger);
+        }
+        button.btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+
+        #qrcode-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 200px;
+            margin-top: 10px;
+        }
+
+        .history-list {
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-info {
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .history-text {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-main);
+        }
+
+        .history-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .history-actions button {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        Gerador de QR Code Offline
+    </header>
+
+    <div class="container">
+        <!-- Coluna Esquerda: Gerador -->
+        <div class="card">
+            <h2>Novo QR Code</h2>
+            <textarea id="textoInput" placeholder="Digite ou cole o texto/link aqui..."></textarea>
+            
+            <div class="btn-group">
+                <button class="btn-secondary" onclick="colarDaAreaDeTransferencia()">Colar</button>
+                <button onclick="gerarQRCode()">Gerar QR Code</button>
+            </div>
+
+            <div id="qrcode-container">
+                <span style="color: #666; font-size: 0.9rem;">O QR Code aparecerá aqui</span>
+            </div>
+        </div>
+
+        <!-- Coluna Direita: Histórico -->
+        <div class="card">
+            <h2>Histórico Recente</h2>
+            <div class="history-list" id="listaHistorico">
+                <!-- Itens injetados via JS -->
+            </div>
+        </div>
+
+        <!-- Rodapé do Container com ações globais -->
+        <div class="card full-width" style="padding: 15px 20px;">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Os dados ficam salvos de forma segura no navegador.</span>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-secondary" onclick="exportarTxt()" style="padding: 8px 15px;">Exportar .txt</button>
+                <button class="btn-danger" onclick="limparHistorico()" style="padding: 8px 15px;">Limpar Histórico</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let qrCodeInstance = null;
+
+        // Ao carregar a página, renderiza o histórico salvo
+        document.addEventListener("DOMContentLoaded", () => {
+            atualizarListaHistorico();
+        });
+
+        async function colarDaAreaDeTransferencia() {
+            try {
+                const texto = await navigator.clipboard.readText();
+                document.getElementById("textoInput").value = texto;
+                gerarQRCode();
+            } catch (err) {
+                alert("Não foi possível acessar a área de transferência automaticamente. Use Ctrl+V.");
+            }
+        }
+
+        function gerarQRCode() {
+            const texto = document.getElementById("textoInput").value.trim();
+            const container = document.getElementById("qrcode-container");
+
+            if (!texto) {
+                alert("Por favor, insira algum texto ou link.");
+                return;
+            }
+
+            // Limpa o container anterior
+            container.innerHTML = "";
+
+            // Cria o QR Code usando a biblioteca qrcode.js
+            qrCodeInstance = new QRCode(container, {
+                text: texto,
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            salvarNoHistorico(texto);
+        }
+
+        function obterHistorico() {
+            const historicoStr = localStorage.getItem("qrcode_historico");
+            return historicoStr ? JSON.parse(historicoStr) : [];
+        }
+
+        function salvarNoHistorico(texto) {
+            let historico = obterHistorico();
+            const agora = new Date().toLocaleString("pt-BR");
+
+            // Evita duplicar exatamente o último item gerado em sequência
+            if (historico.length > 0 && historico[0].texto === texto) {
+                return; 
+            }
+
+            // Adiciona no topo
+            historico.unshift({ texto, data: agora });
+
+            // Mantém no máximo os últimos 50 itens
+            if (historico.length > 50) {
+                historico.pop();
+            }
+
+            localStorage.setItem("qrcode_historico", JSON.stringify(historico));
+            atualizarListaHistorico();
+        }
+
+        function atualizarListaHistorico() {
+            const lista = document.getElementById("listaHistorico");
+            const historico = obterHistorico();
+
+            if (historico.length === 0) {
+                lista.innerHTML = '<span style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">Nenhum QR Code no histórico.</span>';
+                return;
+            }
+
+            lista.innerHTML = "";
+            historico.forEach((item, index) => {
+                const div = document.createElement("div");
+                div.className = "history-item";
+                div.innerHTML = `
+                    <div class="history-info">
+                        <div class="history-text" title="${escapeHtml(item.texto)}">${escapeHtml(item.texto)}</div>
+                        <div class="history-date">${item.data}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn-secondary" onclick="regerar(${index})">Usar</button>
+                        <button class="btn-danger" onclick="excluirItem(${index})">X</button>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        function regerar(index) {
+            const historico = obterHistorico();
+            if (historico[index]) {
+                document.getElementById("textoInput").value = historico[index].texto;
+                gerarQRCode();
+            }
+        }
+
+        function excluirItem(index) {
+            let historico = obterHistorico();
+            historico.splice(index, 1);
+            localStorage.setItem("qrcode_historico", JSON.stringify(historico));
+            atualizarListaHistorico();
+        }
+
+        function limparHistorico() {
+            if (confirm("Deseja realmente apagar todo o histórico?")) {
+                localStorage.removeItem("qrcode_historico");
+                atualizarListaHistorico();
+            }
+        }
+
+        function exportarTxt() {
+            const historico = obterHistorico();
+            if (historico.length === 0) {
+                alert("Não há histórico para exportar.");
+                return;
+            }
+
+            let conteudo = "=== HISTÓRICO DE QR CODES ===\n\n";
+            historico.forEach((item, i) => {
+                conteudo += `[${i + 1}] Data: ${item.data}\nConteúdo: ${item.texto}\n----------------------------------------\n`;
+            });
+
+            const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "historico_qrcodes.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
