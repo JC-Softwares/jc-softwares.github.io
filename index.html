@@ -1,348 +1,616 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JC-Softwares | Soluções Inteligentes de Gestão</title>
+    <title>JC-Softwares | Gerador de QR Code Offline</title>
+    <!-- Biblioteca QRCode.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --bg-principal: #0d0f14;
-            --bg-card: #161920;
-            --azul-jc: #4169E1;
-            --texto-claro: #f0f2f5;
-            --texto-mutado: #a0a8b5;
-            --borda-sutil: #232833;
+            --bg-main: #121212;
+            --bg-card: #1e1e1e;
+            --border-color: #333333;
+            --accent-blue: #0d47a1;
+            --accent-blue-hover: #1565c0;
+            --text-main: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --danger: #c62828;
+            --danger-hover: #d32f2f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-principal);
-            color: var(--texto-claro);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        /* NAVBAR PRINCIPAL */
-        .navbar {
-            background-color: #06070a;
-            border-bottom: 2px solid var(--azul-jc);
-            padding: 20px 50px;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* LOGO LINKADO COM A HOME */
-        .logo-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .logo h1 {
-            margin: 0;
-            font-size: 1.4rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .logo h1 span { color: var(--azul-jc); }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: var(--texto-claro);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover { color: var(--azul-jc); }
-
-        /* HERO COM DEGRADÊ */
-        .hero-section {
-            background: linear-gradient(to bottom, rgba(65, 105, 225, 0.25) 0%, var(--bg-principal) 100%);
-            padding: 110px 20px 80px 20px;
-            text-align: center;
-        }
-
-        .hero-content { max-width: 800px; margin: 0 auto; }
-
-        .hero-section h2 {
-            margin: 0 0 20px 0;
-            font-size: 2.8rem;
-            font-weight: 700;
+        header {
+            background-color: #000000;
             color: #ffffff;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.25rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            border-bottom: 2px solid var(--accent-blue);
         }
 
-        .hero-section h2 span {
-            color: var(--azul-jc);
-            text-shadow: 0 0 20px rgba(65, 105, 225, 0.4);
+        header a {
+            color: #ffffff;
+            text-decoration: none;
         }
 
-        .hero-section p {
-            color: #b4bcda;
-            font-size: 1.15rem;
-            line-height: 1.6;
-            margin: 0 auto 40px auto;
+        header a span {
+            color: #1e88e5;
         }
 
-        .hero-buttons {
+        header a:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            width: 100%;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             gap: 20px;
+            flex: 1;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 110px;
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 12px;
+            font-size: 0.95rem;
+            resize: none;
+            margin-bottom: 12px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .btn-principal {
-            background-color: var(--azul-jc);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 35px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
-            transition: all 0.3s ease;
-            animation: pulsarGlow 2s infinite ease-in-out;
+        button {
+            flex: 1;
+            min-width: 130px;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .btn-principal:hover {
-            transform: translateY(-3px);
-            background-color: #3158cd;
-            box-shadow: 0 8px 25px rgba(65, 105, 225, 0.6);
+        button:hover {
+            background-color: var(--accent-blue-hover);
         }
 
-        .btn-secundario {
-            background-color: transparent;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 35px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            border-radius: 30px;
-            border: 2px solid var(--borda-sutil);
-            transition: all 0.3s ease;
+        button.btn-secondary {
+            background-color: #424242;
+        }
+        button.btn-secondary:hover {
+            background-color: #616161;
         }
 
-        .btn-secundario:hover {
-            border-color: var(--azul-jc);
-            background-color: rgba(65, 105, 225, 0.05);
-            transform: translateY(-3px);
+        button.btn-danger {
+            background-color: var(--danger);
+        }
+        button.btn-danger:hover {
+            background-color: var(--danger-hover);
         }
 
-        @keyframes pulsarGlow {
-            0% { box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3); }
-            50% { box-shadow: 0 4px 25px rgba(65, 105, 225, 0.6); }
-            100% { box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3); }
-        }
-
-        /* SEÇÃO DE PRODUTOS */
-        .produtos-section {
-            padding: 40px 20px 80px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .secao-titulo { text-align: center; margin-bottom: 50px; }
-        .secao-titulo h3 { margin: 0 0 10px 0; font-size: 2rem; color: #ffffff; }
-
-        .grid-produtos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .card-produto {
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda-sutil);
-            border-radius: 12px;
-            padding: 30px;
+        .history-list {
+            max-height: 280px;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 8px;
         }
 
-        .card-produto h4 {
-            margin: 0 0 15px 0;
-            font-size: 1.25rem;
-            color: #ffffff;
+        .history-item {
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
             gap: 10px;
         }
 
-        .card-produto p {
-            color: var(--texto-mutado);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin: 0 0 25px 0;
+        .history-info {
+            overflow: hidden;
+            flex: 1;
         }
 
-        .recursos-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-        .tag {
-            background-color: rgba(65, 105, 225, 0.1);
-            color: #7393ff;
+        .history-text {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-main);
+        }
+
+        .history-date {
             font-size: 0.75rem;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(65, 105, 225, 0.2);
+            color: var(--text-muted);
+            margin-top: 2px;
         }
 
-        /* FOOTER */
-        footer {
-            background-color: #020304;
-            border-top: 1px solid var(--borda-sutil);
-            padding: 50px 20px 30px 20px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--texto-mutado);
+        .history-actions {
+            display: flex;
+            gap: 5px;
         }
 
-        .btn-voltar-topo {
-            background-color: var(--bg-card);
-            color: var(--texto-claro);
-            border: 1px solid var(--borda-sutil);
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
+        .history-actions button {
+            padding: 6px 10px;
             font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            display: inline-block;
-            text-decoration: none;
-            transition: border-color 0.2s;
+            min-width: auto;
+            flex: unset;
         }
 
-        .btn-voltar-topo:hover { border-color: var(--azul-jc); }
-
-        .footer-container {
-            max-width: 1000px;
-            margin: 0 auto 30px auto;
+        .footer-actions {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 10px;
+        }
+
+        /* --- MODAL RESPONSIVO COM SELETOR DE GRADE --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .config-grade {
+            margin-bottom: 15px;
+            width: 100%;
             text-align: left;
         }
 
-        .footer-col h5 { color: #ffffff; margin: 0 0 15px 0; font-size: 1rem; }
-        .footer-col ul { list-style: none; padding: 0; margin: 0; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: var(--texto-mutado); text-decoration: none; }
-        .footer-col ul li a:hover { color: var(--azul-jc); }
-        .footer-brand { font-weight: 700; color: #ffffff; margin-bottom: 12px !important; }
+        .config-grade label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .config-grade select {
+            width: 100%;
+            background-color: #2a2a2a;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .preview-box {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            min-height: 180px;
+            width: 100%;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            min-width: 90px;
+            padding: 8px 10px;
+            font-size: 0.85rem;
+        }
+
+        /* --- ESTILOS DE IMPRESSÃO DA GRADE A4 --- */
+        .print-sheet {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-sheet, .print-sheet * {
+                visibility: visible;
+            }
+            .print-sheet {
+                display: grid !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100vw;
+                height: 100vh;
+                background: white;
+                box-sizing: border-box;
+                padding: 10mm;
+                justify-items: center;
+                align-items: center;
+            }
+        }
     </style>
 </head>
-<body id="topo">
+<body>
 
-    <div class="navbar">
-        <a href="index.html" class="logo-link">
-            <div class="logo">
-                <h1>JC-<span>Softwares</span></h1>
-            </div>
-        </a>
-        <div class="nav-links">
-            <a href="#solucoes">Soluções</a>
-            <a href="planos/index.html">Planos</a>
-            <a href="download/index.html">Downloads</a>
-            <a href="suporte/index.html">Suporte</a>
-            <a href="diagnostico/index.html">Diagnóstico</a>
-            <a href="contato/index.html">Contato</a>
-        </div>
-    </div>
+    <header>
+        <a href="index.html">JC-<span>Softwares</span></a>
+    </header>
 
-    <div class="hero-section">
-        <div class="hero-content">
-            <h2>Sistemas de Gestão <span>Premium</span></h2>
-            <p>Desenvolvimento focado em estabilidade offline, alta velocidade de resposta e automação comercial sob medida para o varejo moderno.</p>
+    <div class="container">
+        <!-- Caixa de Geração -->
+        <div class="card">
+            <h2>Novo QR Code</h2>
+            <textarea id="textoInput" placeholder="Digite ou cole o texto/link aqui..."></textarea>
             
-            <div class="hero-buttons">
-                <a href="download/index.html" class="btn-principal">🚀 Instalar Versão de Avaliação</a>
-                <a href="planos/index.html" class="btn-secundario">💳 Conhecer Planos</a>
+            <div class="btn-group">
+                <button class="btn-secondary" onclick="colarDaAreaDeTransferencia()">Colar</button>
+                <button onclick="dispararGeracao()">Gerar QR Code</button>
+            </div>
+        </div>
+
+        <!-- Histórico -->
+        <div class="card">
+            <h2>Histórico Recente</h2>
+            <div class="history-list" id="listaHistorico"></div>
+        </div>
+
+        <!-- Ações Globais -->
+        <div class="card footer-actions">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Uso local seguro (Offline).</span>
+            <div style="display: flex; gap: 8px; width: 100%;">
+                <button class="btn-secondary" onclick="exportarTxt()" style="min-width: auto;">Exportar .txt</button>
+                <button class="btn-danger" onclick="limparHistorico()" style="min-width: auto;">Limpar Histórico</button>
             </div>
         </div>
     </div>
 
-    <div class="produtos-section" id="solucoes">
-        <div class="secao-titulo">
-            <h3>Nossas Soluções</h3>
-        </div>
-
-        <div class="grid-produtos">
-            <div class="card-produto">
-                <div>
-                    <h4>🛍️ Frente de Caixa Smart</h4>
-                    <p>Interface escura inspirada em aplicativos mobile com foco em usabilidade. Fluidez completa no cadastro de usuários e operação de vendas diárias.</p>
-                    <div class="recursos-tags">
-                        <span class="tag">Interface Dark</span>
-                        <span class="tag">Faturamento Ágil</span>
-                    </div>
-                </div>
+    <!-- MODAL DE INTERAÇÃO -->
+    <div class="modal-overlay" id="modalQrCode">
+        <div class="modal-content">
+            <h3>Gerenciar QR Code</h3>
+            
+            <div class="config-grade">
+                <label for="qtdGrade">Quantidade na folha A4:</label>
+                <select id="qtdGrade" onchange="atualizarPreviewGrid()">
+                    <option value="1">1 Unidade (Centralizado)</option>
+                    <option value="4">Grade com 4 unidades (2x2)</option>
+                    <option value="8">Grade com 8 unidades (2x4)</option>
+                    <option value="12">Grade com 12 unidades (3x4)</option>
+                    <option value="16" selected>Grade com 16 unidades (4x4)</option>
+                </select>
             </div>
 
-            <div class="card-produto">
-                <div>
-                    <h4>📦 Retaguarda & Estoque</h4>
-                    <p>Módulo de administração pesada estruturado sobre banco de dados protegido contra manipulação direta de usuários leigos.</p>
-                    <div class="recursos-tags">
-                        <span class="tag">Banco .DAT Oculto</span>
-                        <span class="tag">Filtros de Busca</span>
-                    </div>
-                </div>
-            </div>
+            <div class="preview-box" id="qrcode-modal-container"></div>
 
-            <div class="card-produto">
-                <div>
-                    <h4>🖨️ Módulo de Impressão Direta</h4>
-                    <p>Drivers dedicados para alternar a saída do documento de forma silenciosa entre relatórios em folha A4 e cupons térmicos rápidos de 80mm.</p>
-                    <div class="recursos-tags">
-                        <span class="tag">Sem Diálogos</span>
-                        <span class="tag">Cupom 80mm / A4</span>
-                    </div>
-                </div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="fecharModal()">Fechar</button>
+                <button class="btn-secondary" onclick="baixarPNG()">Baixar PNG</button>
+                <button onclick="imprimirGrade()">Imprimir A4</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        <a href="#topo" class="btn-voltar-topo">▲ Voltar ao Topo</a>
-        
-        <div class="footer-container">
-            <div class="footer-col">
-                <p class="footer-brand">JC-SOFTWARES</p>
-                <p style="max-width: 250px; font-size: 0.8rem; line-height: 1.5;">Sistemas homologados e protegidos por criptografia de Hardware ID local.</p>
-            </div>
-            <div class="footer-col">
-                <h5>Navegação</h5>
-                <ul>
-                    <li><a href="#solucoes">Soluções</a></li>
-                    <li><a href="./planos/">Planos e Preços</a></li>
-                    <li><a href="./download/">Área de Download</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h5>Ajuda e Suporte</h5>
-                <ul>
-                    <li><a href="./suporte/">Central de Ajuda</a></li>
-                    <li><a href="./diagnostico/">Painel de Diagnóstico</a></li>
-                    <li><a href="./contato/">Falar com Suporte</a></li>
-                </ul>
-            </div>
-        </div>
-        <hr style="border: 0; border-top: 1px solid var(--borda-sutil); margin-bottom: 20px;">
-        <p>&copy; 2026 JC-Softwares. Todos os direitos reservados.</p>
-    </footer>
+    <!-- ELEMENTO OCULTO PARA IMPRESSÃO DA GRADE -->
+    <div id="printSheet" class="print-sheet"></div>
 
+    <script>
+        let textoAtual = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            atualizarListaHistorico();
+        });
+
+        async function colarDaAreaDeTransferencia() {
+            try {
+                const texto = await navigator.clipboard.readText();
+                document.getElementById("textoInput").value = texto;
+                dispararGeracao();
+            } catch (err) {
+                alert("Use Ctrl+V para colar o texto.");
+            }
+        }
+
+        function dispararGeracao() {
+            const texto = document.getElementById("textoInput").value.trim();
+            if (!texto) {
+                alert("Por favor, insira algum texto ou link.");
+                return;
+            }
+            textoAtual = texto;
+            abrirModalComTexto(texto);
+            salvarNoHistorico(texto);
+        }
+
+        function abrirModalComTexto(texto) {
+            textoAtual = texto;
+            atualizarPreviewGrid();
+            document.getElementById("modalQrCode").style.display = "flex";
+        }
+
+        function atualizarPreviewGrid() {
+            const container = document.getElementById("qrcode-modal-container");
+            container.innerHTML = "";
+
+            const divTemp = document.createElement("div");
+            new QRCode(divTemp, {
+                text: textoAtual,
+                width: 150,
+                height: 150,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+            container.appendChild(divTemp);
+        }
+
+        function fecharModal() {
+            document.getElementById("modalQrCode").style.display = "none";
+        }
+
+        function baixarPNG() {
+            const tempDiv = document.createElement("div");
+            new QRCode(tempDiv, {
+                text: textoAtual,
+                width: 500,
+                height: 500,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            setTimeout(() => {
+                const img = tempDiv.querySelector("img");
+                const canvas = tempDiv.querySelector("canvas");
+                let dataUrl = "";
+
+                if (img && img.src) {
+                    dataUrl = img.src;
+                } else if (canvas) {
+                    dataUrl = canvas.toDataURL("image/png");
+                }
+
+                if (dataUrl) {
+                    const a = document.createElement("a");
+                    a.href = dataUrl;
+                    a.download = "qrcode.png";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    alert("Erro ao gerar a imagem PNG.");
+                }
+            }, 100);
+        }
+
+        function imprimirGrade() {
+            const qtd = parseInt(document.getElementById("qtdGrade").value);
+            const sheet = document.getElementById("printSheet");
+            sheet.innerHTML = "";
+
+            let cols = 1, rows = 1;
+            if (qtd === 4) { cols = 2; rows = 2; }
+            else if (qtd === 8) { cols = 2; rows = 4; }
+            else if (qtd === 12) { cols = 3; rows = 4; }
+            else if (qtd === 16) { cols = 4; rows = 4; }
+
+            sheet.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            sheet.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+            for (let i = 0; i < qtd; i++) {
+                const itemBox = document.createElement("div");
+                itemBox.style.display = "flex";
+                itemBox.style.justifyContent = "center";
+                itemBox.style.alignItems = "center";
+                itemBox.style.padding = "5px";
+                
+                const qrDiv = document.createElement("div");
+                new QRCode(qrDiv, {
+                    text: textoAtual,
+                    width: 140,
+                    height: 140,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                
+                itemBox.appendChild(qrDiv);
+                sheet.appendChild(itemBox);
+            }
+
+            setTimeout(() => {
+                window.print();
+            }, 200);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("modalQrCode");
+            if (event.target === modal) {
+                fecharModal();
+            }
+        }
+
+        function obterHistorico() {
+            const historicoStr = localStorage.getItem("qrcode_historico");
+            return historicoStr ? JSON.parse(historicoStr) : [];
+        }
+
+        function salvarNoHistorico(texto) {
+            let historico = obterHistorico();
+            const agora = new Date().toLocaleString("pt-BR");
+
+            if (historico.length > 0 && historico[0].texto === texto) return; 
+
+            historico.unshift({ texto, data: agora });
+            if (historico.length > 50) historico.pop();
+
+            localStorage.setItem("qrcode_historico", JSON.stringify(historico));
+            atualizarListaHistorico();
+        }
+
+        function atualizarListaHistorico() {
+            const lista = document.getElementById("listaHistorico");
+            const historico = obterHistorico();
+
+            if (historico.length === 0) {
+                lista.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 15px;">Nenhum histórico recente.</span>';
+                return;
+            }
+
+            lista.innerHTML = "";
+            historico.forEach((item, index) => {
+                const div = document.createElement("div");
+                div.className = "history-item";
+                div.innerHTML = `
+                    <div class="history-info">
+                        <div class="history-text" title="${escapeHtml(item.texto)}">${escapeHtml(item.texto)}</div>
+                        <div class="history-date">${item.data}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn-secondary" onclick="regerar(${index})">Abrir</button>
+                        <button class="btn-danger" onclick="excluirItem(${index})">X</button>
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        function regerar(index) {
+            const historico = obterHistorico();
+            if (historico[index]) {
+                document.getElementById("textoInput").value = historico[index].texto;
+                abrirModalComTexto(historico[index].texto);
+            }
+        }
+
+        function excluirItem(index) {
+            let historico = obterHistorico();
+            historico.splice(index, 1);
+            localStorage.setItem("qrcode_historico", JSON.stringify(historico));
+            atualizarListaHistorico();
+        }
+
+        function limparHistorico() {
+            if (confirm("Deseja realmente apagar todo o histórico?")) {
+                localStorage.removeItem("qrcode_historico");
+                atualizarListaHistorico();
+            }
+        }
+
+        function exportarTxt() {
+            const historico = obterHistorico();
+            if (historico.length === 0) {
+                alert("Não há histórico para exportar.");
+                return;
+            }
+
+            let conteudo = "=== HISTÓRICO DE QR CODES ===\n\n";
+            historico.forEach((item, i) => {
+                conteudo += `[${i + 1}] Data: ${item.data}\nConteúdo: ${item.texto}\n----------------------------------------\n`;
+            });
+
+            const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "historico_qrcodes.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
 </body>
 </html>
