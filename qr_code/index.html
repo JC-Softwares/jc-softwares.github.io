@@ -37,21 +37,22 @@
         header {
             background-color: var(--accent-blue);
             color: white;
-            padding: 20px;
+            padding: 18px 20px;
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         .container {
             max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
+            margin: 20px auto;
+            padding: 0 15px;
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 20px;
+            flex: 1;
         }
 
         .card {
@@ -63,16 +64,16 @@
         }
 
         .card h2 {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
             color: var(--text-main);
             border-bottom: 2px solid var(--accent-blue);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
         textarea {
             width: 100%;
-            height: 120px;
+            height: 110px;
             background-color: #2a2a2a;
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -91,17 +92,18 @@
         .btn-group {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
         button {
             flex: 1;
+            min-width: 130px;
             background-color: var(--accent-blue);
             color: white;
             border: none;
             border-radius: 8px;
             padding: 10px 15px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
@@ -126,11 +128,11 @@
         }
 
         .history-list {
-            max-height: 320px;
+            max-height: 280px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .history-item {
@@ -160,7 +162,7 @@
         .history-date {
             font-size: 0.75rem;
             color: var(--text-muted);
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         .history-actions {
@@ -169,17 +171,21 @@
         }
 
         .history-actions button {
-            padding: 5px 10px;
+            padding: 6px 10px;
             font-size: 0.8rem;
+            min-width: auto;
+            flex: unset;
         }
 
-        .full-width {
+        .footer-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        /* --- ESTILOS DO MODAL --- */
+        /* --- MODAL RESPONSIVO COM SELETOR DE GRADE --- */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -187,75 +193,111 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
+            background-color: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 15px;
+            overflow-y: auto;
         }
 
         .modal-content {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 30px;
-            width: 350px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-content h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-size: 1.1rem;
             color: var(--text-main);
         }
 
-        #qrcode-modal-container {
+        .config-grade {
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .config-grade label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .config-grade select {
+            width: 100%;
+            background-color: #2a2a2a;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .preview-box {
             background: white;
-            padding: 15px;
+            padding: 10px;
             border-radius: 8px;
-            display: inline-block;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            min-height: 180px;
+            width: 100%;
         }
 
         .modal-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
+            flex-wrap: wrap;
         }
 
-        /* --- CONFIGURAÇÃO DE IMPRESSÃO (Oculta tudo exceto o modal na hora de imprimir) --- */
+        .modal-buttons button {
+            flex: 1;
+            min-width: 90px;
+            padding: 8px 10px;
+            font-size: 0.85rem;
+        }
+
+        /* --- ESTILOS DE IMPRESSÃO DA GRADE A4 --- */
+        .print-sheet {
+            display: none;
+        }
+
         @media print {
             body * {
                 visibility: hidden;
             }
-            #modalQrCode, #modalQrCode * {
+            .print-sheet, .print-sheet * {
                 visibility: visible;
             }
-            #modalQrCode {
+            .print-sheet {
+                display: grid !important;
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100%;
-                height: 100%;
-                background: white !important;
-                display: flex !important;
-                justify-content: center;
+                width: 100vw;
+                height: 100vh;
+                background: white;
+                box-sizing: border-box;
+                padding: 10mm;
+                justify-items: center;
                 align-items: center;
             }
-            .modal-content {
-                background: white !important;
-                border: none !important;
-                box-shadow: none !important;
-            }
-            .modal-content h3 {
-                color: black !important;
-            }
-            .modal-buttons {
-                display: none !important; /* Esconde os botões Fechar/Imprimir no papel */
-            }
+            /* Dinâmicos injetados via JS conforme a quantidade escolhida */
         }
     </style>
 </head>
@@ -266,48 +308,65 @@
     </header>
 
     <div class="container">
-        <!-- Coluna Única: Gerador -->
+        <!-- Caixa de Geração -->
         <div class="card">
             <h2>Novo QR Code</h2>
             <textarea id="textoInput" placeholder="Digite ou cole o texto/link aqui..."></textarea>
             
             <div class="btn-group">
-                <button class="btn-secondary" onclick="colarDaAreaDeTransferencia()">Colar da Área de Transferência</button>
+                <button class="btn-secondary" onclick="colarDaAreaDeTransferencia()">Colar</button>
                 <button onclick="dispararGeracao()">Gerar QR Code</button>
             </div>
         </div>
 
-        <!-- Histórico Recente -->
+        <!-- Histórico -->
         <div class="card">
             <h2>Histórico Recente</h2>
-            <div class="history-list" id="listaHistorico">
-                <!-- Itens injetados via JS -->
-            </div>
+            <div class="history-list" id="listaHistorico"></div>
         </div>
 
-        <!-- Rodapé do Container com ações globais -->
-        <div class="card full-width" style="padding: 15px 20px;">
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Salvamento seguro no navegador local.</span>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-secondary" onclick="exportarTxt()" style="padding: 8px 15px;">Exportar .txt</button>
-                <button class="btn-danger" onclick="limparHistorico()" style="padding: 8px 15px;">Limpar Histórico</button>
+        <!-- Ações Globais -->
+        <div class="card footer-actions">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Uso local seguro (Offline).</span>
+            <div style="display: flex; gap: 8px; width: 100%; sm-width: auto;">
+                <button class="btn-secondary" onclick="exportarTxt()" style="min-width: auto;">Exportar .txt</button>
+                <button class="btn-danger" onclick="limparHistorico()" style="min-width: auto;">Limpar Histórico</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DO QR CODE -->
+    <!-- MODAL DE INTERAÇÃO -->
     <div class="modal-overlay" id="modalQrCode">
         <div class="modal-content">
-            <h3>QR Code Gerado</h3>
-            <div id="qrcode-modal-container"></div>
+            <h3>Gerenciar QR Code</h3>
+            
+            <div class="config-grade">
+                <label for="qtdGrade">Quantidade na folha A4:</label>
+                <select id="qtdGrade" onchange="atualizarPreviewGrid()">
+                    <option value="1">1 Unidade (Centralizado)</option>
+                    <option value="4">Grade com 4 unidades (2x2)</option>
+                    <option value="8">Grade com 8 unidades (2x4)</option>
+                    <option value="12">Grade com 12 unidades (3x4)</option>
+                    <option value="16" selected>Grade com 16 unidades (4x4)</option>
+                </select>
+            </div>
+
+            <div class="preview-box" id="qrcode-modal-container"></div>
+
             <div class="modal-buttons">
                 <button class="btn-secondary" onclick="fecharModal()">Fechar</button>
-                <button onclick="imprimirQRCode()">Imprimir</button>
+                <button class="btn-secondary" onclick="baixarPNG()">Baixar PNG</button>
+                <button onclick="imprimirGrade()">Imprimir A4</button>
             </div>
         </div>
     </div>
 
+    <!-- ELEMENTO OCULTO PARA IMPRESSÃO DA GRADE -->
+    <div id="printSheet" class="print-sheet"></div>
+
     <script>
+        let textoAtual = "";
+
         document.addEventListener("DOMContentLoaded", () => {
             atualizarListaHistorico();
         });
@@ -328,37 +387,119 @@
                 alert("Por favor, insira algum texto ou link.");
                 return;
             }
-            gerarQRCodeNoModal(texto);
+            textoAtual = texto;
+            abrirModalComTexto(texto);
             salvarNoHistorico(texto);
         }
 
-        function gerarQRCodeNoModal(texto) {
-            const container = document.getElementById("qrcode-modal-container");
-            container.innerHTML = ""; // Limpa anterior
+        function abrirModalComTexto(texto) {
+            textoAtual = texto;
+            atualizarPreviewGrid();
+            document.getElementById("modalQrCode").style.display = "flex";
+        }
 
-            // Cria o QR Code dentro do modal
-            new QRCode(container, {
-                text: texto,
-                width: 200,
-                height: 200,
+        function atualizarPreviewGrid() {
+            const container = document.getElementById("qrcode-modal-container");
+            container.innerHTML = "";
+
+            // Cria um QR Code padrão menor para o preview
+            const divTemp = document.createElement("div");
+            new QRCode(divTemp, {
+                text: textoAtual,
+                width: 150,
+                height: 150,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-
-            // Mostra o modal
-            document.getElementById("modalQrCode").style.display = "flex";
+            container.appendChild(divTemp);
         }
 
         function fecharModal() {
             document.getElementById("modalQrCode").style.display = "none";
         }
 
-        function imprimirQRCode() {
-            window.print();
+        // Gera a imagem em PNG em alta resolução para download direto
+        function baixarPNG() {
+            // Cria um elemento temporário invisível para gerar um QR maior (300x300) para download nítido
+            const tempDiv = document.createElement("div");
+            new QRCode(tempDiv, {
+                text: textoAtual,
+                width: 500,
+                height: 500,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            setTimeout(() => {
+                const img = tempDiv.querySelector("img");
+                const canvas = tempDiv.querySelector("canvas");
+                let dataUrl = "";
+
+                if (img && img.src) {
+                    dataUrl = img.src;
+                } else if (canvas) {
+                    dataUrl = canvas.toDataURL("image/png");
+                }
+
+                if (dataUrl) {
+                    const a = document.createElement("a");
+                    a.href = dataUrl;
+                    a.download = "qrcode.png";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    alert("Erro ao gerar a imagem PNG.");
+                }
+            }, 100);
         }
 
-        // Fecha o modal se clicar fora da caixa central
+        function imprimirGrade() {
+            const qtd = parseInt(document.getElementById("qtdGrade").value);
+            const sheet = document.getElementById("printSheet");
+            sheet.innerHTML = "";
+
+            // Configura o layout da grade impressa com base na escolha
+            let cols = 1, rows = 1;
+            if (qtd === 4) { cols = 2; rows = 2; }
+            else if (qtd === 8) { cols = 2; rows = 4; }
+            else if (qtd === 12) { cols = 3; rows = 4; }
+            else if (qtd === 16) { cols = 4; rows = 4; }
+
+            sheet.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            sheet.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+            // Gera cada QR Code individualmente para a folha impressa
+            for (let i = 0; i < qtd; i++) {
+                const itemBox = document.createElement("div");
+                itemBox.style.display = "flex";
+                itemBox.style.justifyContent = "center";
+                itemBox.style.alignItems = "center";
+                itemBox.style.padding = "5px";
+                
+                const qrDiv = document.createElement("div");
+                new QRCode(qrDiv, {
+                    text: textoAtual,
+                    width: 140,
+                    height: 140,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                itemBox.appendChild(qrDiv);
+                sheet.appendChild(itemBox);
+            }
+
+            // Dispara a impressão limpa
+            setTimeout(() => {
+                window.print();
+            }, 200);
+        }
+
+        // Fecha o modal ao clicar fora
         window.onclick = function(event) {
             const modal = document.getElementById("modalQrCode");
             if (event.target === modal) {
@@ -375,9 +516,7 @@
             let historico = obterHistorico();
             const agora = new Date().toLocaleString("pt-BR");
 
-            if (historico.length > 0 && historico[0].texto === texto) {
-                return; 
-            }
+            if (historico.length > 0 && historico[0].texto === texto) return; 
 
             historico.unshift({ texto, data: agora });
             if (historico.length > 50) historico.pop();
@@ -391,7 +530,7 @@
             const historico = obterHistorico();
 
             if (historico.length === 0) {
-                lista.innerHTML = '<span style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 20px;">Nenhum QR Code no histórico.</span>';
+                lista.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 15px;">Nenhum histórico recente.</span>';
                 return;
             }
 
@@ -417,7 +556,7 @@
             const historico = obterHistorico();
             if (historico[index]) {
                 document.getElementById("textoInput").value = historico[index].texto;
-                gerarQRCodeNoModal(historico[index].texto);
+                abrirModalComTexto(historico[index].texto);
             }
         }
 
