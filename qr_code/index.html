@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de QR Code Offline</title>
+    <title>JC-Softwares | Gerador de QR Code Grátis</title>
     <!-- Biblioteca QRCode.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -35,13 +35,27 @@
         }
 
         header {
-            background-color: var(--accent-blue);
-            color: white;
-            padding: 18px 20px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background-color: #000000;
+            color: #ffffff;
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 1.25rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        header a span {
+            color: #1e88e5;
+        }
+
+        header a:hover {
+            opacity: 0.9;
         }
 
         .container {
@@ -297,14 +311,13 @@
                 justify-items: center;
                 align-items: center;
             }
-            /* Dinâmicos injetados via JS conforme a quantidade escolhida */
         }
     </style>
 </head>
 <body>
 
     <header>
-        Gerador de QR Code Grátis
+        <a href="index.html">JC-<span>Softwares</span></a>
     </header>
 
     <div class="container">
@@ -328,7 +341,7 @@
         <!-- Ações Globais -->
         <div class="card footer-actions">
             <span style="font-size: 0.8rem; color: var(--text-muted);">Uso local seguro (Offline).</span>
-            <div style="display: flex; gap: 8px; width: 100%; sm-width: auto;">
+            <div style="display: flex; gap: 8px; width: 100%;">
                 <button class="btn-secondary" onclick="exportarTxt()" style="min-width: auto;">Exportar .txt</button>
                 <button class="btn-danger" onclick="limparHistorico()" style="min-width: auto;">Limpar Histórico</button>
             </div>
@@ -402,7 +415,6 @@
             const container = document.getElementById("qrcode-modal-container");
             container.innerHTML = "";
 
-            // Cria um QR Code padrão menor para o preview
             const divTemp = document.createElement("div");
             new QRCode(divTemp, {
                 text: textoAtual,
@@ -419,9 +431,7 @@
             document.getElementById("modalQrCode").style.display = "none";
         }
 
-        // Gera a imagem em PNG em alta resolução para download direto
         function baixarPNG() {
-            // Cria um elemento temporário invisível para gerar um QR maior (300x300) para download nítido
             const tempDiv = document.createElement("div");
             new QRCode(tempDiv, {
                 text: textoAtual,
@@ -461,7 +471,6 @@
             const sheet = document.getElementById("printSheet");
             sheet.innerHTML = "";
 
-            // Configura o layout da grade impressa com base na escolha
             let cols = 1, rows = 1;
             if (qtd === 4) { cols = 2; rows = 2; }
             else if (qtd === 8) { cols = 2; rows = 4; }
@@ -471,7 +480,6 @@
             sheet.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
             sheet.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
 
-            // Gera cada QR Code individualmente para a folha impressa
             for (let i = 0; i < qtd; i++) {
                 const itemBox = document.createElement("div");
                 itemBox.style.display = "flex";
@@ -493,13 +501,11 @@
                 sheet.appendChild(itemBox);
             }
 
-            // Dispara a impressão limpa
             setTimeout(() => {
                 window.print();
             }, 200);
         }
 
-        // Fecha o modal ao clicar fora
         window.onclick = function(event) {
             const modal = document.getElementById("modalQrCode");
             if (event.target === modal) {
